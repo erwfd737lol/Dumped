@@ -1,0 +1,1443 @@
+{
+  "exportVersion": 1,
+  "exportedAt": "2026-11-07T06:35:30.573Z",
+  "client": {
+    "clientId": "e1afa657-3cf7-48a0-ad68-749e029969b5",
+    "username": "BaconFrauder",
+    "userId": 11589117132,
+    "placeId": 13704594433,
+    "placeName": "[🎃] The Storage",
+    "jobId": "53b615af-902f-4c6e-b98b-7086f9018acc",
+    "transport": "http"
+  },
+  "scriptStore": {
+    "hasFinishedMapping": true,
+    "mappedSources": 203,
+    "processedSources": 203,
+    "skippedSources": 0,
+    "sourcesToMap": 203
+  },
+  "scripts": [
+    {
+      "debugId": "1_16707366",
+      "path": "Chainsaw Rush",
+      "file": "Chainsaw-Rush.luau",
+      "sourceHash": "ea7fee774b32e06b21c0c205ffb30e7624dcb3854b87b312255b67bb816b8b01",
+      "updatedAt": 1794033322230
+    },
+    {
+      "debugId": "1_16707361",
+      "path": "Channel",
+      "file": "Channel.luau",
+      "sourceHash": "fa54cc0470c82e8b208b911ab69223b9c8f4b4e1234c0b1a458a7f60369fcdb4",
+      "updatedAt": 1794033323264
+    },
+    {
+      "debugId": "1_16707358",
+      "path": "Client",
+      "file": "Client.luau",
+      "sourceHash": "78926b09251512a3373ec09ade1d571b5cd27e9196ee4c4f91bb010c101e032b",
+      "updatedAt": 1794033323266
+    },
+    {
+      "debugId": "1_16707362",
+      "path": "Effects",
+      "file": "Effects.luau",
+      "sourceHash": "8b7d679b570ba89d148834f83704151a5024b6d8cf4d6da4d43adab8ea84aa5f",
+      "updatedAt": 1794033322744
+    },
+    {
+      "debugId": "0_61613",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/init.luau",
+      "sourceHash": "1ef031a8f69439ae48ec5a899bf6a38a193dde34cccfad9f2803f8c904907a98",
+      "updatedAt": 1794033298027
+    },
+    {
+      "debugId": "0_61648",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/init.luau",
+      "sourceHash": "86be0c71f7a64169d1e301b9ee2e8ca4905d5bee0542684c0b6f156b1df008c7",
+      "updatedAt": 1794033300076
+    },
+    {
+      "debugId": "0_61678",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.BaseCamera",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/BaseCamera.luau",
+      "sourceHash": "1db191e7febf4ac95c612f3714bd9a01238780cd5116fb7918b66cce59488c15",
+      "updatedAt": 1794033301610
+    },
+    {
+      "debugId": "0_61651",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.BaseOcclusion",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/BaseOcclusion.luau",
+      "sourceHash": "67f37a6be08c6054f5bc548e853056afc81f8b3a9328edeccc48ea221f0ba0c4",
+      "updatedAt": 1794033300076
+    },
+    {
+      "debugId": "0_61687",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.CameraInput",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/CameraInput.luau",
+      "sourceHash": "3d558d24da943429f64c0f8eb75b8407701858a3eca84e38c397737dcf5ffe61",
+      "updatedAt": 1794033302126
+    },
+    {
+      "debugId": "0_61705",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.CameraToggleStateController",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/CameraToggleStateController.luau",
+      "sourceHash": "85bb33694ac8e54b46b2baad81af45e46d782cb1a0c4f071efc869a37e1c3ef0",
+      "updatedAt": 1794033302635
+    },
+    {
+      "debugId": "0_61658",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.CameraUI",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/CameraUI.luau",
+      "sourceHash": "c7546f16f35cbdcde8730bb57cf422687d26afdb99adbcf9fa35202ef93940dc",
+      "updatedAt": 1794033300593
+    },
+    {
+      "debugId": "0_61654",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.CameraUtils",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/CameraUtils.luau",
+      "sourceHash": "19b79fdd3f9e3bab96531ad7d3a8004b292dda7f0af6e521633e575a3c1a30b0",
+      "updatedAt": 1794033300076
+    },
+    {
+      "debugId": "0_61657",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.ClassicCamera",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/ClassicCamera.luau",
+      "sourceHash": "b01d0b5e76e5f309f7cfb1af5d304ed601008ec68f6cf03a0a7c149a57018de9",
+      "updatedAt": 1794033300076
+    },
+    {
+      "debugId": "0_61680",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.Invisicam",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/Invisicam.luau",
+      "sourceHash": "dc44a7fc378c9414c62075f8309eedb4c3e951f88f003e81fdd878b477529562",
+      "updatedAt": 1794033302126
+    },
+    {
+      "debugId": "0_61659",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.LegacyCamera",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/LegacyCamera.luau",
+      "sourceHash": "a19317873a6c9b8e530e8289b58f6a4c17851f28c9350556a2fbcc1b61b69ae7",
+      "updatedAt": 1794033300593
+    },
+    {
+      "debugId": "0_61709",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.MouseLockController",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/MouseLockController.luau",
+      "sourceHash": "0b9d9da5d40c40cf0608367768270d09e650caa2f45f9033b2f309d4e5fe122c",
+      "updatedAt": 1794033302635
+    },
+    {
+      "debugId": "0_61676",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.OrbitalCamera",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/OrbitalCamera.luau",
+      "sourceHash": "8c4f5db0027df6cd5cf49cfc3892cefd635c59f9cf67a6bb153f8ebb35dbbb26",
+      "updatedAt": 1794033301610
+    },
+    {
+      "debugId": "0_61674",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.Poppercam",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/Poppercam.luau",
+      "sourceHash": "e5a2cf20988a693b246902fb5eb2171f6c1e4be5a416be3c1bf9ad65cc496096",
+      "updatedAt": 1794033301610
+    },
+    {
+      "debugId": "0_61665",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.TransparencyController",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/TransparencyController.luau",
+      "sourceHash": "d44b59abd04a73d43d5fbc94c2e5521a3a7f68ccdc6f8b0ff45e26b9e70587e4",
+      "updatedAt": 1794033301101
+    },
+    {
+      "debugId": "0_61669",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.VehicleCamera",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/VehicleCamera/init.luau",
+      "sourceHash": "3cc94b5b1d5f1d1f5e1167ba1674d935e668513398acfbb154f65d04f056685b",
+      "updatedAt": 1794033301101
+    },
+    {
+      "debugId": "0_61671",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.VehicleCamera.VehicleCameraConfig",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/VehicleCamera/VehicleCameraConfig.luau",
+      "sourceHash": "47d6acd15f2080df0b45e3b243eaf4e148b5428724ef5b5b582d3ad959e276fc",
+      "updatedAt": 1794033301101
+    },
+    {
+      "debugId": "0_61673",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.VehicleCamera.VehicleCameraCore",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/VehicleCamera/VehicleCameraCore.luau",
+      "sourceHash": "95e26dc16d5575a715ede4d6758ed57c1719581d5d1a94c66866ae71edd38e51",
+      "updatedAt": 1794033301610
+    },
+    {
+      "debugId": "0_61707",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.VRBaseCamera",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/VRBaseCamera.luau",
+      "sourceHash": "ef50de3716e16812bffa945ab7fbc669f8dede44ef5234419e33ed254f50d47c",
+      "updatedAt": 1794033302635
+    },
+    {
+      "debugId": "0_61667",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.VRCamera",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/VRCamera.luau",
+      "sourceHash": "53fb7e5aef7d81bde2b6977e911a599558bcc6164dbd48167124fae105e77aad",
+      "updatedAt": 1794033301101
+    },
+    {
+      "debugId": "0_61704",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.VRCameraTeleportDetector",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/VRCameraTeleportDetector/init.luau",
+      "sourceHash": "cf9f41aa7459709ea09fb3667e09f7b266d0173804e0102585a22f78fb2d5f92",
+      "updatedAt": 1794033302635
+    },
+    {
+      "debugId": "0_61703",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.VRCameraTeleportDetector.spec",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/VRCameraTeleportDetector/spec.luau",
+      "sourceHash": "3a7dbe7bee5d480aac46c399f6ed63dfd5f4b983e41c10ac910699a7e81134b9",
+      "updatedAt": 1794033302126
+    },
+    {
+      "debugId": "0_61689",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.VRVehicleCamera",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/VRVehicleCamera.luau",
+      "sourceHash": "113ed8f25330bd19760b6e51dda57b57eb815dc1b5aeb0b2c012c5a890cebf97",
+      "updatedAt": 1794033302126
+    },
+    {
+      "debugId": "0_61661",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.ZoomController",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/ZoomController/init.luau",
+      "sourceHash": "f88dfa5050a504093ce54b11782c8b89b941d403b11bb314e199dffca7fd0706",
+      "updatedAt": 1794033300593
+    },
+    {
+      "debugId": "0_61663",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CameraModule.ZoomController.Popper",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CameraModule/ZoomController/Popper.luau",
+      "sourceHash": "23f15a29bd68a1a2e4915375849c07da6471300044b7d0db8d4a588e68fc1e36",
+      "updatedAt": 1794033300593
+    },
+    {
+      "debugId": "0_61731",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CommonUtils.CameraWrapper",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CommonUtils/CameraWrapper/init.luau",
+      "sourceHash": "df560c203bceb503f302ed9f64543c77c3208d0d4d0a1ede622b23789d3c88a1",
+      "updatedAt": 1794033303663
+    },
+    {
+      "debugId": "0_61732",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CommonUtils.CameraWrapper.spec",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CommonUtils/CameraWrapper/spec.luau",
+      "sourceHash": "c46b7be96784c1e0d6497ae7d299556b16a37574ee4bc177140725d119077201",
+      "updatedAt": 1794033303663
+    },
+    {
+      "debugId": "0_61727",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CommonUtils.CharacterUtil",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CommonUtils/CharacterUtil.luau",
+      "sourceHash": "0b4a50c5bc7f1b52ebdbc7afcfc441c98742c209472d63ae4f1b1cf0d452079b",
+      "updatedAt": 1794033303143
+    },
+    {
+      "debugId": "0_61729",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CommonUtils.ConnectionUtil",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CommonUtils/ConnectionUtil/init.luau",
+      "sourceHash": "48d37d8cad1cc17637b0fdd6308d73f604f8f90bbbce20f0349f3d506fdb90d4",
+      "updatedAt": 1794033303143
+    },
+    {
+      "debugId": "0_61728",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CommonUtils.ConnectionUtil.spec",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CommonUtils/ConnectionUtil/spec.luau",
+      "sourceHash": "9a2c600a05717b159382b0bae6b2554ced7578152e89822a7ec39ccfb32b8285",
+      "updatedAt": 1794033303143
+    },
+    {
+      "debugId": "0_61730",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.CommonUtils.FlagUtil",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/CommonUtils/FlagUtil.luau",
+      "sourceHash": "e130c74039fc1d6765c982edde63ba8b45e16be06e90bc0e796d7a64ae3b5150",
+      "updatedAt": 1794033303143
+    },
+    {
+      "debugId": "0_61619",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/init.luau",
+      "sourceHash": "ac975bfaa51d44a7dce21f73a5d2caa97baeded776239e2835f14494acbef1fe",
+      "updatedAt": 1794033298027
+    },
+    {
+      "debugId": "0_61627",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.AvatarAbilitiesInterface",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/AvatarAbilitiesInterface.luau",
+      "sourceHash": "21aec552be3c46fb7f6b8ffd0cf69cca79dd8b7fe2e9dc47cca6e2151e4e6ee5",
+      "updatedAt": 1794033299052
+    },
+    {
+      "debugId": "0_61624",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.BaseCharacterController",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/BaseCharacterController.luau",
+      "sourceHash": "ca7aefdc8ef058603980afba5cf42336da55e88120764fbd6da3ee3c9677657a",
+      "updatedAt": 1794033298537
+    },
+    {
+      "debugId": "0_61630",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.ClickToMoveController",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/ClickToMoveController.luau",
+      "sourceHash": "beac3422c7f9f3604986020b710f9d9cc9d096e2a70727a2de53284252ac5409",
+      "updatedAt": 1794033299052
+    },
+    {
+      "debugId": "0_61626",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.ClickToMoveDisplay",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/ClickToMoveDisplay.luau",
+      "sourceHash": "3545045c154430402f5eb3d89ceba154071a2370e5b5b2630bac46aef7659e34",
+      "updatedAt": 1794033298537
+    },
+    {
+      "debugId": "0_61641",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.DynamicThumbstick",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/DynamicThumbstick.luau",
+      "sourceHash": "09ab7d35509f10ffdc56e1db12539f6d59fba7e7ff878f027390b853d3a6d642",
+      "updatedAt": 1794033299560
+    },
+    {
+      "debugId": "0_61625",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.Gamepad",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/Gamepad.luau",
+      "sourceHash": "d9c74884aeadbe18c34fb4d8481d45efbcd1d675f6a5d485f153b44d789a327c",
+      "updatedAt": 1794033298537
+    },
+    {
+      "debugId": "0_61635",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.Keyboard",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/Keyboard.luau",
+      "sourceHash": "975d701c6f606c02b0ca53f25f2233178e0e8ecd0a302df7269c9aad81f46a7f",
+      "updatedAt": 1794033299052
+    },
+    {
+      "debugId": "0_61632",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.PathDisplay",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/PathDisplay.luau",
+      "sourceHash": "5e5e7823ef948f5320ab0638bf678dd49a82235ea7b9df6f3d12049f83606517",
+      "updatedAt": 1794033299052
+    },
+    {
+      "debugId": "0_61622",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.TouchJump",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/TouchJump.luau",
+      "sourceHash": "cf468fbb5679dd255e53c49381db117c15868fe4c06ab0cb082cf490ee9e5f3b",
+      "updatedAt": 1794033298537
+    },
+    {
+      "debugId": "0_61638",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.TouchThumbstick",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/TouchThumbstick.luau",
+      "sourceHash": "ce3c8cf53998b912ab0e79e5217e0d041ead19b6114a38aaf40096baa4cd0419",
+      "updatedAt": 1794033299560
+    },
+    {
+      "debugId": "0_61643",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.VehicleController",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/VehicleController.luau",
+      "sourceHash": "a74db96cae5d2760b6c85b10eb6838946a7e0a8a1f1c9a402ec7227e2258bb13",
+      "updatedAt": 1794033299561
+    },
+    {
+      "debugId": "0_61646",
+      "path": "Players.BaconFrauder.PlayerScripts.PlayerModule.ControlModule.VRNavigation",
+      "file": "Players/BaconFrauder/PlayerScripts/PlayerModule/ControlModule/VRNavigation.luau",
+      "sourceHash": "a6473a43e66b81f9143b84d5a4905974a01fb01dcd56941c1d722dac430e92d2",
+      "updatedAt": 1794033299561
+    },
+    {
+      "debugId": "0_57084",
+      "path": "Players.BaconFrauder.PlayerScripts.RbxCharacterSounds.AtomicBinding",
+      "file": "Players/BaconFrauder/PlayerScripts/RbxCharacterSounds/AtomicBinding.luau",
+      "sourceHash": "1604f26e4685a94b6e520e8bd824770c5d7438f9f6d5206107ea75a34d371838",
+      "updatedAt": 1794033298027
+    },
+    {
+      "debugId": "1_15915498",
+      "path": "Players.dirht932.Client",
+      "file": "Players/dirht932/Client.luau",
+      "sourceHash": "78926b09251512a3373ec09ade1d571b5cd27e9196ee4c4f91bb010c101e032b",
+      "updatedAt": 1794033309315
+    },
+    {
+      "debugId": "1_15915500",
+      "path": "Players.dirht932.Utilities",
+      "file": "Players/dirht932/Utilities/init.luau",
+      "sourceHash": "7837fcf7f5726a263c554700ea1051c4649ef52c48f6f0f85dacd02f2e74da09",
+      "updatedAt": 1794033308293
+    },
+    {
+      "debugId": "1_15915501",
+      "path": "Players.dirht932.Utilities.Channel",
+      "file": "Players/dirht932/Utilities/Channel.luau",
+      "sourceHash": "70523020b856d2d2308323d66a229746a7af41677ee717c5fe381aa72eb74abe",
+      "updatedAt": 1794033309314
+    },
+    {
+      "debugId": "1_15915502",
+      "path": "Players.dirht932.Utilities.Effects",
+      "file": "Players/dirht932/Utilities/Effects/init.luau",
+      "sourceHash": "8b7d679b570ba89d148834f83704151a5024b6d8cf4d6da4d43adab8ea84aa5f",
+      "updatedAt": 1794033308802
+    },
+    {
+      "debugId": "1_15915506",
+      "path": "Players.dirht932.Utilities.Effects.Chainsaw Rush",
+      "file": "Players/dirht932/Utilities/Effects/Chainsaw-Rush.luau",
+      "sourceHash": "ea7fee774b32e06b21c0c205ffb30e7624dcb3854b87b312255b67bb816b8b01",
+      "updatedAt": 1794033308802
+    },
+    {
+      "debugId": "1_15915503",
+      "path": "Players.dirht932.Utilities.Effects.Scythe Slash",
+      "file": "Players/dirht932/Utilities/Effects/Scythe-Slash.luau",
+      "sourceHash": "1486cd19e5d839187c9acbbb9bc85af3905b5d2408e84a736c199c29ce4f2a89",
+      "updatedAt": 1794033309314
+    },
+    {
+      "debugId": "1_15915504",
+      "path": "Players.dirht932.Utilities.Effects.VampireBite",
+      "file": "Players/dirht932/Utilities/Effects/VampireBite.luau",
+      "sourceHash": "947297a6aaf14779d4aaaba0221ea62eb8cad7d1ed15088b90d0cb21c82379f5",
+      "updatedAt": 1794033308803
+    },
+    {
+      "debugId": "1_15915505",
+      "path": "Players.dirht932.Utilities.Effects.VampireBlur",
+      "file": "Players/dirht932/Utilities/Effects/VampireBlur.luau",
+      "sourceHash": "72d7c07b878e4a018819eb024b7239b8684acedd526811e58ade252aafd62e7b",
+      "updatedAt": 1794033308802
+    },
+    {
+      "debugId": "1_15915507",
+      "path": "Players.dirht932.Utilities.ToolRig",
+      "file": "Players/dirht932/Utilities/ToolRig.luau",
+      "sourceHash": "427b5cdbbe3ffe56e35d90652eab819ff30eeaa5e7e030c530168dbd520fa6c8",
+      "updatedAt": 1794033308293
+    },
+    {
+      "debugId": "1_15875881",
+      "path": "Players.Happybbsadfear.Client",
+      "file": "Players/Happybbsadfear/Client.luau",
+      "sourceHash": "b52d6a55ce212a298ae7164c4245b07ca18c91d25e50acc08e35da65f47c7c09",
+      "updatedAt": 1794033311382
+    },
+    {
+      "debugId": "1_15875883",
+      "path": "Players.Happybbsadfear.Utilities",
+      "file": "Players/Happybbsadfear/Utilities/init.luau",
+      "sourceHash": "7837fcf7f5726a263c554700ea1051c4649ef52c48f6f0f85dacd02f2e74da09",
+      "updatedAt": 1794033306237
+    },
+    {
+      "debugId": "1_15875884",
+      "path": "Players.Happybbsadfear.Utilities.Channel",
+      "file": "Players/Happybbsadfear/Utilities/Channel.luau",
+      "sourceHash": "70523020b856d2d2308323d66a229746a7af41677ee717c5fe381aa72eb74abe",
+      "updatedAt": 1794033306761
+    },
+    {
+      "debugId": "1_15875885",
+      "path": "Players.Happybbsadfear.Utilities.Effects",
+      "file": "Players/Happybbsadfear/Utilities/Effects/init.luau",
+      "sourceHash": "8b7d679b570ba89d148834f83704151a5024b6d8cf4d6da4d43adab8ea84aa5f",
+      "updatedAt": 1794033306237
+    },
+    {
+      "debugId": "1_15875889",
+      "path": "Players.Happybbsadfear.Utilities.Effects.Chainsaw Rush",
+      "file": "Players/Happybbsadfear/Utilities/Effects/Chainsaw-Rush.luau",
+      "sourceHash": "ea7fee774b32e06b21c0c205ffb30e7624dcb3854b87b312255b67bb816b8b01",
+      "updatedAt": 1794033306237
+    },
+    {
+      "debugId": "1_15875886",
+      "path": "Players.Happybbsadfear.Utilities.Effects.Scythe Slash",
+      "file": "Players/Happybbsadfear/Utilities/Effects/Scythe-Slash.luau",
+      "sourceHash": "1486cd19e5d839187c9acbbb9bc85af3905b5d2408e84a736c199c29ce4f2a89",
+      "updatedAt": 1794033306761
+    },
+    {
+      "debugId": "1_15875887",
+      "path": "Players.Happybbsadfear.Utilities.Effects.VampireBite",
+      "file": "Players/Happybbsadfear/Utilities/Effects/VampireBite.luau",
+      "sourceHash": "947297a6aaf14779d4aaaba0221ea62eb8cad7d1ed15088b90d0cb21c82379f5",
+      "updatedAt": 1794033306761
+    },
+    {
+      "debugId": "1_15875888",
+      "path": "Players.Happybbsadfear.Utilities.Effects.VampireBlur",
+      "file": "Players/Happybbsadfear/Utilities/Effects/VampireBlur.luau",
+      "sourceHash": "5b466b097f20e59047206f8e9eeb8ca183a226d9686238814085bc9b1731e941",
+      "updatedAt": 1794033306761
+    },
+    {
+      "debugId": "1_15875890",
+      "path": "Players.Happybbsadfear.Utilities.ToolRig",
+      "file": "Players/Happybbsadfear/Utilities/ToolRig.luau",
+      "sourceHash": "54d9716d4c7e714d365258c9f1fd45ed80369c5ccef1ac9e5499f7062527b640",
+      "updatedAt": 1794033306237
+    },
+    {
+      "debugId": "1_16378247",
+      "path": "Players.hliop_57.Client",
+      "file": "Players/hliop_57/Client.luau",
+      "sourceHash": "78926b09251512a3373ec09ade1d571b5cd27e9196ee4c4f91bb010c101e032b",
+      "updatedAt": 1794033307274
+    },
+    {
+      "debugId": "1_16378249",
+      "path": "Players.hliop_57.Utilities",
+      "file": "Players/hliop_57/Utilities/init.luau",
+      "sourceHash": "7837fcf7f5726a263c554700ea1051c4649ef52c48f6f0f85dacd02f2e74da09",
+      "updatedAt": 1794033307273
+    },
+    {
+      "debugId": "1_16378250",
+      "path": "Players.hliop_57.Utilities.Channel",
+      "file": "Players/hliop_57/Utilities/Channel.luau",
+      "sourceHash": "70523020b856d2d2308323d66a229746a7af41677ee717c5fe381aa72eb74abe",
+      "updatedAt": 1794033307273
+    },
+    {
+      "debugId": "1_16378251",
+      "path": "Players.hliop_57.Utilities.Effects",
+      "file": "Players/hliop_57/Utilities/Effects/init.luau",
+      "sourceHash": "8b7d679b570ba89d148834f83704151a5024b6d8cf4d6da4d43adab8ea84aa5f",
+      "updatedAt": 1794033307786
+    },
+    {
+      "debugId": "1_16378255",
+      "path": "Players.hliop_57.Utilities.Effects.Chainsaw Rush",
+      "file": "Players/hliop_57/Utilities/Effects/Chainsaw-Rush.luau",
+      "sourceHash": "ea7fee774b32e06b21c0c205ffb30e7624dcb3854b87b312255b67bb816b8b01",
+      "updatedAt": 1794033308293
+    },
+    {
+      "debugId": "1_16378252",
+      "path": "Players.hliop_57.Utilities.Effects.Scythe Slash",
+      "file": "Players/hliop_57/Utilities/Effects/Scythe-Slash.luau",
+      "sourceHash": "1486cd19e5d839187c9acbbb9bc85af3905b5d2408e84a736c199c29ce4f2a89",
+      "updatedAt": 1794033307786
+    },
+    {
+      "debugId": "1_16378253",
+      "path": "Players.hliop_57.Utilities.Effects.VampireBite",
+      "file": "Players/hliop_57/Utilities/Effects/VampireBite.luau",
+      "sourceHash": "947297a6aaf14779d4aaaba0221ea62eb8cad7d1ed15088b90d0cb21c82379f5",
+      "updatedAt": 1794033307786
+    },
+    {
+      "debugId": "1_16378254",
+      "path": "Players.hliop_57.Utilities.Effects.VampireBlur",
+      "file": "Players/hliop_57/Utilities/Effects/VampireBlur.luau",
+      "sourceHash": "72d7c07b878e4a018819eb024b7239b8684acedd526811e58ade252aafd62e7b",
+      "updatedAt": 1794033307786
+    },
+    {
+      "debugId": "1_16378256",
+      "path": "Players.hliop_57.Utilities.ToolRig",
+      "file": "Players/hliop_57/Utilities/ToolRig.luau",
+      "sourceHash": "427b5cdbbe3ffe56e35d90652eab819ff30eeaa5e7e030c530168dbd520fa6c8",
+      "updatedAt": 1794033308293
+    },
+    {
+      "debugId": "1_16450567",
+      "path": "Players.kimphil0929.Client",
+      "file": "Players/kimphil0929/Client.luau",
+      "sourceHash": "78926b09251512a3373ec09ade1d571b5cd27e9196ee4c4f91bb010c101e032b",
+      "updatedAt": 1794033303665
+    },
+    {
+      "debugId": "1_16450569",
+      "path": "Players.kimphil0929.Utilities",
+      "file": "Players/kimphil0929/Utilities/init.luau",
+      "sourceHash": "7837fcf7f5726a263c554700ea1051c4649ef52c48f6f0f85dacd02f2e74da09",
+      "updatedAt": 1794033303663
+    },
+    {
+      "debugId": "1_16450570",
+      "path": "Players.kimphil0929.Utilities.Channel",
+      "file": "Players/kimphil0929/Utilities/Channel.luau",
+      "sourceHash": "70523020b856d2d2308323d66a229746a7af41677ee717c5fe381aa72eb74abe",
+      "updatedAt": 1794033304177
+    },
+    {
+      "debugId": "1_16450571",
+      "path": "Players.kimphil0929.Utilities.Effects",
+      "file": "Players/kimphil0929/Utilities/Effects/init.luau",
+      "sourceHash": "8b7d679b570ba89d148834f83704151a5024b6d8cf4d6da4d43adab8ea84aa5f",
+      "updatedAt": 1794033304177
+    },
+    {
+      "debugId": "1_16450575",
+      "path": "Players.kimphil0929.Utilities.Effects.Chainsaw Rush",
+      "file": "Players/kimphil0929/Utilities/Effects/Chainsaw-Rush.luau",
+      "sourceHash": "c649d2c9267e8beb686b90d3fdd27b0588877425cbacb47c60a95adb7941732c",
+      "updatedAt": 1794033305201
+    },
+    {
+      "debugId": "1_16450572",
+      "path": "Players.kimphil0929.Utilities.Effects.Scythe Slash",
+      "file": "Players/kimphil0929/Utilities/Effects/Scythe-Slash.luau",
+      "sourceHash": "1486cd19e5d839187c9acbbb9bc85af3905b5d2408e84a736c199c29ce4f2a89",
+      "updatedAt": 1794033304177
+    },
+    {
+      "debugId": "1_16450573",
+      "path": "Players.kimphil0929.Utilities.Effects.VampireBite",
+      "file": "Players/kimphil0929/Utilities/Effects/VampireBite.luau",
+      "sourceHash": "947297a6aaf14779d4aaaba0221ea62eb8cad7d1ed15088b90d0cb21c82379f5",
+      "updatedAt": 1794033304177
+    },
+    {
+      "debugId": "1_16450574",
+      "path": "Players.kimphil0929.Utilities.Effects.VampireBlur",
+      "file": "Players/kimphil0929/Utilities/Effects/VampireBlur.luau",
+      "sourceHash": "72d7c07b878e4a018819eb024b7239b8684acedd526811e58ade252aafd62e7b",
+      "updatedAt": 1794033304686
+    },
+    {
+      "debugId": "1_16450576",
+      "path": "Players.kimphil0929.Utilities.ToolRig",
+      "file": "Players/kimphil0929/Utilities/ToolRig.luau",
+      "sourceHash": "427b5cdbbe3ffe56e35d90652eab819ff30eeaa5e7e030c530168dbd520fa6c8",
+      "updatedAt": 1794033315515
+    },
+    {
+      "debugId": "1_16139039",
+      "path": "Players.phud8822.Client",
+      "file": "Players/phud8822/Client.luau",
+      "sourceHash": "78926b09251512a3373ec09ade1d571b5cd27e9196ee4c4f91bb010c101e032b",
+      "updatedAt": 1794033305725
+    },
+    {
+      "debugId": "1_16139041",
+      "path": "Players.phud8822.Utilities",
+      "file": "Players/phud8822/Utilities/init.luau",
+      "sourceHash": "7837fcf7f5726a263c554700ea1051c4649ef52c48f6f0f85dacd02f2e74da09",
+      "updatedAt": 1794033314470
+    },
+    {
+      "debugId": "1_16139042",
+      "path": "Players.phud8822.Utilities.Channel",
+      "file": "Players/phud8822/Utilities/Channel.luau",
+      "sourceHash": "70523020b856d2d2308323d66a229746a7af41677ee717c5fe381aa72eb74abe",
+      "updatedAt": 1794033305723
+    },
+    {
+      "debugId": "1_16139043",
+      "path": "Players.phud8822.Utilities.Effects",
+      "file": "Players/phud8822/Utilities/Effects/init.luau",
+      "sourceHash": "8b7d679b570ba89d148834f83704151a5024b6d8cf4d6da4d43adab8ea84aa5f",
+      "updatedAt": 1794033305201
+    },
+    {
+      "debugId": "1_16139047",
+      "path": "Players.phud8822.Utilities.Effects.Chainsaw Rush",
+      "file": "Players/phud8822/Utilities/Effects/Chainsaw-Rush.luau",
+      "sourceHash": "ea7fee774b32e06b21c0c205ffb30e7624dcb3854b87b312255b67bb816b8b01",
+      "updatedAt": 1794033305201
+    },
+    {
+      "debugId": "1_16139044",
+      "path": "Players.phud8822.Utilities.Effects.Scythe Slash",
+      "file": "Players/phud8822/Utilities/Effects/Scythe-Slash.luau",
+      "sourceHash": "0ce4d18c299e8339da1ee55b74c78f0eeb86a199dc88daea61025206ccfffd43",
+      "updatedAt": 1794033305723
+    },
+    {
+      "debugId": "1_16139045",
+      "path": "Players.phud8822.Utilities.Effects.VampireBite",
+      "file": "Players/phud8822/Utilities/Effects/VampireBite.luau",
+      "sourceHash": "947297a6aaf14779d4aaaba0221ea62eb8cad7d1ed15088b90d0cb21c82379f5",
+      "updatedAt": 1794033305723
+    },
+    {
+      "debugId": "1_16139046",
+      "path": "Players.phud8822.Utilities.Effects.VampireBlur",
+      "file": "Players/phud8822/Utilities/Effects/VampireBlur.luau",
+      "sourceHash": "72d7c07b878e4a018819eb024b7239b8684acedd526811e58ade252aafd62e7b",
+      "updatedAt": 1794033305201
+    },
+    {
+      "debugId": "1_16139048",
+      "path": "Players.phud8822.Utilities.ToolRig",
+      "file": "Players/phud8822/Utilities/ToolRig.luau",
+      "sourceHash": "427b5cdbbe3ffe56e35d90652eab819ff30eeaa5e7e030c530168dbd520fa6c8",
+      "updatedAt": 1794033305201
+    },
+    {
+      "debugId": "1_63653",
+      "path": "ReplicatedStorage.BaseObjects.Wooden Piano.Settings",
+      "file": "ReplicatedStorage/BaseObjects/Wooden-Piano/Settings.luau",
+      "sourceHash": "6dac96fa9d9f577fad54b74993bcc5ae1a787f218b6c09a60ed04b0db36b7e62",
+      "updatedAt": 1794033322230
+    },
+    {
+      "debugId": "1_63595",
+      "path": "ReplicatedStorage.ClassicControllerSmokeFixture",
+      "file": "ReplicatedStorage/ClassicControllerSmokeFixture.luau",
+      "sourceHash": "da4373ea2f4f16684a4d4a3b82cbc164573074d5148fd4642f77d6d8a18db6bc",
+      "updatedAt": 1794033316028
+    },
+    {
+      "debugId": "1_63596",
+      "path": "ReplicatedStorage.ModernControllerSmokeFixture",
+      "file": "ReplicatedStorage/ModernControllerSmokeFixture.luau",
+      "sourceHash": "03e1ee091ab08d708d4723804e86e3b24d8627907418b5ec6834ce4cc9c7ac4d",
+      "updatedAt": 1794033315515
+    },
+    {
+      "debugId": "1_63601",
+      "path": "ReplicatedStorage.Modules.Achievements",
+      "file": "ReplicatedStorage/Modules/Achievements.luau",
+      "sourceHash": "995ba92660cab81a98c34cc21697c35ae74fe1e24d65e818d3a516d2a5cec5f7",
+      "updatedAt": 1794033316027
+    },
+    {
+      "debugId": "1_63618",
+      "path": "ReplicatedStorage.Modules.BaitsLib",
+      "file": "ReplicatedStorage/Modules/BaitsLib.luau",
+      "sourceHash": "b3b2eacaf3a52faa5564a95e42e8e5b726a7fc250194ab93bb17138b87f1c785",
+      "updatedAt": 1794033317578
+    },
+    {
+      "debugId": "1_63644",
+      "path": "ReplicatedStorage.Modules.BaseCapacityLib",
+      "file": "ReplicatedStorage/Modules/BaseCapacityLib.luau",
+      "sourceHash": "aed2dc1831122d4a0cbb638c271d5a78bb77f17e9830bfcc0a023ec6704643f3",
+      "updatedAt": 1794033321184
+    },
+    {
+      "debugId": "1_63603",
+      "path": "ReplicatedStorage.Modules.BaseCustomLib",
+      "file": "ReplicatedStorage/Modules/BaseCustomLib.luau",
+      "sourceHash": "45f3871c9fde47f472be4c375a2de151616913c35655784ca9b9e139c6adf756",
+      "updatedAt": 1794033316552
+    },
+    {
+      "debugId": "1_63602",
+      "path": "ReplicatedStorage.Modules.BaseObjectsLib",
+      "file": "ReplicatedStorage/Modules/BaseObjectsLib.luau",
+      "sourceHash": "e69d43e7a4d3bab877022c5a8e71b2d3a14b337f402c5ab37e0a819ddd34abd4",
+      "updatedAt": 1794033316027
+    },
+    {
+      "debugId": "1_63648",
+      "path": "ReplicatedStorage.Modules.ClassicBuild",
+      "file": "ReplicatedStorage/Modules/ClassicBuild.luau",
+      "sourceHash": "3b6ec5ed40fe88bece2760b76be0c9f126e7f1129260e2d2d0af2fbbe2a4d637",
+      "updatedAt": 1794033321696
+    },
+    {
+      "debugId": "1_63608",
+      "path": "ReplicatedStorage.Modules.ColorPicker",
+      "file": "ReplicatedStorage/Modules/ColorPicker/init.luau",
+      "sourceHash": "cba8bad7742ce18e9063a828e63c5bb348b9872dcbd73942a6ba9b9a5bd50528",
+      "updatedAt": 1794033316552
+    },
+    {
+      "debugId": "1_63609",
+      "path": "ReplicatedStorage.Modules.ColorPicker.BuiltinSliders",
+      "file": "ReplicatedStorage/Modules/ColorPicker/BuiltinSliders.luau",
+      "sourceHash": "34f1d5ea6c45ca0bf99819e812dd48af662b49b7f848cab46cbf847a21007857",
+      "updatedAt": 1794033316552
+    },
+    {
+      "debugId": "1_63612",
+      "path": "ReplicatedStorage.Modules.ColorPicker.History",
+      "file": "ReplicatedStorage/Modules/ColorPicker/History.luau",
+      "sourceHash": "07de8831a5f848fe9f9c12d4043a162163f5539fdec7eb56c2c68b408be9b6f4",
+      "updatedAt": 1794033317067
+    },
+    {
+      "debugId": "1_63611",
+      "path": "ReplicatedStorage.Modules.ColorPicker.MouseMovement",
+      "file": "ReplicatedStorage/Modules/ColorPicker/MouseMovement.luau",
+      "sourceHash": "150dbd33f91bf228b7256568d2f205abcd469fe44702f24e1e5bbe9f1e5a8fb0",
+      "updatedAt": 1794033317067
+    },
+    {
+      "debugId": "1_63614",
+      "path": "ReplicatedStorage.Modules.ColorPicker.PickerModes.Circle",
+      "file": "ReplicatedStorage/Modules/ColorPicker/PickerModes/Circle.luau",
+      "sourceHash": "103d52c3fbec037eca446de241870f5665a0cf848584fa104557d27dd5c76aa9",
+      "updatedAt": 1794033317577
+    },
+    {
+      "debugId": "1_63615",
+      "path": "ReplicatedStorage.Modules.ColorPicker.PickerModes.Square",
+      "file": "ReplicatedStorage/Modules/ColorPicker/PickerModes/Square.luau",
+      "sourceHash": "5eb76971bd74a36b25edd366977b24c43a2553157627af922fde8a75d2048c5e",
+      "updatedAt": 1794033317577
+    },
+    {
+      "debugId": "1_63616",
+      "path": "ReplicatedStorage.Modules.ColorPicker.PickerModes.Triangle",
+      "file": "ReplicatedStorage/Modules/ColorPicker/PickerModes/Triangle.luau",
+      "sourceHash": "dba7cedaf07ab9f74e6cbd6a7540a2741e7ef4ee18b651182105b65dee044630",
+      "updatedAt": 1794033318095
+    },
+    {
+      "debugId": "1_63610",
+      "path": "ReplicatedStorage.Modules.ColorPicker.Slider",
+      "file": "ReplicatedStorage/Modules/ColorPicker/Slider.luau",
+      "sourceHash": "f705efe117c7194efe325d27c210e4ea4b8536f4b03794864573b524a8114d9f",
+      "updatedAt": 1794033316552
+    },
+    {
+      "debugId": "1_63613",
+      "path": "ReplicatedStorage.Modules.ColorPicker.WindowResize",
+      "file": "ReplicatedStorage/Modules/ColorPicker/WindowResize.luau",
+      "sourceHash": "7665914114685b173c7e562b8c5aca3842da82a4bc13e58204c6ec48b46a828f",
+      "updatedAt": 1794033317067
+    },
+    {
+      "debugId": "1_63605",
+      "path": "ReplicatedStorage.Modules.CraftLib",
+      "file": "ReplicatedStorage/Modules/CraftLib.luau",
+      "sourceHash": "43bad8f120977604bdae701c3473e59a1607678e9357bc09b141ad54b4273eeb",
+      "updatedAt": 1794033316028
+    },
+    {
+      "debugId": "1_63641",
+      "path": "ReplicatedStorage.Modules.CustomBackpack",
+      "file": "ReplicatedStorage/Modules/CustomBackpack.luau",
+      "sourceHash": "5e86677e3c51cb3abccabc469c05266391b6be0ae57c205879b8143932ad456c",
+      "updatedAt": 1794033320678
+    },
+    {
+      "debugId": "1_63620",
+      "path": "ReplicatedStorage.Modules.DailyRewards",
+      "file": "ReplicatedStorage/Modules/DailyRewards.luau",
+      "sourceHash": "8fdffd1bb012cf50066b1b22b44c18526ba8101446e8c1c8f561130c3e39295d",
+      "updatedAt": 1794033318619
+    },
+    {
+      "debugId": "1_63617",
+      "path": "ReplicatedStorage.Modules.Events",
+      "file": "ReplicatedStorage/Modules/Events.luau",
+      "sourceHash": "97faeb19ab70510756783a9a4add488e114d041c1aefa3fcf376feeafcd7b564",
+      "updatedAt": 1794033317577
+    },
+    {
+      "debugId": "1_63606",
+      "path": "ReplicatedStorage.Modules.ExchangeLib",
+      "file": "ReplicatedStorage/Modules/ExchangeLib.luau",
+      "sourceHash": "25233e27398a53cb63004c451d10eb1d33edbbf33d450e55f7b63ec3d9a24ec3",
+      "updatedAt": 1794033316033
+    },
+    {
+      "debugId": "1_63646",
+      "path": "ReplicatedStorage.Modules.GamepassLib",
+      "file": "ReplicatedStorage/Modules/GamepassLib.luau",
+      "sourceHash": "ec062a5c767beb84d353bad4b679aa18ad5761ad1350781d74b86966b9276260",
+      "updatedAt": 1794033321185
+    },
+    {
+      "debugId": "1_63621",
+      "path": "ReplicatedStorage.Modules.Icon",
+      "file": "ReplicatedStorage/Modules/Icon/init.luau",
+      "sourceHash": "8688a8b83449e59022cdc95834336000af2b880833627d8bac488a1998f8a382",
+      "updatedAt": 1794033318095
+    },
+    {
+      "debugId": "1_63626",
+      "path": "ReplicatedStorage.Modules.Icon.Elements.Caption",
+      "file": "ReplicatedStorage/Modules/Icon/Elements/Caption.luau",
+      "sourceHash": "41e7c00869cefdebcd27f525ee22e957f3e40a593999943d78d8824a1ac25180",
+      "updatedAt": 1794033318619
+    },
+    {
+      "debugId": "1_63627",
+      "path": "ReplicatedStorage.Modules.Icon.Elements.Container",
+      "file": "ReplicatedStorage/Modules/Icon/Elements/Container.luau",
+      "sourceHash": "e24fd4bea0e8cacbf11575712435a4e003def9771f8e5e4cf8c16a9cb418a0ff",
+      "updatedAt": 1794033319134
+    },
+    {
+      "debugId": "1_63633",
+      "path": "ReplicatedStorage.Modules.Icon.Elements.Dropdown",
+      "file": "ReplicatedStorage/Modules/Icon/Elements/Dropdown.luau",
+      "sourceHash": "95600d0dee2de4bfc17fc6a71b16e8363b37ea89820f63370489b1f2057b5c95",
+      "updatedAt": 1794033319652
+    },
+    {
+      "debugId": "1_63628",
+      "path": "ReplicatedStorage.Modules.Icon.Elements.Indicator",
+      "file": "ReplicatedStorage/Modules/Icon/Elements/Indicator.luau",
+      "sourceHash": "bb6e23856442b2270048873be2d4a61a1f65cd85d79be221435a6e996c530293",
+      "updatedAt": 1794033319134
+    },
+    {
+      "debugId": "1_63629",
+      "path": "ReplicatedStorage.Modules.Icon.Elements.Menu",
+      "file": "ReplicatedStorage/Modules/Icon/Elements/Menu.luau",
+      "sourceHash": "ae790eaa910b3e7cdcc4d022c81c64fd5364111dc5bc8fe2acc913e5953d8430",
+      "updatedAt": 1794033319652
+    },
+    {
+      "debugId": "1_63630",
+      "path": "ReplicatedStorage.Modules.Icon.Elements.Notice",
+      "file": "ReplicatedStorage/Modules/Icon/Elements/Notice.luau",
+      "sourceHash": "09c43360991922f6115068436a8847f0e08882050a776932e3c7ae235d22e4fd",
+      "updatedAt": 1794033319134
+    },
+    {
+      "debugId": "1_63631",
+      "path": "ReplicatedStorage.Modules.Icon.Elements.Selection",
+      "file": "ReplicatedStorage/Modules/Icon/Elements/Selection.luau",
+      "sourceHash": "b0be61717db9b3fb21135982ad28f048ac6ce43839bdcb6bd2acf402bbee621c",
+      "updatedAt": 1794033319652
+    },
+    {
+      "debugId": "1_63632",
+      "path": "ReplicatedStorage.Modules.Icon.Elements.Widget",
+      "file": "ReplicatedStorage/Modules/Icon/Elements/Widget.luau",
+      "sourceHash": "19aa74293795c04a625f1f807a80fe955e749d9649c75654d771624b2387d1e3",
+      "updatedAt": 1794033319652
+    },
+    {
+      "debugId": "1_63634",
+      "path": "ReplicatedStorage.Modules.Icon.Features.Gamepad",
+      "file": "ReplicatedStorage/Modules/Icon/Features/Gamepad.luau",
+      "sourceHash": "17cb86a6dbd0502ae6bc7f1e3d30ba1922ddb1c1995cf5478b6f32f974d5ba25",
+      "updatedAt": 1794033320159
+    },
+    {
+      "debugId": "1_63635",
+      "path": "ReplicatedStorage.Modules.Icon.Features.Overflow",
+      "file": "ReplicatedStorage/Modules/Icon/Features/Overflow.luau",
+      "sourceHash": "e9a7b5b6e5b22830fc9f4f2a862f043e2e907d9ff9252e19a7d6aa03193831e7",
+      "updatedAt": 1794033320159
+    },
+    {
+      "debugId": "1_63636",
+      "path": "ReplicatedStorage.Modules.Icon.Features.Themes",
+      "file": "ReplicatedStorage/Modules/Icon/Features/Themes/init.luau",
+      "sourceHash": "0593a36720291916593cfa00807e55aaf74e295940ec79bc005cf3638f05bc93",
+      "updatedAt": 1794033320159
+    },
+    {
+      "debugId": "1_63637",
+      "path": "ReplicatedStorage.Modules.Icon.Features.Themes.Classic",
+      "file": "ReplicatedStorage/Modules/Icon/Features/Themes/Classic.luau",
+      "sourceHash": "88a105afdb30dc05b1d69d8ad3af082e121fa37676141b52429ce6e87faf552e",
+      "updatedAt": 1794033320677
+    },
+    {
+      "debugId": "1_63638",
+      "path": "ReplicatedStorage.Modules.Icon.Features.Themes.Default",
+      "file": "ReplicatedStorage/Modules/Icon/Features/Themes/Default.luau",
+      "sourceHash": "505c5b957a79547746bae67a8729b6807860fced33d8938e71f05d498ba6bcd3",
+      "updatedAt": 1794033320159
+    },
+    {
+      "debugId": "1_63639",
+      "path": "ReplicatedStorage.Modules.Icon.Packages.GoodSignal",
+      "file": "ReplicatedStorage/Modules/Icon/Packages/GoodSignal.luau",
+      "sourceHash": "09c8c6a0691b39bdd1cc47f171dd2803c433ec51fc04d0a2e410df71a10c906d",
+      "updatedAt": 1794033321184
+    },
+    {
+      "debugId": "1_63640",
+      "path": "ReplicatedStorage.Modules.Icon.Packages.Janitor",
+      "file": "ReplicatedStorage/Modules/Icon/Packages/Janitor.luau",
+      "sourceHash": "95959ff5ed2774958f871367ae53258517b2973927f6992630181f4284483ef7",
+      "updatedAt": 1794033320677
+    },
+    {
+      "debugId": "1_63624",
+      "path": "ReplicatedStorage.Modules.Icon.Reference",
+      "file": "ReplicatedStorage/Modules/Icon/Reference.luau",
+      "sourceHash": "e49c5d8892cebd3e26d30a5e720d85d09a32ceba366180bdcf2c05ff45066f14",
+      "updatedAt": 1794033318619
+    },
+    {
+      "debugId": "1_63622",
+      "path": "ReplicatedStorage.Modules.Icon.Types",
+      "file": "ReplicatedStorage/Modules/Icon/Types.luau",
+      "sourceHash": "f9412f726b306baf37ca974886ad46256cb3136e9992a986b35b2c45982c83a9",
+      "updatedAt": 1794033318095
+    },
+    {
+      "debugId": "1_63625",
+      "path": "ReplicatedStorage.Modules.Icon.Utility",
+      "file": "ReplicatedStorage/Modules/Icon/Utility.luau",
+      "sourceHash": "18d8a5693ce26f67def340a3249328441c901f7667bf64e69d673f0ae6794e79",
+      "updatedAt": 1794033319134
+    },
+    {
+      "debugId": "1_63623",
+      "path": "ReplicatedStorage.Modules.Icon.VERSION",
+      "file": "ReplicatedStorage/Modules/Icon/VERSION.luau",
+      "sourceHash": "8ee56d46a2209a02ef2d61fa9b365bd8a1333a45233bc358b3cadcff580fc89e",
+      "updatedAt": 1794033318619
+    },
+    {
+      "debugId": "1_63607",
+      "path": "ReplicatedStorage.Modules.Lightning",
+      "file": "ReplicatedStorage/Modules/Lightning.luau",
+      "sourceHash": "4a2e306a9d3989ee75be7e30fe20e8f7086f3870ea0d4278466727c5a2ce4e50",
+      "updatedAt": 1794033317067
+    },
+    {
+      "debugId": "1_63647",
+      "path": "ReplicatedStorage.Modules.ModernBuild",
+      "file": "ReplicatedStorage/Modules/ModernBuild.luau",
+      "sourceHash": "7eda627437ba8ad472377a53a4770e37c623c36ca4810b11c3eb5f6ce2c8e182",
+      "updatedAt": 1794033322230
+    },
+    {
+      "debugId": "1_63643",
+      "path": "ReplicatedStorage.Modules.PaintController",
+      "file": "ReplicatedStorage/Modules/PaintController.luau",
+      "sourceHash": "60d8faf4620c5aa614731a67a4e4e7c0de94fc94ab3ffdd866d91e11b9a29ebd",
+      "updatedAt": 1794033322230
+    },
+    {
+      "debugId": "1_63651",
+      "path": "ReplicatedStorage.Modules.PartCache.PartCache",
+      "file": "ReplicatedStorage/Modules/PartCache/PartCache.luau",
+      "sourceHash": "0085f710f0496f8ef6b23fdcfd52819fedf0615a74042424f0295a182d237557",
+      "updatedAt": 1794033322230
+    },
+    {
+      "debugId": "1_63652",
+      "path": "ReplicatedStorage.Modules.PartCache.Table",
+      "file": "ReplicatedStorage/Modules/PartCache/Table.luau",
+      "sourceHash": "35b0738cdbd75a4f8a1dba3f9a4de4fcbce6a9695d93f8db4efdf1ee36d70959",
+      "updatedAt": 1794033322230
+    },
+    {
+      "debugId": "1_63619",
+      "path": "ReplicatedStorage.Modules.ProductLib",
+      "file": "ReplicatedStorage/Modules/ProductLib.luau",
+      "sourceHash": "a11dd95d68346dea792ba4cfb4671ab36ff8a4a6195353c8c27570d5dedceada",
+      "updatedAt": 1794033318095
+    },
+    {
+      "debugId": "1_63649",
+      "path": "ReplicatedStorage.Modules.PumpkinXShopLib",
+      "file": "ReplicatedStorage/Modules/PumpkinXShopLib.luau",
+      "sourceHash": "be25a0067dcf62158579b3eec27ca9badf99d8def2bd464bb9a9f5ef26eece59",
+      "updatedAt": 1794033321695
+    },
+    {
+      "debugId": "1_63650",
+      "path": "ReplicatedStorage.Modules.PumpkinXShopUI",
+      "file": "ReplicatedStorage/Modules/PumpkinXShopUI.luau",
+      "sourceHash": "37ee270061953a3eac8f7f8aca79a1a2b8efa304ce8c857c96afadcf7161dbbe",
+      "updatedAt": 1794033321695
+    },
+    {
+      "debugId": "1_63600",
+      "path": "ReplicatedStorage.Modules.ShopLib",
+      "file": "ReplicatedStorage/Modules/ShopLib.luau",
+      "sourceHash": "8322341b921906fad99ed359281b784c514995ad609290cf665dc544f871fe24",
+      "updatedAt": 1794033316027
+    },
+    {
+      "debugId": "1_63604",
+      "path": "ReplicatedStorage.Modules.SkinsLib",
+      "file": "ReplicatedStorage/Modules/SkinsLib.luau",
+      "sourceHash": "b68ddcd2541d3b111f77cedc9dd99802493d021cacf8c396934d42287c25ea53",
+      "updatedAt": 1794033316028
+    },
+    {
+      "debugId": "1_63599",
+      "path": "ReplicatedStorage.Modules.SpringModule",
+      "file": "ReplicatedStorage/Modules/SpringModule.luau",
+      "sourceHash": "3b79fce045f98087cecada679adc6c5b17d99911ce86d7e4b288657cc2240a18",
+      "updatedAt": 1794033316027
+    },
+    {
+      "debugId": "1_63598",
+      "path": "ReplicatedStorage.Modules.ToolsLib",
+      "file": "ReplicatedStorage/Modules/ToolsLib.luau",
+      "sourceHash": "1049cff8c8ed72103a28ae95f892b9246615a4867291eb536ec5bb56a6d647a3",
+      "updatedAt": 1794033315515
+    },
+    {
+      "debugId": "1_63642",
+      "path": "ReplicatedStorage.Modules.TradingConfig",
+      "file": "ReplicatedStorage/Modules/TradingConfig.luau",
+      "sourceHash": "c68bab4fbb52fc4da7c023120a2ae51979bb0f347f27b8a29b6c72f4f1041e88",
+      "updatedAt": 1794033320678
+    },
+    {
+      "debugId": "1_63645",
+      "path": "ReplicatedStorage.Modules.UIStyleGuide",
+      "file": "ReplicatedStorage/Modules/UIStyleGuide.luau",
+      "sourceHash": "98c07bbc3a5f2ea9e16fd9e144a402bd8cb2513801dbb82dfd4b36b2faa314f2",
+      "updatedAt": 1794033321184
+    },
+    {
+      "debugId": "1_63597",
+      "path": "ReplicatedStorage.QAAuthoredBuildingFixture",
+      "file": "ReplicatedStorage/QAAuthoredBuildingFixture.luau",
+      "sourceHash": "6050fab95ef15d395112bdca5ec4c463812aed9a4fa3cb950e87e4fefa471b35",
+      "updatedAt": 1794033315515
+    },
+    {
+      "debugId": "1_16707363",
+      "path": "Scythe Slash",
+      "file": "Scythe-Slash.luau",
+      "sourceHash": "0ce4d18c299e8339da1ee55b74c78f0eeb86a199dc88daea61025206ccfffd43",
+      "updatedAt": 1794033322744
+    },
+    {
+      "debugId": "1_142174",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/init.luau",
+      "sourceHash": "1ef031a8f69439ae48ec5a899bf6a38a193dde34cccfad9f2803f8c904907a98",
+      "updatedAt": 1794033309834
+    },
+    {
+      "debugId": "1_142178",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/init.luau",
+      "sourceHash": "86be0c71f7a64169d1e301b9ee2e8ca4905d5bee0542684c0b6f156b1df008c7",
+      "updatedAt": 1794033311382
+    },
+    {
+      "debugId": "1_142205",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.BaseCamera",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/BaseCamera.luau",
+      "sourceHash": "1db191e7febf4ac95c612f3714bd9a01238780cd5116fb7918b66cce59488c15",
+      "updatedAt": 1794033313444
+    },
+    {
+      "debugId": "1_142179",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.BaseOcclusion",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/BaseOcclusion.luau",
+      "sourceHash": "67f37a6be08c6054f5bc548e853056afc81f8b3a9328edeccc48ea221f0ba0c4",
+      "updatedAt": 1794033311382
+    },
+    {
+      "debugId": "1_142208",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.CameraInput",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/CameraInput.luau",
+      "sourceHash": "3d558d24da943429f64c0f8eb75b8407701858a3eca84e38c397737dcf5ffe61",
+      "updatedAt": 1794033313444
+    },
+    {
+      "debugId": "1_142212",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.CameraToggleStateController",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/CameraToggleStateController.luau",
+      "sourceHash": "85bb33694ac8e54b46b2baad81af45e46d782cb1a0c4f071efc869a37e1c3ef0",
+      "updatedAt": 1794033313952
+    },
+    {
+      "debugId": "1_142183",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.CameraUI",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/CameraUI.luau",
+      "sourceHash": "c7546f16f35cbdcde8730bb57cf422687d26afdb99adbcf9fa35202ef93940dc",
+      "updatedAt": 1794033311902
+    },
+    {
+      "debugId": "1_142180",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.CameraUtils",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/CameraUtils.luau",
+      "sourceHash": "b1fb0ff2999daa03924a8b2eddafc42e384e2cf86c43692863343d39b7fef111",
+      "updatedAt": 1794033311902
+    },
+    {
+      "debugId": "1_142181",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.ClassicCamera",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/ClassicCamera.luau",
+      "sourceHash": "b01d0b5e76e5f309f7cfb1af5d304ed601008ec68f6cf03a0a7c149a57018de9",
+      "updatedAt": 1794033311902
+    },
+    {
+      "debugId": "1_142207",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.Invisicam",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/Invisicam.luau",
+      "sourceHash": "dc44a7fc378c9414c62075f8309eedb4c3e951f88f003e81fdd878b477529562",
+      "updatedAt": 1794033313444
+    },
+    {
+      "debugId": "1_142185",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.LegacyCamera",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/LegacyCamera.luau",
+      "sourceHash": "a19317873a6c9b8e530e8289b58f6a4c17851f28c9350556a2fbcc1b61b69ae7",
+      "updatedAt": 1794033311902
+    },
+    {
+      "debugId": "1_142219",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.MouseLockController",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/MouseLockController.luau",
+      "sourceHash": "0a5b85bc2a8105fbdec0bf33c24176117902a31e67cfa63222cf2da1e76cd7b6",
+      "updatedAt": 1794033314470
+    },
+    {
+      "debugId": "1_142204",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.OrbitalCamera",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/OrbitalCamera.luau",
+      "sourceHash": "45253c4c4b0246a67bd960a3b7e96e5722c99ad70da51688c5b2e5759a9c13d0",
+      "updatedAt": 1794033313444
+    },
+    {
+      "debugId": "1_142202",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.Poppercam",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/Poppercam.luau",
+      "sourceHash": "e5a2cf20988a693b246902fb5eb2171f6c1e4be5a416be3c1bf9ad65cc496096",
+      "updatedAt": 1794033312928
+    },
+    {
+      "debugId": "1_142195",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.TransparencyController",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/TransparencyController.luau",
+      "sourceHash": "d44b59abd04a73d43d5fbc94c2e5521a3a7f68ccdc6f8b0ff45e26b9e70587e4",
+      "updatedAt": 1794033312411
+    },
+    {
+      "debugId": "1_142200",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.VehicleCamera",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/VehicleCamera/init.luau",
+      "sourceHash": "3cc94b5b1d5f1d1f5e1167ba1674d935e668513398acfbb154f65d04f056685b",
+      "updatedAt": 1794033312928
+    },
+    {
+      "debugId": "1_142214",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.VehicleCamera.VehicleCameraConfig",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/VehicleCamera/VehicleCameraConfig.luau",
+      "sourceHash": "f4ae9c25d09e7207419a62f952905dfa6369048a2eccdb8f67193cd315da0d1a",
+      "updatedAt": 1794033312928
+    },
+    {
+      "debugId": "1_142215",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.VehicleCamera.VehicleCameraCore",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/VehicleCamera/VehicleCameraCore.luau",
+      "sourceHash": "95e26dc16d5575a715ede4d6758ed57c1719581d5d1a94c66866ae71edd38e51",
+      "updatedAt": 1794033312928
+    },
+    {
+      "debugId": "1_142213",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.VRBaseCamera",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/VRBaseCamera.luau",
+      "sourceHash": "ef50de3716e16812bffa945ab7fbc669f8dede44ef5234419e33ed254f50d47c",
+      "updatedAt": 1794033314470
+    },
+    {
+      "debugId": "1_142199",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.VRCamera",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/VRCamera.luau",
+      "sourceHash": "53fb7e5aef7d81bde2b6977e911a599558bcc6164dbd48167124fae105e77aad",
+      "updatedAt": 1794033312412
+    },
+    {
+      "debugId": "1_142211",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.VRCameraTeleportDetector",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/VRCameraTeleportDetector/init.luau",
+      "sourceHash": "cf9f41aa7459709ea09fb3667e09f7b266d0173804e0102585a22f78fb2d5f92",
+      "updatedAt": 1794033313952
+    },
+    {
+      "debugId": "1_142210",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.VRCameraTeleportDetector.spec",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/VRCameraTeleportDetector/spec.luau",
+      "sourceHash": "1653c2e6aba51e0099eca59ee8fd73cdd86e9d7463d40e777103fa67417d0e9c",
+      "updatedAt": 1794033313952
+    },
+    {
+      "debugId": "1_142209",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.VRVehicleCamera",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/VRVehicleCamera.luau",
+      "sourceHash": "113ed8f25330bd19760b6e51dda57b57eb815dc1b5aeb0b2c012c5a890cebf97",
+      "updatedAt": 1794033313952
+    },
+    {
+      "debugId": "1_142193",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.ZoomController",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/ZoomController/init.luau",
+      "sourceHash": "f88dfa5050a504093ce54b11782c8b89b941d403b11bb314e199dffca7fd0706",
+      "updatedAt": 1794033312411
+    },
+    {
+      "debugId": "1_142194",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CameraModule.ZoomController.Popper",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CameraModule/ZoomController/Popper.luau",
+      "sourceHash": "e2e41bb8aaace9426409d1488957ac243e7b498334bd592d050f4bf593dd67bf",
+      "updatedAt": 1794033312412
+    },
+    {
+      "debugId": "1_142190",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CommonUtils.CameraWrapper",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CommonUtils/CameraWrapper/init.luau",
+      "sourceHash": "df560c203bceb503f302ed9f64543c77c3208d0d4d0a1ede622b23789d3c88a1",
+      "updatedAt": 1794033314996
+    },
+    {
+      "debugId": "1_142191",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CommonUtils.CameraWrapper.spec",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CommonUtils/CameraWrapper/spec.luau",
+      "sourceHash": "c46b7be96784c1e0d6497ae7d299556b16a37574ee4bc177140725d119077201",
+      "updatedAt": 1794033314996
+    },
+    {
+      "debugId": "1_142176",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CommonUtils.CharacterUtil",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CommonUtils/CharacterUtil.luau",
+      "sourceHash": "0b4a50c5bc7f1b52ebdbc7afcfc441c98742c209472d63ae4f1b1cf0d452079b",
+      "updatedAt": 1794033314470
+    },
+    {
+      "debugId": "1_142186",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CommonUtils.ConnectionUtil",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CommonUtils/ConnectionUtil/init.luau",
+      "sourceHash": "48d37d8cad1cc17637b0fdd6308d73f604f8f90bbbce20f0349f3d506fdb90d4",
+      "updatedAt": 1794033314996
+    },
+    {
+      "debugId": "1_142184",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CommonUtils.ConnectionUtil.spec",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CommonUtils/ConnectionUtil/spec.luau",
+      "sourceHash": "9a2c600a05717b159382b0bae6b2554ced7578152e89822a7ec39ccfb32b8285",
+      "updatedAt": 1794033314470
+    },
+    {
+      "debugId": "1_142189",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.CommonUtils.FlagUtil",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/CommonUtils/FlagUtil.luau",
+      "sourceHash": "1e113fbb6d8d79665a0acc5401e70ec4134797668d6e808dde2b030890c36568",
+      "updatedAt": 1794033314996
+    },
+    {
+      "debugId": "1_142177",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/init.luau",
+      "sourceHash": "ac975bfaa51d44a7dce21f73a5d2caa97baeded776239e2835f14494acbef1fe",
+      "updatedAt": 1794033309834
+    },
+    {
+      "debugId": "1_142196",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.AvatarAbilitiesInterface",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/AvatarAbilitiesInterface.luau",
+      "sourceHash": "21aec552be3c46fb7f6b8ffd0cf69cca79dd8b7fe2e9dc47cca6e2151e4e6ee5",
+      "updatedAt": 1794033310353
+    },
+    {
+      "debugId": "1_142187",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.BaseCharacterController",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/BaseCharacterController.luau",
+      "sourceHash": "ca7aefdc8ef058603980afba5cf42336da55e88120764fbd6da3ee3c9677657a",
+      "updatedAt": 1794033309834
+    },
+    {
+      "debugId": "1_142197",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.ClickToMoveController",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/ClickToMoveController.luau",
+      "sourceHash": "beac3422c7f9f3604986020b710f9d9cc9d096e2a70727a2de53284252ac5409",
+      "updatedAt": 1794033310353
+    },
+    {
+      "debugId": "1_142192",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.ClickToMoveDisplay",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/ClickToMoveDisplay.luau",
+      "sourceHash": "3545045c154430402f5eb3d89ceba154071a2370e5b5b2630bac46aef7659e34",
+      "updatedAt": 1794033310353
+    },
+    {
+      "debugId": "1_142206",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.DynamicThumbstick",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/DynamicThumbstick.luau",
+      "sourceHash": "09ab7d35509f10ffdc56e1db12539f6d59fba7e7ff878f027390b853d3a6d642",
+      "updatedAt": 1794033310860
+    },
+    {
+      "debugId": "1_142188",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.Gamepad",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/Gamepad.luau",
+      "sourceHash": "d9c74884aeadbe18c34fb4d8481d45efbcd1d675f6a5d485f153b44d789a327c",
+      "updatedAt": 1794033310352
+    },
+    {
+      "debugId": "1_142201",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.Keyboard",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/Keyboard.luau",
+      "sourceHash": "975d701c6f606c02b0ca53f25f2233178e0e8ecd0a302df7269c9aad81f46a7f",
+      "updatedAt": 1794033310860
+    },
+    {
+      "debugId": "1_142198",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.PathDisplay",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/PathDisplay.luau",
+      "sourceHash": "5e5e7823ef948f5320ab0638bf678dd49a82235ea7b9df6f3d12049f83606517",
+      "updatedAt": 1794033310860
+    },
+    {
+      "debugId": "1_142182",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.TouchJump",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/TouchJump.luau",
+      "sourceHash": "cf468fbb5679dd255e53c49381db117c15868fe4c06ab0cb082cf490ee9e5f3b",
+      "updatedAt": 1794033309834
+    },
+    {
+      "debugId": "1_142203",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.TouchThumbstick",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/TouchThumbstick.luau",
+      "sourceHash": "ce3c8cf53998b912ab0e79e5217e0d041ead19b6114a38aaf40096baa4cd0419",
+      "updatedAt": 1794033310860
+    },
+    {
+      "debugId": "1_142216",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.VehicleController",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/VehicleController.luau",
+      "sourceHash": "a74db96cae5d2760b6c85b10eb6838946a7e0a8a1f1c9a402ec7227e2258bb13",
+      "updatedAt": 1794033311382
+    },
+    {
+      "debugId": "1_142218",
+      "path": "StarterPlayer.StarterPlayerScripts.PlayerModule.ControlModule.VRNavigation",
+      "file": "StarterPlayer/StarterPlayerScripts/PlayerModule/ControlModule/VRNavigation.luau",
+      "sourceHash": "a6473a43e66b81f9143b84d5a4905974a01fb01dcd56941c1d722dac430e92d2",
+      "updatedAt": 1794033311382
+    },
+    {
+      "debugId": "1_63594",
+      "path": "StarterPlayer.StarterPlayerScripts.RbxCharacterSounds.AtomicBinding",
+      "file": "StarterPlayer/StarterPlayerScripts/RbxCharacterSounds/AtomicBinding.luau",
+      "sourceHash": "1604f26e4685a94b6e520e8bd824770c5d7438f9f6d5206107ea75a34d371838",
+      "updatedAt": 1794033309314
+    },
+    {
+      "debugId": "1_16707360",
+      "path": "Utilities",
+      "file": "Utilities.luau",
+      "sourceHash": "7837fcf7f5726a263c554700ea1051c4649ef52c48f6f0f85dacd02f2e74da09",
+      "updatedAt": 1794033323264
+    },
+    {
+      "debugId": "1_16707364",
+      "path": "VampireBite",
+      "file": "VampireBite.luau",
+      "sourceHash": "947297a6aaf14779d4aaaba0221ea62eb8cad7d1ed15088b90d0cb21c82379f5",
+      "updatedAt": 1794033322743
+    },
+    {
+      "debugId": "1_16707365",
+      "path": "VampireBlur",
+      "file": "VampireBlur.luau",
+      "sourceHash": "72d7c07b878e4a018819eb024b7239b8684acedd526811e58ade252aafd62e7b",
+      "updatedAt": 1794033322743
+    },
+    {
+      "debugId": "1_16390968",
+      "path": "Workspace.Storages.Room.Contents.Objects.Wooden Piano.Settings",
+      "file": "Workspace/Storages/Room/Contents/Objects/Wooden-Piano/Settings.luau",
+      "sourceHash": "6dac96fa9d9f577fad54b74993bcc5ae1a787f218b6c09a60ed04b0db36b7e62",
+      "updatedAt": 1794033298027
+    }
+  ]
+}
