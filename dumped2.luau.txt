@@ -1,0 +1,5319 @@
+-- Deobfuscated by deobf (dynamic trace)
+-- source: in.lua
+-- NOTE: reconstructed from observed behaviour; branches that were not taken
+--       during the trace are missing and conditions are only noted in comments.
+-- run status: finished
+-- 2814 statements recorded in 1.34s
+-- URLs requested:
+--   https://github.com/Footagesus/WindUI/releases/latest/download/main.lua
+-- remotes fired/invoked:
+--   RemoteEvent
+-- non-standard globals touched: farmState, roomScriptState, basementFarmState
+
+-- loadstring() of 81417 bytes: "local b=...;return({fK=function(W,W,x,J)J=(99);W=x[38]();return J,W;end,Az=bit32.bnot,e=function(W,W,x)W=(x[6950]);return W;end,Dt=function(W,W,x,J,N)(x)[9.0]=(N);J=110;x[11.0]=W;return J;end,k=corout"
+task.spawn(function()
+end)
+
+task.spawn(function()
+end)
+
+task.delay(75, function()
+	-- [envlog] cancelled before it ran
+end)
+
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+Frame.Position = UDim2.new(0, 0, 0, 0)
+Frame.Size = UDim2.new(0, 209, 0, 219)
+Frame.Parent = ScreenGui
+local Path2D = Instance.new("Path2D")
+Path2D.Parent = Frame
+Path2D:SetControlPoints({ Path2DControlPoint.new(UDim2.new(0.25, -8, 0, -4), UDim2.new(0, 6, 0, -5), UDim2.new(0, -6, 0.0625, 5)), Path2DControlPoint.new(UDim2.new(0.5, -1, 0.4375, -9), UDim2.new(0, -3, 0, 1), UDim2.new(0, 0, 0, 0)), Path2DControlPoint.new(UDim2.new(0.125, 5, 0, 0), UDim2.new(0, 0, 0, 1), UDim2.new(0, 2, 0, 2)) })
+Path2D:GetLength()
+Path2D:GetPositionOnCurve(0.71428573131561279)
+Path2D:GetPositionOnCurve(0.46153846383094788)
+Path2D:GetPositionOnCurve(0.2222222238779068)
+Path2D:GetTangentOnCurve(0.45454546809196472)
+Path2D:GetTangentOnCurve(0.8571428656578064)
+Path2D:GetTangentOnCurve(0.5)
+Path2D:GetPositionOnCurveArcLength(0.25)
+Path2D:GetPositionOnCurveArcLength(0.5)
+Path2D:GetTangentOnCurveArcLength(0.80000001192092896)
+Path2D:GetTangentOnCurveArcLength(0.26666668057441711)
+ScreenGui:Destroy()
+local ScreenGui2 = Instance.new("ScreenGui")
+local Frame2 = Instance.new("Frame")
+Frame2.Position = UDim2.new(0, 708, 0, -594)
+Frame2.Size = UDim2.new(0, 667, 0, 782)
+Frame2.Parent = ScreenGui2
+local TextLabel = Instance.new("TextLabel")
+TextLabel.Position = UDim2.new(0.5, 68, 1, -93)
+TextLabel.Size = UDim2.new(0.25, 87, 1, 37)
+TextLabel.AnchorPoint = Vector2.new(0.75, 0)
+TextLabel.LayoutOrder = 1
+TextLabel.Rotation = 451
+TextLabel.Parent = Frame2
+local TextLabel2 = Instance.new("TextLabel")
+TextLabel2.Position = UDim2.new(-1.75, -63, -0.5, 7)
+TextLabel2.Size = UDim2.new(0.203125, 127, 0, 78)
+TextLabel2.AnchorPoint = Vector2.new(0, 1)
+TextLabel2.LayoutOrder = 6
+TextLabel2.Rotation = -381
+TextLabel2.Parent = TextLabel
+local Frame3 = Instance.new("Frame")
+Frame3.Position = UDim2.new(0.5, -145, 0, 122)
+Frame3.Size = UDim2.new(0.359375, 4, 0.0625, 48)
+Frame3.AnchorPoint = Vector2.new(1, 1)
+Frame3.LayoutOrder = 2
+Frame3.Rotation = 669
+Frame3.Parent = Frame2
+local UIScale = Instance.new("UIScale")
+UIScale.Scale = 1.25
+UIScale.Parent = Frame3
+local UIPadding = Instance.new("UIPadding")
+UIPadding.PaddingTop = UDim.new(1, 12)
+UIPadding.PaddingBottom = UDim.new(0, 11)
+UIPadding.PaddingLeft = UDim.new(1, 19)
+UIPadding.PaddingRight = UDim.new(1, 11)
+UIPadding.Parent = Frame3
+local UISizeConstraint = Instance.new("UISizeConstraint")
+UISizeConstraint.MinSize = Vector2.new(18, 25)
+UISizeConstraint.MaxSize = Vector2.new(2832, 1225)
+UISizeConstraint.Parent = Frame3
+local TextButton = Instance.new("TextButton")
+TextButton.Position = UDim2.new(-1.5625, 120, -2, 123)
+TextButton.Size = UDim2.new(0.5, 128, 0.75, 20)
+TextButton.LayoutOrder = 9
+TextButton.Rotation = 537
+TextButton.Parent = Frame2
+local UIPadding2 = Instance.new("UIPadding")
+UIPadding2.PaddingTop = UDim.new(0.5, 15)
+UIPadding2.PaddingBottom = UDim.new(0.3125, 16)
+UIPadding2.PaddingLeft = UDim.new(0.890625, 13)
+UIPadding2.PaddingRight = UDim.new(1, 16)
+UIPadding2.Parent = TextButton
+local UISizeConstraint2 = Instance.new("UISizeConstraint")
+UISizeConstraint2.MinSize = Vector2.new(35, 21)
+UISizeConstraint2.MaxSize = Vector2.new(3831, 1217)
+UISizeConstraint2.Parent = TextButton
+local UIScale2 = Instance.new("UIScale")
+UIScale2.Scale = 1.875
+UIScale2.Parent = TextButton
+local TextLabel3 = Instance.new("TextLabel")
+TextLabel3.Position = UDim2.new(2, -4, 1.34375, -125)
+TextLabel3.Size = UDim2.new(0.46875, 20, 0.375, 18)
+TextLabel3.AnchorPoint = Vector2.new(0.5, 0.859375)
+TextLabel3.LayoutOrder = 1
+TextLabel3.Rotation = 126
+TextLabel3.Parent = Frame2
+local Frame4 = Instance.new("Frame")
+Frame4.Position = UDim2.new(0.390625, 141, -1.265625, -31)
+Frame4.Size = UDim2.new(1, 1, 0, 123)
+Frame4.AnchorPoint = Vector2.new(0.625, 0.5)
+Frame4.LayoutOrder = 6
+Frame4.Rotation = -333
+Frame4.Parent = TextLabel3
+local UIPadding3 = Instance.new("UIPadding")
+UIPadding3.PaddingTop = UDim.new(0.5625, 5)
+UIPadding3.PaddingBottom = UDim.new(0.875, 12)
+UIPadding3.PaddingLeft = UDim.new(1, 12)
+UIPadding3.PaddingRight = UDim.new(1, 6)
+UIPadding3.Parent = Frame4
+local UIScale3 = Instance.new("UIScale")
+UIScale3.Scale = 1.25
+UIScale3.Parent = Frame4
+local UISizeConstraint3 = Instance.new("UISizeConstraint")
+UISizeConstraint3.MinSize = Vector2.new(2, 21)
+UISizeConstraint3.MaxSize = Vector2.new(4395, 2031)
+UISizeConstraint3.Parent = Frame4
+local TextButton2 = Instance.new("TextButton")
+TextButton2.Position = UDim2.new(0.109375, -9, -1.5, 87)
+TextButton2.Size = UDim2.new(1, 84, 0.6875, 91)
+TextButton2.AnchorPoint = Vector2.new(0.03125, 0)
+TextButton2.LayoutOrder = 6
+TextButton2.Rotation = 323
+TextButton2.Parent = TextButton
+local UIScale4 = Instance.new("UIScale")
+UIScale4.Scale = 1.234375
+UIScale4.Parent = TextButton2
+local UISizeConstraint4 = Instance.new("UISizeConstraint")
+UISizeConstraint4.MinSize = Vector2.new(35, 39)
+UISizeConstraint4.MaxSize = Vector2.new(4978, 1796)
+UISizeConstraint4.Parent = TextButton2
+local UIPadding4 = Instance.new("UIPadding")
+UIPadding4.PaddingTop = UDim.new(0, 3)
+UIPadding4.PaddingBottom = UDim.new(0.1875, 2)
+UIPadding4.PaddingLeft = UDim.new(0.25, 16)
+UIPadding4.PaddingRight = UDim.new(0.84375, 12)
+UIPadding4.Parent = TextButton2
+local TextLabel4 = Instance.new("TextLabel")
+TextLabel4.Position = UDim2.new(0.3125, 113, -1.25, -53)
+TextLabel4.Size = UDim2.new(0.25, 51, 0.625, 129)
+TextLabel4.AnchorPoint = Vector2.new(0, 0.125)
+TextLabel4.LayoutOrder = 5
+TextLabel4.Rotation = 159
+TextLabel4.Parent = TextLabel2
+local Frame5 = Instance.new("Frame")
+Frame5.Position = UDim2.new(1.09375, 98, -1.625, 32)
+Frame5.Size = UDim2.new(0.5, 101, 1, 58)
+Frame5.LayoutOrder = 6
+Frame5.Rotation = -127
+Frame5.Parent = TextLabel4
+local UISizeConstraint5 = Instance.new("UISizeConstraint")
+UISizeConstraint5.MinSize = Vector2.new(15, 3)
+UISizeConstraint5.MaxSize = Vector2.new(2286, 1745)
+UISizeConstraint5.Parent = Frame5
+local UIPadding5 = Instance.new("UIPadding")
+UIPadding5.PaddingTop = UDim.new(0.125, 11)
+UIPadding5.PaddingBottom = UDim.new(0.40625, 10)
+UIPadding5.PaddingLeft = UDim.new(0, 14)
+UIPadding5.PaddingRight = UDim.new(0.09375, 19)
+UIPadding5.Parent = Frame5
+local TextLabel5 = Instance.new("TextLabel")
+TextLabel5.Position = UDim2.new(0.1875, 65, 1.25, 76)
+TextLabel5.Size = UDim2.new(0.5, 93, 0, 18)
+TextLabel5.AnchorPoint = Vector2.new(0.75, 0.875)
+TextLabel5.Rotation = -710
+TextLabel5.Parent = TextLabel3
+local UISizeConstraint6 = Instance.new("UISizeConstraint")
+UISizeConstraint6.MinSize = Vector2.new(30, 4)
+UISizeConstraint6.MaxSize = Vector2.new(2072, 4461)
+UISizeConstraint6.Parent = TextLabel5
+local Frame6 = Instance.new("Frame")
+Frame6.Position = UDim2.new(0.25, -54, 1.25, 34)
+Frame6.Size = UDim2.new(1, 42, 0.5, 83)
+Frame6.LayoutOrder = 1
+Frame6.Parent = TextLabel4
+local UIScale5 = Instance.new("UIScale")
+UIScale5.Scale = 2
+UIScale5.Parent = Frame6
+ScreenGui2:Destroy()
+
+local connection = game.AncestryChanged:Connect(function(child, parent)
+end)
+
+connection:Disconnect()
+
+local connection2 = workspace.AncestryChanged:Connect(function(child2, parent2)
+end)
+
+connection2:Disconnect()
+local Folder = Instance.new("Folder")
+
+local connection3 = Folder.AncestryChanged:Connect(function(child3, parent3)
+end)
+
+connection3:Disconnect()
+Folder:GetChildren()
+Folder:Destroy()
+local Folder2 = Instance.new("Folder", Folder)
+
+local connection4 = Folder2.AncestryChanged:Connect(function(child4, parent4)
+end)
+
+connection4:Disconnect()
+Folder2.Name = "807444173"
+Folder:WaitForChild("807444173")
+Folder:Destroy()
+Folder2:Destroy()
+local HttpService = game:GetService("HttpService")
+
+local connection5 = HttpService.AncestryChanged:Connect(function(child5, parent5)
+end)
+
+connection5:Disconnect()
+local RunService = game:GetService("RunService")
+
+local connection6 = RunService.AncestryChanged:Connect(function(child6, parent6)
+end)
+
+connection6:Disconnect()
+local response = game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua")
+local WindUI = loadstring(response)()
+
+WindUI:AddTheme({
+	Name = "SuperDark",
+	Text = Color3.fromHex("#e0e0e0"),
+	Accent = Color3.fromHex("#0a0a0a"),
+	Background = Color3.fromHex("#000000"),
+	Button = Color3.fromHex("#000000"),
+	Icon = Color3.fromHex("#777777"),
+	Outline = Color3.fromHex("#0a0a0a"),
+	Placeholder = Color3.fromHex("#444444"),
+	ToggleDisabled = Color3.fromRGB(10, 10, 10),
+	ToggleEnabled = Color3.fromRGB(150, 150, 150)
+})
+
+WindUI:SetTheme("SuperDark")
+
+local Window = WindUI:CreateWindow({
+	Title = "The Storage HUB",
+	Author = "by @arquivehacks",
+	BackgroundImageTransparency = 0.15,
+	Folder = "TheStorageHub",
+	HideSearchBar = true,
+	Icon = "package",
+	MaxSize = Vector2.new(1000, 750),
+	MinSize = Vector2.new(650, 480),
+	Resizable = true,
+	ScrollBarEnabled = false,
+	SideBarWidth = 230,
+	Size = UDim2.fromOffset(740, 560),
+	ToggleKey = Enum.KeyCode.RightShift,
+	Transparent = true,
+	User = {
+		Anonymous = false,
+		Enabled = true,
+		Callback = function()
+		end
+	}
+})
+
+Window:Tag({ Title = "v1.0.4", Color = Color3.fromHex("#1a1a1a"), Icon = "github", Radius = 8 })
+local VisualsTab = Window:Tab({ Title = "Visuals", Icon = "eye" })
+local MovimentTab = Window:Tab({ Title = "Moviment", Icon = "move" })
+local ItemsTab = Window:Tab({ Title = "Items", Icon = "box" })
+local TeleportTab = Window:Tab({ Title = "Teleport", Icon = "map-pin" })
+local MiscTab = Window:Tab({ Title = "Misc", Icon = "settings" })
+local NotificationsTab = Window:Tab({ Title = "Notifications", Icon = "bell" })
+VisualsTab:Select()
+VisualsTab:Section({ Title = "ESP", Opened = true })
+
+VisualsTab:Toggle({
+	Title = "Players",
+	Desc = "Show ESP for players",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local Players = game:GetService("Players")
+			local Live = workspace:FindFirstChild("Live")
+			local children = Live:GetChildren()
+
+			for i, v in ipairs(children) do
+				local PlayerHighlight = v:FindFirstChild("PlayerHighlight")
+				PlayerHighlight:Destroy()
+				local PlayerESP = v:FindFirstChild("PlayerESP")
+				PlayerESP:Destroy()
+			end
+
+			local children2 = Live:GetChildren()
+
+			for i2, v2 in ipairs(children2) do
+				local Humanoid = v2:FindFirstChild("Humanoid")
+				Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Subject
+			end
+
+			local children3 = Live:GetChildren()
+
+			for i3, v3 in ipairs(children3) do
+				local Humanoid2 = v3:FindFirstChild("Humanoid")
+				Humanoid2.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+				v3:FindFirstChild("PlayerHighlight")
+			end
+
+			local connection7 = Live.ChildAdded:Connect(function(child7)
+				task.wait(0.2)
+			end)
+
+			local thread = task.spawn(function()
+				local children4 = Live:GetChildren()
+
+				for i4, v4 in ipairs(children4) do
+					local Humanoid3 = v4:FindFirstChild("Humanoid")
+					Humanoid3.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+					v4:FindFirstChild("PlayerHighlight")
+				end
+
+				task.wait(0.5)
+			end)
+		else
+			connection7:Disconnect()
+			task.cancel(thread)
+			local children5 = Live:GetChildren()
+
+			for i5, v5 in ipairs(children5) do
+				local PlayerHighlight2 = v5:FindFirstChild("PlayerHighlight")
+				PlayerHighlight2:Destroy()
+				local PlayerESP2 = v5:FindFirstChild("PlayerESP")
+				PlayerESP2:Destroy()
+			end
+
+			local children6 = Live:GetChildren()
+
+			for i6, v6 in ipairs(children6) do
+				local Humanoid4 = v6:FindFirstChild("Humanoid")
+				Humanoid4.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Subject
+			end
+		end
+	end
+})
+
+VisualsTab:Toggle({
+	Title = "Enemies",
+	Desc = "Show ESP for enemies",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local Mobs = workspace:FindFirstChild("Mobs")
+			local children7 = Mobs:GetChildren()
+
+			for i7, v7 in ipairs(children7) do
+				local MobHighlight = v7:FindFirstChild("MobHighlight")
+				MobHighlight:Destroy()
+				local MobESP = v7:FindFirstChild("MobESP")
+				MobESP:Destroy()
+			end
+
+			local children8 = Mobs:GetChildren()
+
+			for i8, v8 in ipairs(children8) do
+				local Humanoid5 = v8:FindFirstChild("Humanoid")
+				Humanoid5.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+				v8:FindFirstChild("MobHighlight")
+			end
+
+			local connection8 = Mobs.ChildAdded:Connect(function(child8)
+				task.wait(0.2)
+			end)
+
+			local thread2 = task.spawn(function()
+				local children9 = Mobs:GetChildren()
+
+				for i9, v9 in ipairs(children9) do
+					local Humanoid6 = v9:FindFirstChild("Humanoid")
+					Humanoid6.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+					v9:FindFirstChild("MobHighlight")
+				end
+
+				task.wait(0.5)
+			end)
+		else
+			connection8:Disconnect()
+			task.cancel(thread2)
+			local children10 = Mobs:GetChildren()
+
+			for i10, v10 in ipairs(children10) do
+				local MobHighlight2 = v10:FindFirstChild("MobHighlight")
+				MobHighlight2:Destroy()
+				local MobESP2 = v10:FindFirstChild("MobESP")
+				MobESP2:Destroy()
+			end
+		end
+	end
+})
+
+VisualsTab:Toggle({
+	Title = "Loot",
+	Desc = "Show ESP for loot",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local Storages = workspace:FindFirstChild("Storages")
+			local children11 = Storages:GetChildren()
+
+			for i11, v11 in ipairs(children11) do
+				local Contents = v11:FindFirstChild("Contents")
+				local Loot = Contents:FindFirstChild("Loot")
+				local children12 = Loot:GetChildren()
+
+				for i12, v12 in ipairs(children12) do
+					local LootHighlight = v12:FindFirstChild("LootHighlight")
+					LootHighlight:Destroy()
+					local LootName = v12:FindFirstChild("LootName")
+					LootName:Destroy()
+				end
+			end
+
+			local children13 = Storages:GetChildren()
+
+			for i13, v13 in ipairs(children13) do
+				local Contents2 = v13:FindFirstChild("Contents")
+				local Loot2 = Contents2:FindFirstChild("Loot")
+				local children14 = Loot2:GetChildren()
+
+				for i14, v14 in ipairs(children14) do
+					v14:FindFirstChild("LootHighlight")
+				end
+			end
+
+			local thread3 = task.spawn(function()
+				local children15 = Storages:GetChildren()
+
+				for i15, v15 in ipairs(children15) do
+					local Contents3 = v15:FindFirstChild("Contents")
+					local Loot3 = Contents3:FindFirstChild("Loot")
+					local children16 = Loot3:GetChildren()
+
+					for i16, v16 in ipairs(children16) do
+						v16:FindFirstChild("LootHighlight")
+					end
+				end
+
+				task.wait(0.2)
+			end)
+		else
+			task.cancel(thread3)
+			local children17 = Storages:GetChildren()
+
+			for i17, v17 in ipairs(children17) do
+				local Contents4 = v17:FindFirstChild("Contents")
+				local Loot4 = Contents4:FindFirstChild("Loot")
+				local children18 = Loot4:GetChildren()
+
+				for i18, v18 in ipairs(children18) do
+					local LootHighlight2 = v18:FindFirstChild("LootHighlight")
+					LootHighlight2:Destroy()
+					local LootName2 = v18:FindFirstChild("LootName")
+					LootName2:Destroy()
+				end
+			end
+		end
+	end
+})
+
+VisualsTab:Divider()
+VisualsTab:Section({ Title = "FullBright", Opened = true })
+
+VisualsTab:Button({
+	Title = "FullBright",
+	Desc = "Clears dark fog",
+	Icon = "sun",
+	Callback = function(state)
+		if state then
+			local Lighting = game:GetService("Lighting")
+			local Atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
+			Atmosphere.Density = 0
+			Atmosphere.Haze = 0
+			Atmosphere.Glare = 0
+			Atmosphere.Offset = 0
+
+			Lighting.ChildAdded:Connect(function(child9)
+				local Atmosphere6 = Lighting:FindFirstChildOfClass("Atmosphere")
+				Atmosphere6.Density = 0
+				Atmosphere6.Haze = 0
+				Atmosphere6.Glare = 0
+				Atmosphere6.Offset = 0
+			end)
+
+			task.spawn(function()
+				local Atmosphere2 = Lighting:FindFirstChildOfClass("Atmosphere")
+				Atmosphere2.Density = 0
+				Atmosphere2.Haze = 0
+				Atmosphere2.Glare = 0
+				Atmosphere2.Offset = 0
+				task.wait(0.5)
+				local Atmosphere3 = Lighting:FindFirstChildOfClass("Atmosphere")
+				Atmosphere3.Density = 0
+				Atmosphere3.Haze = 0
+				Atmosphere3.Glare = 0
+				Atmosphere3.Offset = 0
+				task.wait(0.5)
+				local Atmosphere4 = Lighting:FindFirstChildOfClass("Atmosphere")
+				Atmosphere4.Density = 0
+				Atmosphere4.Haze = 0
+				Atmosphere4.Glare = 0
+				Atmosphere4.Offset = 0
+				task.wait(0.5)
+				local Atmosphere5 = Lighting:FindFirstChildOfClass("Atmosphere")
+				Atmosphere5.Density = 0
+				Atmosphere5.Haze = 0
+				Atmosphere5.Glare = 0
+				Atmosphere5.Offset = 0
+				task.wait(0.5)
+				-- [envlog] the statements above repeat forever (loop)
+			end)
+
+			WindUI:Notify({ Title = "FullBright", Content = "Activated!", Duration = 5 })
+		else
+			WindUI:Notify({ Title = "FullBright", Content = "Already active.", Duration = 3 })
+		end
+	end
+})
+
+MovimentTab:Section({ Title = "Run", Opened = true })
+
+MovimentTab:Toggle({
+	Title = "Auto Run",
+	Desc = "Automatically run",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local ReplicatedStorage = game:GetService("ReplicatedStorage")
+			local Remotes = ReplicatedStorage:FindFirstChild("Remotes")
+			local RemoteEvent = Remotes:FindFirstChild("RemoteEvent")
+
+			task.spawn(function()
+				RemoteEvent:FireServer("Run")
+				task.wait()
+			end)
+
+			WindUI:Notify({ Title = "Auto Run", Content = "Enabled!", Duration = 2 })
+		else
+			local Remotes2 = ReplicatedStorage:FindFirstChild("Remotes")
+			Remotes2:FindFirstChild("RemoteEvent")
+			WindUI:Notify({ Title = "Auto Run", Content = "Disabled!", Duration = 2 })
+		end
+	end
+})
+
+MovimentTab:Divider()
+MovimentTab:Section({ Title = "Speed", Opened = true })
+
+MovimentTab:Toggle({
+	Title = "Enable Speed",
+	Desc = "Increase walking speed",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local Live2 = workspace:FindFirstChild("Live")
+			local child = Live2:FindFirstChild(game.Players.LocalPlayer.Name)
+			local Humanoid7 = child:FindFirstChild("Humanoid")
+			Humanoid7.WalkSpeed = 16
+			WindUI:Notify({ Title = "Speed", Content = "Enabled!", Duration = 2 })
+		else
+			local Live3 = workspace:FindFirstChild("Live")
+			local child2 = Live3:FindFirstChild(game.Players.LocalPlayer.Name)
+			local Humanoid8 = child2:FindFirstChild("Humanoid")
+			Humanoid8.WalkSpeed = 16
+			WindUI:Notify({ Title = "Speed", Content = "Disabled!", Duration = 2 })
+		end
+	end
+})
+
+MovimentTab:Slider({
+	Title = "Speed Value",
+	Step = 1,
+	Value = { Default = 0, Max = 10, Min = 0 },
+	Callback = function(state)
+		if state then
+			local Live4 = workspace:FindFirstChild("Live")
+			Live4:FindFirstChild(game.Players.LocalPlayer.Name)
+		else
+			local Live5 = workspace:FindFirstChild("Live")
+			Live5:FindFirstChild(game.Players.LocalPlayer.Name)
+		end
+	end
+})
+
+MovimentTab:Divider()
+MovimentTab:Section({ Title = "Panic", Opened = true })
+
+MovimentTab:Toggle({
+	Title = "Enable Panic",
+	Desc = "Press keybind to teleport to storage",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Panic", Content = "Enabled!", Duration = 2 })
+		else
+			WindUI:Notify({ Title = "Panic", Content = "Disabled!", Duration = 2 })
+		end
+	end
+})
+
+MovimentTab:Keybind({
+	Title = "Panic Keybind",
+	Value = "P",
+	Callback = function()
+	end
+})
+
+MovimentTab:Divider()
+MovimentTab:Section({ Title = "NoClip", Opened = true })
+
+MovimentTab:Toggle({
+	Title = "NoClip",
+	Desc = "Walk through walls",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NoClip", Content = "Cannot enable while a farm is active!", Duration = 3 })
+		end
+	end
+})
+
+MovimentTab:Divider()
+MovimentTab:Section({ Title = "Fly", Opened = true })
+
+MovimentTab:Toggle({
+	Title = "Fly",
+	Desc = "WASD, E up, Q down",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local Live6 = workspace:FindFirstChild("Live")
+			local child3 = Live6:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart = child3:FindFirstChild("HumanoidRootPart")
+			local Humanoid9 = child3:FindFirstChild("Humanoid")
+			Humanoid9.PlatformStand = true
+			local BodyVelocity = Instance.new("BodyVelocity")
+			BodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+			BodyVelocity.Parent = HumanoidRootPart
+			local UserInputService = game:GetService("UserInputService")
+
+			local connection9 = RunService.RenderStepped:Connect(function(deltaTime)
+				local Live12 = workspace:FindFirstChild("Live")
+				local child9 = Live12:FindFirstChild(game.Players.LocalPlayer.Name)
+				child9:FindFirstChild("HumanoidRootPart")
+				UserInputService:IsKeyDown(Enum.KeyCode.W)
+				UserInputService:IsKeyDown(Enum.KeyCode.S)
+				UserInputService:IsKeyDown(Enum.KeyCode.A)
+				UserInputService:IsKeyDown(Enum.KeyCode.D)
+				UserInputService:IsKeyDown(Enum.KeyCode.E)
+				UserInputService:IsKeyDown(Enum.KeyCode.Q)
+				-- [envlog] error: Luraph Script:1: [string "Luraph "]:1: attempt to index nil with 'Velocity'
+			end)
+
+			WindUI:Notify({ Title = "Fly", Content = "Enabled!", Duration = 2 })
+		else
+			connection9:Disconnect()
+			BodyVelocity:Destroy()
+			local Live7 = workspace:FindFirstChild("Live")
+			local child4 = Live7:FindFirstChild(game.Players.LocalPlayer.Name)
+			local Humanoid10 = child4:FindFirstChild("Humanoid")
+			Humanoid10.PlatformStand = false
+			local HumanoidRootPart2 = child4:FindFirstChild("HumanoidRootPart")
+			local BodyVelocity2 = HumanoidRootPart2:FindFirstChildOfClass("BodyVelocity")
+			BodyVelocity2:Destroy()
+			WindUI:Notify({ Title = "Fly", Content = "Disabled!", Duration = 2 })
+		end
+	end
+})
+
+ItemsTab:Section({ Title = "Auto Buy", Opened = true })
+
+ItemsTab:Dropdown({
+	Title = "Choose items to autobuy",
+	Desc = "Select items to purchase automatically",
+	AllowNone = true,
+	Multi = true,
+	Value = {},
+	Values = {
+		{ Title = "Defense Blessing", Icon = "box" },
+		{ Title = "Health Blessing", Icon = "box" },
+		{ Title = "Speed Blessing", Icon = "box" },
+		{ Title = "Super Human Blessing", Icon = "box" },
+		{ Title = "AK", Icon = "box" },
+		{ Title = "Bear Trap", Icon = "box" },
+		{ Title = "Crowbar", Icon = "box" },
+		{ Title = "EMP Grenade", Icon = "box" },
+		{ Title = "Grenade", Icon = "box" },
+		{ Title = "Revolver", Icon = "box" },
+		{ Title = "SMG", Icon = "box" },
+		{ Title = "Light Ammo", Icon = "box" },
+		{ Title = "Medium Ammo", Icon = "box" },
+		{ Title = "Shotgun Ammo", Icon = "box" },
+		{ Title = "Armor Pad", Icon = "box" },
+		{ Title = "Light Ammo Pack", Icon = "box" },
+		{ Title = "Medium Ammo Pack", Icon = "box" },
+		{ Title = "Shotgun Ammo Pack", Icon = "box" },
+		{ Title = "Ramen", Icon = "box" },
+		{ Title = "The Stuff", Icon = "box" }
+	},
+	Callback = function(arg25)
+		for i19, v19 in ipairs(arg25) do
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Auto Buy",
+	Desc = "Automatically buy selected items",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Auto Buy", Content = "Select items first!", Duration = 3 })
+		end
+	end
+})
+
+ItemsTab:Divider()
+ItemsTab:Section({ Title = "Auto Farm Rooms", Opened = true })
+
+ItemsTab:Toggle({
+	Title = "Auto Farm Surface",
+	Desc = "Automatically open surface rooms",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local Live8 = workspace:FindFirstChild("Live")
+			local child5 = Live8:FindFirstChild(game.Players.LocalPlayer.Name)
+			child5:FindFirstChild("HumanoidRootPart")
+			local Live9 = workspace:FindFirstChild("Live")
+			local child6 = Live9:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart3 = child6:FindFirstChild("HumanoidRootPart")
+
+			local thread7 = task.spawn(function(...)
+				local Storages2 = workspace:FindFirstChild("Storages")
+				workspace:FindFirstChild("BlackBox")
+				local BlackBoxWarning = Instance.new("ScreenGui")
+				BlackBoxWarning.Name = "BlackBoxWarning"
+				local PlayerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+				BlackBoxWarning.Parent = PlayerGui
+				BlackBoxWarning.ResetOnSpawn = false
+				local Frame7 = Instance.new("Frame")
+				Frame7.Size = UDim2.new(0, 320, 0, 80)
+				Frame7.Position = UDim2.new(0.5, -160, 0.5, -40)
+				Frame7.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+				Frame7.BackgroundTransparency = 0.3
+				Frame7.BorderSizePixel = 2
+				Frame7.BorderColor3 = Color3.fromRGB(255, 200, 100)
+				Frame7.Visible = false
+				Frame7.Parent = BlackBoxWarning
+				local TextLabel6 = Instance.new("TextLabel")
+				TextLabel6.Size = UDim2.new(1, 0, 0.6, 0)
+				TextLabel6.Position = UDim2.new(0, 0, 0, 0)
+				TextLabel6.BackgroundTransparency = 1
+				TextLabel6.Text = "RECOVERING HEALTH"
+				TextLabel6.TextColor3 = Color3.fromRGB(255, 255, 255)
+				TextLabel6.TextScaled = true
+				TextLabel6.Font = Enum.Font.GothamBold
+				TextLabel6.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+				TextLabel6.TextStrokeTransparency = 0.5
+				TextLabel6.Parent = Frame7
+				local TextLabel7 = Instance.new("TextLabel")
+				TextLabel7.Size = UDim2.new(1, 0, 0.4, 0)
+				TextLabel7.Position = UDim2.new(0, 0, 0.6, 0)
+				TextLabel7.BackgroundTransparency = 1
+				TextLabel7.Text = "0 / 80"
+				TextLabel7.TextColor3 = Color3.fromRGB(200, 220, 255)
+				TextLabel7.TextScaled = true
+				TextLabel7.Font = Enum.Font.Gotham
+				TextLabel7.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+				TextLabel7.TextStrokeTransparency = 0.5
+				TextLabel7.Parent = Frame7
+				local ContextActionService = game:GetService("ContextActionService")
+
+				ContextActionService:BindActionAtPriority("BlockMovement", function()
+				end, false, 3000, Enum.PlayerActions.CharacterForward, Enum.PlayerActions.CharacterBackward, Enum.PlayerActions.CharacterLeft, Enum.PlayerActions.CharacterRight, Enum.PlayerActions.CharacterJump)
+
+				local Live10 = workspace:FindFirstChild("Live")
+				local child7 = Live10:FindFirstChild(game.Players.LocalPlayer.Name)
+				local HumanoidRootPart4 = child7:WaitForChild("HumanoidRootPart")
+				child7:WaitForChild("Humanoid")
+				local descendants = child7:GetDescendants()
+
+				for i20, v20 in ipairs(descendants) do
+					v20.CanCollide = false
+					v20.CanTouch = false
+					v20.CanQuery = false
+				end
+
+				local thread4 = task.spawn(function()
+					local Live11 = workspace:FindFirstChild("Live")
+					local child8 = Live11:FindFirstChild(game.Players.LocalPlayer.Name)
+					local descendants2 = child8:GetDescendants()
+
+					for i21, v21 in ipairs(descendants2) do
+						v21.CanCollide = false
+						v21.CanTouch = false
+						v21.CanQuery = false
+					end
+
+					task.wait(0.1)
+				end)
+
+				local thread5 = task.spawn(function()
+					task.wait(0.1)
+					local Live188 = workspace:FindFirstChild("Live")
+					local child185 = Live188:FindFirstChild(game.Players.LocalPlayer.Name)
+					child185:FindFirstChildOfClass("Humanoid")
+					-- [envlog] error: Luraph Script:1: [string "Luraph "]:1: attempt to compare userdata < number
+				end)
+
+				local thread6 = task.spawn(function()
+					task.wait(0.3)
+					local children94 = Storages2:GetChildren()
+
+					for i102, v185 in ipairs(children94) do
+						v185:FindFirstChild("Contents")
+					end
+
+					local children95 = Storages2:GetChildren()
+					children95[1]:FindFirstChild("Contents")
+				end)
+
+				task.wait(0.5)
+				task.cancel(thread4)
+				task.cancel(thread5)
+				task.cancel(thread6)
+				Frame7.Visible = false
+				BlackBoxWarning:Destroy()
+				v20.CanCollide = true
+				v20.CanTouch = true
+				v20.CanQuery = true
+				v21.CanCollide = true
+				v21.CanTouch = true
+				v21.CanQuery = true
+				ContextActionService:UnbindAction("BlockMovement")
+				HumanoidRootPart4.CFrame = HumanoidRootPart3.CFrame
+			end)
+
+			WindUI:Notify({ Title = "Surface Farm", Content = "Activated!", Duration = 2 })
+		else
+			task.wait(0.5)
+			task.cancel(thread7)
+			WindUI:Notify({ Title = "Surface Farm", Content = "Deactivated!", Duration = 2 })
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Auto Farm Basement",
+	Desc = "Automatically open basement rooms and collect loot",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local Live13 = workspace:FindFirstChild("Live")
+			local child10 = Live13:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart5 = child10:FindFirstChild("HumanoidRootPart")
+
+			local thread8 = task.spawn(function(...)
+				workspace:FindFirstChild("BasementStorages")
+				workspace:FindFirstChild("BlackBox")
+				local Live14 = workspace:FindFirstChild("Live")
+				local child11 = Live14:FindFirstChild(game.Players.LocalPlayer.Name)
+				child11:WaitForChild("HumanoidRootPart")
+				child11:WaitForChild("Humanoid")
+				local descendants3 = child11:GetDescendants()
+
+				for i22, v22 in ipairs(descendants3) do
+					v22.CanCollide = false
+					v22.CanTouch = false
+					v22.CanQuery = false
+				end
+
+				task.spawn(function()
+					local Live15 = workspace:FindFirstChild("Live")
+					local child12 = Live15:FindFirstChild(game.Players.LocalPlayer.Name)
+					local descendants4 = child12:GetDescendants()
+
+					for i23, v23 in ipairs(descendants4) do
+						v23.CanCollide = false
+						v23.CanTouch = false
+						v23.CanQuery = false
+					end
+
+					task.wait(0.1)
+				end)
+
+				local BlackBoxWarning2 = Instance.new("ScreenGui")
+				BlackBoxWarning2.Name = "BlackBoxWarning"
+				local PlayerGui2 = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+				BlackBoxWarning2.Parent = PlayerGui2
+				BlackBoxWarning2.ResetOnSpawn = false
+				local Frame8 = Instance.new("Frame")
+				Frame8.Size = UDim2.new(0, 320, 0, 80)
+				Frame8.Position = UDim2.new(0.5, -160, 0.5, -40)
+				Frame8.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+				Frame8.BackgroundTransparency = 0.3
+				Frame8.BorderSizePixel = 2
+				Frame8.BorderColor3 = Color3.fromRGB(255, 200, 100)
+				Frame8.Visible = false
+				Frame8.Parent = BlackBoxWarning2
+				local TextLabel8 = Instance.new("TextLabel")
+				TextLabel8.Size = UDim2.new(1, 0, 0.6, 0)
+				TextLabel8.Position = UDim2.new(0, 0, 0, 0)
+				TextLabel8.BackgroundTransparency = 1
+				TextLabel8.Text = "RECOVERING HEALTH"
+				TextLabel8.TextColor3 = Color3.fromRGB(255, 255, 255)
+				TextLabel8.TextScaled = true
+				TextLabel8.Font = Enum.Font.GothamBold
+				TextLabel8.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+				TextLabel8.TextStrokeTransparency = 0.5
+				TextLabel8.Parent = Frame8
+				local TextLabel9 = Instance.new("TextLabel")
+				TextLabel9.Size = UDim2.new(1, 0, 0.4, 0)
+				TextLabel9.Position = UDim2.new(0, 0, 0.6, 0)
+				TextLabel9.BackgroundTransparency = 1
+				TextLabel9.Text = "0 / 80"
+				TextLabel9.TextColor3 = Color3.fromRGB(200, 220, 255)
+				TextLabel9.TextScaled = true
+				TextLabel9.Font = Enum.Font.Gotham
+				TextLabel9.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+				TextLabel9.TextStrokeTransparency = 0.5
+				TextLabel9.Parent = Frame8
+
+				ContextActionService:BindActionAtPriority("BlockMovement", function()
+				end, false, 3000, Enum.PlayerActions.CharacterForward, Enum.PlayerActions.CharacterBackward, Enum.PlayerActions.CharacterLeft, Enum.PlayerActions.CharacterRight, Enum.PlayerActions.CharacterJump)
+
+				task.spawn(function()
+					task.wait(0.2)
+					local Live189 = workspace:FindFirstChild("Live")
+					local child186 = Live189:FindFirstChild(game.Players.LocalPlayer.Name)
+					child186:FindFirstChildOfClass("Humanoid")
+					-- [envlog] error: Luraph Script:1: [string "Luraph "]:1: attempt to compare userdata < number
+				end)
+
+				local Mobs2 = workspace:FindFirstChild("Mobs")
+				local children19 = Mobs2:GetChildren()
+
+				for i24, v24 in ipairs(children19) do
+				end
+
+				local BasementStorages = workspace:FindFirstChild("BasementStorages")
+				local children20 = BasementStorages:GetChildren()
+
+				for i25, v25 in ipairs(children20) do
+					local Contents5 = v25:FindFirstChild("Contents")
+					local Mobs3 = Contents5:FindFirstChild("Mobs")
+					local children21 = Mobs3:GetChildren()
+
+					for i26, v26 in ipairs(children21) do
+					end
+				end
+
+				v24:FindFirstChild("HumanoidRootPart")
+				-- [envlog] error: Luraph Script:1: Luraph Script:1: Luraph Script:1: Luraph Script:1: [string "Luraph "]:1: attempt to compare userdata < number
+			end)
+		else
+			task.wait(0.5)
+			task.cancel(thread8)
+			v22.CanCollide = true
+			v22.CanTouch = true
+			v22.CanQuery = true
+			v23.CanCollide = true
+			v23.CanTouch = true
+			v23.CanQuery = true
+			ContextActionService:UnbindAction("BlockMovement")
+			BlackBoxWarning2:Destroy()
+			local Live190 = workspace:FindFirstChild("Live")
+			local child187 = Live190:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart14 = child187:FindFirstChild("HumanoidRootPart")
+			HumanoidRootPart14.CFrame = HumanoidRootPart5.CFrame
+			WindUI:Notify({ Title = "Basement Farm", Content = "Stopped.", Duration = 2 })
+		end
+	end
+})
+
+ItemsTab:Divider()
+ItemsTab:Section({ Title = "General Auto Farm", Opened = true })
+local descendants5 = workspace:GetDescendants()
+
+for i27, v27 in ipairs(descendants5) do
+end
+
+workspace.DescendantAdded:Connect(function(descendant)
+end)
+
+ItemsTab:Toggle({
+	Title = "Auto Collect All",
+	Desc = "Collect any item automatically",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Auto Collect", Content = "Activated!", Duration = 2 })
+			local Live16 = workspace:FindFirstChild("Live")
+			local child13 = Live16:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants6 = child13:GetDescendants()
+
+			for k, v28 in pairs(descendants6) do
+				v28.CanCollide = false
+			end
+
+			local thread9 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			WindUI:Notify({ Title = "Auto Collect", Content = "Deactivated!", Duration = 2 })
+			task.cancel(thread9)
+			local Live17 = workspace:FindFirstChild("Live")
+			local child14 = Live17:FindFirstChild(game.Players.LocalPlayer.Name)
+			v28.CanCollide = true
+			local Humanoid11 = child14:FindFirstChild("Humanoid")
+			Humanoid11:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Divider()
+ItemsTab:Section({ Title = "Weapons", Opened = true })
+
+ItemsTab:Toggle({
+	Title = "Revolver",
+	Desc = "Farm Revolver",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: Revolver", Duration = 2 })
+			local Live18 = workspace:FindFirstChild("Live")
+			local child15 = Live18:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants7 = child15:GetDescendants()
+
+			for k2, v29 in pairs(descendants7) do
+				v29.CanCollide = false
+			end
+
+			local thread10 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread10)
+			local Live19 = workspace:FindFirstChild("Live")
+			local child16 = Live19:FindFirstChild(game.Players.LocalPlayer.Name)
+			v29.CanCollide = true
+			local Humanoid12 = child16:FindFirstChild("Humanoid")
+			Humanoid12:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "AK47",
+	Desc = "Farm AK47",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: AK47", Duration = 2 })
+			local Live20 = workspace:FindFirstChild("Live")
+			local child17 = Live20:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants8 = child17:GetDescendants()
+
+			for k3, v30 in pairs(descendants8) do
+				v30.CanCollide = false
+			end
+
+			local thread11 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread11)
+			local Live21 = workspace:FindFirstChild("Live")
+			local child18 = Live21:FindFirstChild(game.Players.LocalPlayer.Name)
+			v30.CanCollide = true
+			local Humanoid13 = child18:FindFirstChild("Humanoid")
+			Humanoid13:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Shotgun",
+	Desc = "Farm Shotgun",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: Shotgun", Duration = 2 })
+			local Live22 = workspace:FindFirstChild("Live")
+			local child19 = Live22:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants9 = child19:GetDescendants()
+
+			for k4, v31 in pairs(descendants9) do
+				v31.CanCollide = false
+			end
+
+			local thread12 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread12)
+			local Live23 = workspace:FindFirstChild("Live")
+			local child20 = Live23:FindFirstChild(game.Players.LocalPlayer.Name)
+			v31.CanCollide = true
+			local Humanoid14 = child20:FindFirstChild("Humanoid")
+			Humanoid14:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Double Barrel Shotgun",
+	Desc = "Farm Double Barrel Shotgun",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: Double Barrel Shotgun", Duration = 2 })
+			local Live24 = workspace:FindFirstChild("Live")
+			local child21 = Live24:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants10 = child21:GetDescendants()
+
+			for k5, v32 in pairs(descendants10) do
+				v32.CanCollide = false
+			end
+
+			local thread13 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread13)
+			local Live25 = workspace:FindFirstChild("Live")
+			local child22 = Live25:FindFirstChild(game.Players.LocalPlayer.Name)
+			v32.CanCollide = true
+			local Humanoid15 = child22:FindFirstChild("Humanoid")
+			Humanoid15:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "SMG",
+	Desc = "Farm SMG",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: SMG", Duration = 2 })
+			local Live26 = workspace:FindFirstChild("Live")
+			local child23 = Live26:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants11 = child23:GetDescendants()
+
+			for k6, v33 in pairs(descendants11) do
+				v33.CanCollide = false
+			end
+
+			local thread14 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread14)
+			local Live27 = workspace:FindFirstChild("Live")
+			local child24 = Live27:FindFirstChild(game.Players.LocalPlayer.Name)
+			v33.CanCollide = true
+			local Humanoid16 = child24:FindFirstChild("Humanoid")
+			Humanoid16:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Flamethrower",
+	Desc = "Farm Flamethrower",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: Flamethrower", Duration = 2 })
+			local Live28 = workspace:FindFirstChild("Live")
+			local child25 = Live28:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants12 = child25:GetDescendants()
+
+			for k7, v34 in pairs(descendants12) do
+				v34.CanCollide = false
+			end
+
+			local thread15 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread15)
+			local Live29 = workspace:FindFirstChild("Live")
+			local child26 = Live29:FindFirstChild(game.Players.LocalPlayer.Name)
+			v34.CanCollide = true
+			local Humanoid17 = child26:FindFirstChild("Humanoid")
+			Humanoid17:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Grenade Launcher",
+	Desc = "Farm Grenade Launcher",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: Grenade Launcher", Duration = 2 })
+			local Live30 = workspace:FindFirstChild("Live")
+			local child27 = Live30:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants13 = child27:GetDescendants()
+
+			for k8, v35 in pairs(descendants13) do
+				v35.CanCollide = false
+			end
+
+			local thread16 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread16)
+			local Live31 = workspace:FindFirstChild("Live")
+			local child28 = Live31:FindFirstChild(game.Players.LocalPlayer.Name)
+			v35.CanCollide = true
+			local Humanoid18 = child28:FindFirstChild("Humanoid")
+			Humanoid18:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Sledgehammer",
+	Desc = "Farm Sledgehammer",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: Sledgehammer", Duration = 2 })
+			local Live32 = workspace:FindFirstChild("Live")
+			local child29 = Live32:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants14 = child29:GetDescendants()
+
+			for k9, v36 in pairs(descendants14) do
+				v36.CanCollide = false
+			end
+
+			local thread17 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread17)
+			local Live33 = workspace:FindFirstChild("Live")
+			local child30 = Live33:FindFirstChild(game.Players.LocalPlayer.Name)
+			v36.CanCollide = true
+			local Humanoid19 = child30:FindFirstChild("Humanoid")
+			Humanoid19:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Fire Axe",
+	Desc = "Farm Fire Axe",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: Fire Axe", Duration = 2 })
+			local Live34 = workspace:FindFirstChild("Live")
+			local child31 = Live34:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants15 = child31:GetDescendants()
+
+			for k10, v37 in pairs(descendants15) do
+				v37.CanCollide = false
+			end
+
+			local thread18 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread18)
+			local Live35 = workspace:FindFirstChild("Live")
+			local child32 = Live35:FindFirstChild(game.Players.LocalPlayer.Name)
+			v37.CanCollide = true
+			local Humanoid20 = child32:FindFirstChild("Humanoid")
+			Humanoid20:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Katana",
+	Desc = "Farm Katana",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: Katana", Duration = 2 })
+			local Live36 = workspace:FindFirstChild("Live")
+			local child33 = Live36:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants16 = child33:GetDescendants()
+
+			for k11, v38 in pairs(descendants16) do
+				v38.CanCollide = false
+			end
+
+			local thread19 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread19)
+			local Live37 = workspace:FindFirstChild("Live")
+			local child34 = Live37:FindFirstChild(game.Players.LocalPlayer.Name)
+			v38.CanCollide = true
+			local Humanoid21 = child34:FindFirstChild("Humanoid")
+			Humanoid21:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Knife",
+	Desc = "Farm Knife",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Weapon Farm", Content = "Searching for: Knife", Duration = 2 })
+			local Live38 = workspace:FindFirstChild("Live")
+			local child35 = Live38:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants17 = child35:GetDescendants()
+
+			for k12, v39 in pairs(descendants17) do
+				v39.CanCollide = false
+			end
+
+			local thread20 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread20)
+			local Live39 = workspace:FindFirstChild("Live")
+			local child36 = Live39:FindFirstChild(game.Players.LocalPlayer.Name)
+			v39.CanCollide = true
+			local Humanoid22 = child36:FindFirstChild("Humanoid")
+			Humanoid22:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Divider()
+ItemsTab:Section({ Title = "Items", Opened = true })
+
+ItemsTab:Toggle({
+	Title = "Agent 1 Key",
+	Desc = "Farm Agent 1 Key",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Agent 1 Key", Duration = 2 })
+			local Live40 = workspace:FindFirstChild("Live")
+			local child37 = Live40:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants18 = child37:GetDescendants()
+
+			for k13, v40 in pairs(descendants18) do
+				v40.CanCollide = false
+			end
+
+			local thread21 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread21)
+			local Live41 = workspace:FindFirstChild("Live")
+			local child38 = Live41:FindFirstChild(game.Players.LocalPlayer.Name)
+			v40.CanCollide = true
+			local Humanoid23 = child38:FindFirstChild("Humanoid")
+			Humanoid23:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Green Key",
+	Desc = "Farm Green Key",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Green Key", Duration = 2 })
+			local Live42 = workspace:FindFirstChild("Live")
+			local child39 = Live42:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants19 = child39:GetDescendants()
+
+			for k14, v41 in pairs(descendants19) do
+				v41.CanCollide = false
+			end
+
+			local thread22 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread22)
+			local Live43 = workspace:FindFirstChild("Live")
+			local child40 = Live43:FindFirstChild(game.Players.LocalPlayer.Name)
+			v41.CanCollide = true
+			local Humanoid24 = child40:FindFirstChild("Humanoid")
+			Humanoid24:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Red Key",
+	Desc = "Farm Red Key",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Red Key", Duration = 2 })
+			local Live44 = workspace:FindFirstChild("Live")
+			local child41 = Live44:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants20 = child41:GetDescendants()
+
+			for k15, v42 in pairs(descendants20) do
+				v42.CanCollide = false
+			end
+
+			local thread23 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread23)
+			local Live45 = workspace:FindFirstChild("Live")
+			local child42 = Live45:FindFirstChild(game.Players.LocalPlayer.Name)
+			v42.CanCollide = true
+			local Humanoid25 = child42:FindFirstChild("Humanoid")
+			Humanoid25:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Skeleton Key",
+	Desc = "Farm Skeleton Key",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Skeleton Key", Duration = 2 })
+			local Live46 = workspace:FindFirstChild("Live")
+			local child43 = Live46:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants21 = child43:GetDescendants()
+
+			for k16, v43 in pairs(descendants21) do
+				v43.CanCollide = false
+			end
+
+			local thread24 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread24)
+			local Live47 = workspace:FindFirstChild("Live")
+			local child44 = Live47:FindFirstChild(game.Players.LocalPlayer.Name)
+			v43.CanCollide = true
+			local Humanoid26 = child44:FindFirstChild("Humanoid")
+			Humanoid26:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Blue Book",
+	Desc = "Farm Blue Book",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Blue Book", Duration = 2 })
+			local Live48 = workspace:FindFirstChild("Live")
+			local child45 = Live48:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants22 = child45:GetDescendants()
+
+			for k17, v44 in pairs(descendants22) do
+				v44.CanCollide = false
+			end
+
+			local thread25 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread25)
+			local Live49 = workspace:FindFirstChild("Live")
+			local child46 = Live49:FindFirstChild(game.Players.LocalPlayer.Name)
+			v44.CanCollide = true
+			local Humanoid27 = child46:FindFirstChild("Humanoid")
+			Humanoid27:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Pink Book",
+	Desc = "Farm Pink Book",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Pink Book", Duration = 2 })
+			local Live50 = workspace:FindFirstChild("Live")
+			local child47 = Live50:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants23 = child47:GetDescendants()
+
+			for k18, v45 in pairs(descendants23) do
+				v45.CanCollide = false
+			end
+
+			local thread26 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread26)
+			local Live51 = workspace:FindFirstChild("Live")
+			local child48 = Live51:FindFirstChild(game.Players.LocalPlayer.Name)
+			v45.CanCollide = true
+			local Humanoid28 = child48:FindFirstChild("Humanoid")
+			Humanoid28:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Purple Book",
+	Desc = "Farm Purple Book",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Purple Book", Duration = 2 })
+			local Live52 = workspace:FindFirstChild("Live")
+			local child49 = Live52:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants24 = child49:GetDescendants()
+
+			for k19, v46 in pairs(descendants24) do
+				v46.CanCollide = false
+			end
+
+			local thread27 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread27)
+			local Live53 = workspace:FindFirstChild("Live")
+			local child50 = Live53:FindFirstChild(game.Players.LocalPlayer.Name)
+			v46.CanCollide = true
+			local Humanoid29 = child50:FindFirstChild("Humanoid")
+			Humanoid29:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Red Book",
+	Desc = "Farm Red Book",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Red Book", Duration = 2 })
+			local Live54 = workspace:FindFirstChild("Live")
+			local child51 = Live54:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants25 = child51:GetDescendants()
+
+			for k20, v47 in pairs(descendants25) do
+				v47.CanCollide = false
+			end
+
+			local thread28 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread28)
+			local Live55 = workspace:FindFirstChild("Live")
+			local child52 = Live55:FindFirstChild(game.Players.LocalPlayer.Name)
+			v47.CanCollide = true
+			local Humanoid30 = child52:FindFirstChild("Humanoid")
+			Humanoid30:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "White Book",
+	Desc = "Farm White Book",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: White Book", Duration = 2 })
+			local Live56 = workspace:FindFirstChild("Live")
+			local child53 = Live56:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants26 = child53:GetDescendants()
+
+			for k21, v48 in pairs(descendants26) do
+				v48.CanCollide = false
+			end
+
+			local thread29 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread29)
+			local Live57 = workspace:FindFirstChild("Live")
+			local child54 = Live57:FindFirstChild(game.Players.LocalPlayer.Name)
+			v48.CanCollide = true
+			local Humanoid31 = child54:FindFirstChild("Humanoid")
+			Humanoid31:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Yellow Book",
+	Desc = "Farm Yellow Book",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Yellow Book", Duration = 2 })
+			local Live58 = workspace:FindFirstChild("Live")
+			local child55 = Live58:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants27 = child55:GetDescendants()
+
+			for k22, v49 in pairs(descendants27) do
+				v49.CanCollide = false
+			end
+
+			local thread30 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread30)
+			local Live59 = workspace:FindFirstChild("Live")
+			local child56 = Live59:FindFirstChild(game.Players.LocalPlayer.Name)
+			v49.CanCollide = true
+			local Humanoid32 = child56:FindFirstChild("Humanoid")
+			Humanoid32:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Bronze Ore",
+	Desc = "Farm Bronze Ore",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Bronze Ore", Duration = 2 })
+			local Live60 = workspace:FindFirstChild("Live")
+			local child57 = Live60:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants28 = child57:GetDescendants()
+
+			for k23, v50 in pairs(descendants28) do
+				v50.CanCollide = false
+			end
+
+			local thread31 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread31)
+			local Live61 = workspace:FindFirstChild("Live")
+			local child58 = Live61:FindFirstChild(game.Players.LocalPlayer.Name)
+			v50.CanCollide = true
+			local Humanoid33 = child58:FindFirstChild("Humanoid")
+			Humanoid33:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Coal Ore",
+	Desc = "Farm Coal Ore",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Coal Ore", Duration = 2 })
+			local Live62 = workspace:FindFirstChild("Live")
+			local child59 = Live62:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants29 = child59:GetDescendants()
+
+			for k24, v51 in pairs(descendants29) do
+				v51.CanCollide = false
+			end
+
+			local thread32 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread32)
+			local Live63 = workspace:FindFirstChild("Live")
+			local child60 = Live63:FindFirstChild(game.Players.LocalPlayer.Name)
+			v51.CanCollide = true
+			local Humanoid34 = child60:FindFirstChild("Humanoid")
+			Humanoid34:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Gold Bar",
+	Desc = "Farm Gold Bar",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Gold Bar", Duration = 2 })
+			local Live64 = workspace:FindFirstChild("Live")
+			local child61 = Live64:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants30 = child61:GetDescendants()
+
+			for k25, v52 in pairs(descendants30) do
+				v52.CanCollide = false
+			end
+
+			local thread33 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread33)
+			local Live65 = workspace:FindFirstChild("Live")
+			local child62 = Live65:FindFirstChild(game.Players.LocalPlayer.Name)
+			v52.CanCollide = true
+			local Humanoid35 = child62:FindFirstChild("Humanoid")
+			Humanoid35:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Iron Ore",
+	Desc = "Farm Iron Ore",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Iron Ore", Duration = 2 })
+			local Live66 = workspace:FindFirstChild("Live")
+			local child63 = Live66:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants31 = child63:GetDescendants()
+
+			for k26, v53 in pairs(descendants31) do
+				v53.CanCollide = false
+			end
+
+			local thread34 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread34)
+			local Live67 = workspace:FindFirstChild("Live")
+			local child64 = Live67:FindFirstChild(game.Players.LocalPlayer.Name)
+			v53.CanCollide = true
+			local Humanoid36 = child64:FindFirstChild("Humanoid")
+			Humanoid36:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Silver Bar",
+	Desc = "Farm Silver Bar",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Silver Bar", Duration = 2 })
+			local Live68 = workspace:FindFirstChild("Live")
+			local child65 = Live68:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants32 = child65:GetDescendants()
+
+			for k27, v54 in pairs(descendants32) do
+				v54.CanCollide = false
+			end
+
+			local thread35 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread35)
+			local Live69 = workspace:FindFirstChild("Live")
+			local child66 = Live69:FindFirstChild(game.Players.LocalPlayer.Name)
+			v54.CanCollide = true
+			local Humanoid37 = child66:FindFirstChild("Humanoid")
+			Humanoid37:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Silver Ore",
+	Desc = "Farm Silver Ore",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Silver Ore", Duration = 2 })
+			local Live70 = workspace:FindFirstChild("Live")
+			local child67 = Live70:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants33 = child67:GetDescendants()
+
+			for k28, v55 in pairs(descendants33) do
+				v55.CanCollide = false
+			end
+
+			local thread36 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread36)
+			local Live71 = workspace:FindFirstChild("Live")
+			local child68 = Live71:FindFirstChild(game.Players.LocalPlayer.Name)
+			v55.CanCollide = true
+			local Humanoid38 = child68:FindFirstChild("Humanoid")
+			Humanoid38:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Cartoon Painting",
+	Desc = "Farm Cartoon Painting",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Cartoon Painting", Duration = 2 })
+			local Live72 = workspace:FindFirstChild("Live")
+			local child69 = Live72:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants34 = child69:GetDescendants()
+
+			for k29, v56 in pairs(descendants34) do
+				v56.CanCollide = false
+			end
+
+			local thread37 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread37)
+			local Live73 = workspace:FindFirstChild("Live")
+			local child70 = Live73:FindFirstChild(game.Players.LocalPlayer.Name)
+			v56.CanCollide = true
+			local Humanoid39 = child70:FindFirstChild("Humanoid")
+			Humanoid39:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Christ Painting",
+	Desc = "Farm Christ Painting",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Christ Painting", Duration = 2 })
+			local Live74 = workspace:FindFirstChild("Live")
+			local child71 = Live74:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants35 = child71:GetDescendants()
+
+			for k30, v57 in pairs(descendants35) do
+				v57.CanCollide = false
+			end
+
+			local thread38 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread38)
+			local Live75 = workspace:FindFirstChild("Live")
+			local child72 = Live75:FindFirstChild(game.Players.LocalPlayer.Name)
+			v57.CanCollide = true
+			local Humanoid40 = child72:FindFirstChild("Humanoid")
+			Humanoid40:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Dark Anime Painting",
+	Desc = "Farm Dark Anime Painting",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Dark Anime Painting", Duration = 2 })
+			local Live76 = workspace:FindFirstChild("Live")
+			local child73 = Live76:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants36 = child73:GetDescendants()
+
+			for k31, v58 in pairs(descendants36) do
+				v58.CanCollide = false
+			end
+
+			local thread39 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread39)
+			local Live77 = workspace:FindFirstChild("Live")
+			local child74 = Live77:FindFirstChild(game.Players.LocalPlayer.Name)
+			v58.CanCollide = true
+			local Humanoid41 = child74:FindFirstChild("Humanoid")
+			Humanoid41:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Last Supper Painting",
+	Desc = "Farm Last Supper Painting",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Last Supper Painting", Duration = 2 })
+			local Live78 = workspace:FindFirstChild("Live")
+			local child75 = Live78:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants37 = child75:GetDescendants()
+
+			for k32, v59 in pairs(descendants37) do
+				v59.CanCollide = false
+			end
+
+			local thread40 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread40)
+			local Live79 = workspace:FindFirstChild("Live")
+			local child76 = Live79:FindFirstChild(game.Players.LocalPlayer.Name)
+			v59.CanCollide = true
+			local Humanoid42 = child76:FindFirstChild("Humanoid")
+			Humanoid42:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Pain Painting",
+	Desc = "Farm Pain Painting",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Pain Painting", Duration = 2 })
+			local Live80 = workspace:FindFirstChild("Live")
+			local child77 = Live80:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants38 = child77:GetDescendants()
+
+			for k33, v60 in pairs(descendants38) do
+				v60.CanCollide = false
+			end
+
+			local thread41 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread41)
+			local Live81 = workspace:FindFirstChild("Live")
+			local child78 = Live81:FindFirstChild(game.Players.LocalPlayer.Name)
+			v60.CanCollide = true
+			local Humanoid43 = child78:FindFirstChild("Humanoid")
+			Humanoid43:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Gás Can",
+	Desc = "Farm Gás Can",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Gás Can", Duration = 2 })
+			local Live82 = workspace:FindFirstChild("Live")
+			local child79 = Live82:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants39 = child79:GetDescendants()
+
+			for k34, v61 in pairs(descendants39) do
+				v61.CanCollide = false
+			end
+
+			local thread42 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread42)
+			local Live83 = workspace:FindFirstChild("Live")
+			local child80 = Live83:FindFirstChild(game.Players.LocalPlayer.Name)
+			v61.CanCollide = true
+			local Humanoid44 = child80:FindFirstChild("Humanoid")
+			Humanoid44:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Medkit",
+	Desc = "Farm Medkit",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Medkit", Duration = 2 })
+			local Live84 = workspace:FindFirstChild("Live")
+			local child81 = Live84:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants40 = child81:GetDescendants()
+
+			for k35, v62 in pairs(descendants40) do
+				v62.CanCollide = false
+			end
+
+			local thread43 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread43)
+			local Live85 = workspace:FindFirstChild("Live")
+			local child82 = Live85:FindFirstChild(game.Players.LocalPlayer.Name)
+			v62.CanCollide = true
+			local Humanoid45 = child82:FindFirstChild("Humanoid")
+			Humanoid45:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Ramen",
+	Desc = "Farm Ramen",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Ramen", Duration = 2 })
+			local Live86 = workspace:FindFirstChild("Live")
+			local child83 = Live86:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants41 = child83:GetDescendants()
+
+			for k36, v63 in pairs(descendants41) do
+				v63.CanCollide = false
+			end
+
+			local thread44 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread44)
+			local Live87 = workspace:FindFirstChild("Live")
+			local child84 = Live87:FindFirstChild(game.Players.LocalPlayer.Name)
+			v63.CanCollide = true
+			local Humanoid46 = child84:FindFirstChild("Humanoid")
+			Humanoid46:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Failed Potion",
+	Desc = "Farm Failed Potion",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Failed Potion", Duration = 2 })
+			local Live88 = workspace:FindFirstChild("Live")
+			local child85 = Live88:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants42 = child85:GetDescendants()
+
+			for k37, v64 in pairs(descendants42) do
+				v64.CanCollide = false
+			end
+
+			local thread45 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread45)
+			local Live89 = workspace:FindFirstChild("Live")
+			local child86 = Live89:FindFirstChild(game.Players.LocalPlayer.Name)
+			v64.CanCollide = true
+			local Humanoid47 = child86:FindFirstChild("Humanoid")
+			Humanoid47:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Empty Bottle",
+	Desc = "Farm Empty Bottle",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Empty Bottle", Duration = 2 })
+			local Live90 = workspace:FindFirstChild("Live")
+			local child87 = Live90:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants43 = child87:GetDescendants()
+
+			for k38, v65 in pairs(descendants43) do
+				v65.CanCollide = false
+			end
+
+			local thread46 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread46)
+			local Live91 = workspace:FindFirstChild("Live")
+			local child88 = Live91:FindFirstChild(game.Players.LocalPlayer.Name)
+			v65.CanCollide = true
+			local Humanoid48 = child88:FindFirstChild("Humanoid")
+			Humanoid48:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Baking pan",
+	Desc = "Farm Baking pan",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Baking pan", Duration = 2 })
+			local Live92 = workspace:FindFirstChild("Live")
+			local child89 = Live92:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants44 = child89:GetDescendants()
+
+			for k39, v66 in pairs(descendants44) do
+				v66.CanCollide = false
+			end
+
+			local thread47 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread47)
+			local Live93 = workspace:FindFirstChild("Live")
+			local child90 = Live93:FindFirstChild(game.Players.LocalPlayer.Name)
+			v66.CanCollide = true
+			local Humanoid49 = child90:FindFirstChild("Humanoid")
+			Humanoid49:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Claymore",
+	Desc = "Farm Claymore",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Claymore", Duration = 2 })
+			local Live94 = workspace:FindFirstChild("Live")
+			local child91 = Live94:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants45 = child91:GetDescendants()
+
+			for k40, v67 in pairs(descendants45) do
+				v67.CanCollide = false
+			end
+
+			local thread48 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread48)
+			local Live95 = workspace:FindFirstChild("Live")
+			local child92 = Live95:FindFirstChild(game.Players.LocalPlayer.Name)
+			v67.CanCollide = true
+			local Humanoid50 = child92:FindFirstChild("Humanoid")
+			Humanoid50:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Components",
+	Desc = "Farm Components",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Components", Duration = 2 })
+			local Live96 = workspace:FindFirstChild("Live")
+			local child93 = Live96:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants46 = child93:GetDescendants()
+
+			for k41, v68 in pairs(descendants46) do
+				v68.CanCollide = false
+			end
+
+			local thread49 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread49)
+			local Live97 = workspace:FindFirstChild("Live")
+			local child94 = Live97:FindFirstChild(game.Players.LocalPlayer.Name)
+			v68.CanCollide = true
+			local Humanoid51 = child94:FindFirstChild("Humanoid")
+			Humanoid51:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Crowbar",
+	Desc = "Farm Crowbar",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Crowbar", Duration = 2 })
+			local Live98 = workspace:FindFirstChild("Live")
+			local child95 = Live98:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants47 = child95:GetDescendants()
+
+			for k42, v69 in pairs(descendants47) do
+				v69.CanCollide = false
+			end
+
+			local thread50 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread50)
+			local Live99 = workspace:FindFirstChild("Live")
+			local child96 = Live99:FindFirstChild(game.Players.LocalPlayer.Name)
+			v69.CanCollide = true
+			local Humanoid52 = child96:FindFirstChild("Humanoid")
+			Humanoid52:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Diamond",
+	Desc = "Farm Diamond",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Diamond", Duration = 2 })
+			local Live100 = workspace:FindFirstChild("Live")
+			local child97 = Live100:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants48 = child97:GetDescendants()
+
+			for k43, v70 in pairs(descendants48) do
+				v70.CanCollide = false
+			end
+
+			local thread51 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread51)
+			local Live101 = workspace:FindFirstChild("Live")
+			local child98 = Live101:FindFirstChild(game.Players.LocalPlayer.Name)
+			v70.CanCollide = true
+			local Humanoid53 = child98:FindFirstChild("Humanoid")
+			Humanoid53:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "EMP Grenade",
+	Desc = "Farm EMP Grenade",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: EMP Grenade", Duration = 2 })
+			local Live102 = workspace:FindFirstChild("Live")
+			local child99 = Live102:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants49 = child99:GetDescendants()
+
+			for k44, v71 in pairs(descendants49) do
+				v71.CanCollide = false
+			end
+
+			local thread52 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread52)
+			local Live103 = workspace:FindFirstChild("Live")
+			local child100 = Live103:FindFirstChild(game.Players.LocalPlayer.Name)
+			v71.CanCollide = true
+			local Humanoid54 = child100:FindFirstChild("Humanoid")
+			Humanoid54:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Light Ammo Pack",
+	Desc = "Farm Light Ammo Pack",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Light Ammo Pack", Duration = 2 })
+			local Live104 = workspace:FindFirstChild("Live")
+			local child101 = Live104:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants50 = child101:GetDescendants()
+
+			for k45, v72 in pairs(descendants50) do
+				v72.CanCollide = false
+			end
+
+			local thread53 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread53)
+			local Live105 = workspace:FindFirstChild("Live")
+			local child102 = Live105:FindFirstChild(game.Players.LocalPlayer.Name)
+			v72.CanCollide = true
+			local Humanoid55 = child102:FindFirstChild("Humanoid")
+			Humanoid55:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Medium Ammo Pack",
+	Desc = "Farm Medium Ammo Pack",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Medium Ammo Pack", Duration = 2 })
+			local Live106 = workspace:FindFirstChild("Live")
+			local child103 = Live106:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants51 = child103:GetDescendants()
+
+			for k46, v73 in pairs(descendants51) do
+				v73.CanCollide = false
+			end
+
+			local thread54 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread54)
+			local Live107 = workspace:FindFirstChild("Live")
+			local child104 = Live107:FindFirstChild(game.Players.LocalPlayer.Name)
+			v73.CanCollide = true
+			local Humanoid56 = child104:FindFirstChild("Humanoid")
+			Humanoid56:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Mug",
+	Desc = "Farm Mug",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Mug", Duration = 2 })
+			local Live108 = workspace:FindFirstChild("Live")
+			local child105 = Live108:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants52 = child105:GetDescendants()
+
+			for k47, v74 in pairs(descendants52) do
+				v74.CanCollide = false
+			end
+
+			local thread55 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread55)
+			local Live109 = workspace:FindFirstChild("Live")
+			local child106 = Live109:FindFirstChild(game.Players.LocalPlayer.Name)
+			v74.CanCollide = true
+			local Humanoid57 = child106:FindFirstChild("Humanoid")
+			Humanoid57:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Pepper Spray",
+	Desc = "Farm Pepper Spray",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Pepper Spray", Duration = 2 })
+			local Live110 = workspace:FindFirstChild("Live")
+			local child107 = Live110:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants53 = child107:GetDescendants()
+
+			for k48, v75 in pairs(descendants53) do
+				v75.CanCollide = false
+			end
+
+			local thread56 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread56)
+			local Live111 = workspace:FindFirstChild("Live")
+			local child108 = Live111:FindFirstChild(game.Players.LocalPlayer.Name)
+			v75.CanCollide = true
+			local Humanoid58 = child108:FindFirstChild("Humanoid")
+			Humanoid58:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Pickaxe",
+	Desc = "Farm Pickaxe",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Pickaxe", Duration = 2 })
+			local Live112 = workspace:FindFirstChild("Live")
+			local child109 = Live112:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants54 = child109:GetDescendants()
+
+			for k49, v76 in pairs(descendants54) do
+				v76.CanCollide = false
+			end
+
+			local thread57 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread57)
+			local Live113 = workspace:FindFirstChild("Live")
+			local child110 = Live113:FindFirstChild(game.Players.LocalPlayer.Name)
+			v76.CanCollide = true
+			local Humanoid59 = child110:FindFirstChild("Humanoid")
+			Humanoid59:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Screwdriver",
+	Desc = "Farm Screwdriver",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Screwdriver", Duration = 2 })
+			local Live114 = workspace:FindFirstChild("Live")
+			local child111 = Live114:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants55 = child111:GetDescendants()
+
+			for k50, v77 in pairs(descendants55) do
+				v77.CanCollide = false
+			end
+
+			local thread58 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread58)
+			local Live115 = workspace:FindFirstChild("Live")
+			local child112 = Live115:FindFirstChild(game.Players.LocalPlayer.Name)
+			v77.CanCollide = true
+			local Humanoid60 = child112:FindFirstChild("Humanoid")
+			Humanoid60:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Shark Tooth",
+	Desc = "Farm Shark Tooth",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Shark Tooth", Duration = 2 })
+			local Live116 = workspace:FindFirstChild("Live")
+			local child113 = Live116:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants56 = child113:GetDescendants()
+
+			for k51, v78 in pairs(descendants56) do
+				v78.CanCollide = false
+			end
+
+			local thread59 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread59)
+			local Live117 = workspace:FindFirstChild("Live")
+			local child114 = Live117:FindFirstChild(game.Players.LocalPlayer.Name)
+			v78.CanCollide = true
+			local Humanoid61 = child114:FindFirstChild("Humanoid")
+			Humanoid61:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Wrench",
+	Desc = "Farm Wrench",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Wrench", Duration = 2 })
+			local Live118 = workspace:FindFirstChild("Live")
+			local child115 = Live118:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants57 = child115:GetDescendants()
+
+			for k52, v79 in pairs(descendants57) do
+				v79.CanCollide = false
+			end
+
+			local thread60 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread60)
+			local Live119 = workspace:FindFirstChild("Live")
+			local child116 = Live119:FindFirstChild(game.Players.LocalPlayer.Name)
+			v79.CanCollide = true
+			local Humanoid62 = child116:FindFirstChild("Humanoid")
+			Humanoid62:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Alive Eye",
+	Desc = "Farm Alive Eye",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Alive Eye", Duration = 2 })
+			local Live120 = workspace:FindFirstChild("Live")
+			local child117 = Live120:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants58 = child117:GetDescendants()
+
+			for k53, v80 in pairs(descendants58) do
+				v80.CanCollide = false
+			end
+
+			local thread61 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread61)
+			local Live121 = workspace:FindFirstChild("Live")
+			local child118 = Live121:FindFirstChild(game.Players.LocalPlayer.Name)
+			v80.CanCollide = true
+			local Humanoid63 = child118:FindFirstChild("Humanoid")
+			Humanoid63:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Ancient Knife",
+	Desc = "Farm Ancient Knife",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Ancient Knife", Duration = 2 })
+			local Live122 = workspace:FindFirstChild("Live")
+			local child119 = Live122:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants59 = child119:GetDescendants()
+
+			for k54, v81 in pairs(descendants59) do
+				v81.CanCollide = false
+			end
+
+			local thread62 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread62)
+			local Live123 = workspace:FindFirstChild("Live")
+			local child120 = Live123:FindFirstChild(game.Players.LocalPlayer.Name)
+			v81.CanCollide = true
+			local Humanoid64 = child120:FindFirstChild("Humanoid")
+			Humanoid64:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Baby Vênus Guytrap",
+	Desc = "Farm Baby Vênus Guytrap",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Baby Vênus Guytrap", Duration = 2 })
+			local Live124 = workspace:FindFirstChild("Live")
+			local child121 = Live124:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants60 = child121:GetDescendants()
+
+			for k55, v82 in pairs(descendants60) do
+				v82.CanCollide = false
+			end
+
+			local thread63 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread63)
+			local Live125 = workspace:FindFirstChild("Live")
+			local child122 = Live125:FindFirstChild(game.Players.LocalPlayer.Name)
+			v82.CanCollide = true
+			local Humanoid65 = child122:FindFirstChild("Humanoid")
+			Humanoid65:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Baseball Bat",
+	Desc = "Farm Baseball Bat",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Baseball Bat", Duration = 2 })
+			local Live126 = workspace:FindFirstChild("Live")
+			local child123 = Live126:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants61 = child123:GetDescendants()
+
+			for k56, v83 in pairs(descendants61) do
+				v83.CanCollide = false
+			end
+
+			local thread64 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread64)
+			local Live127 = workspace:FindFirstChild("Live")
+			local child124 = Live127:FindFirstChild(game.Players.LocalPlayer.Name)
+			v83.CanCollide = true
+			local Humanoid66 = child124:FindFirstChild("Humanoid")
+			Humanoid66:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "King's Crown",
+	Desc = "Farm King's Crown",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: King's Crown", Duration = 2 })
+			local Live128 = workspace:FindFirstChild("Live")
+			local child125 = Live128:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants62 = child125:GetDescendants()
+
+			for k57, v84 in pairs(descendants62) do
+				v84.CanCollide = false
+			end
+
+			local thread65 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread65)
+			local Live129 = workspace:FindFirstChild("Live")
+			local child126 = Live129:FindFirstChild(game.Players.LocalPlayer.Name)
+			v84.CanCollide = true
+			local Humanoid67 = child126:FindFirstChild("Humanoid")
+			Humanoid67:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Armor Pad",
+	Desc = "Farm Armor Pad",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Armor Pad", Duration = 2 })
+			local Live130 = workspace:FindFirstChild("Live")
+			local child127 = Live130:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants63 = child127:GetDescendants()
+
+			for k58, v85 in pairs(descendants63) do
+				v85.CanCollide = false
+			end
+
+			local thread66 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread66)
+			local Live131 = workspace:FindFirstChild("Live")
+			local child128 = Live131:FindFirstChild(game.Players.LocalPlayer.Name)
+			v85.CanCollide = true
+			local Humanoid68 = child128:FindFirstChild("Humanoid")
+			Humanoid68:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Pumpkin Key",
+	Desc = "Farm Pumpkin Key",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Pumpkin Key", Duration = 2 })
+			local Live132 = workspace:FindFirstChild("Live")
+			local child129 = Live132:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants64 = child129:GetDescendants()
+
+			for k59, v86 in pairs(descendants64) do
+				v86.CanCollide = false
+			end
+
+			local thread67 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread67)
+			local Live133 = workspace:FindFirstChild("Live")
+			local child130 = Live133:FindFirstChild(game.Players.LocalPlayer.Name)
+			v86.CanCollide = true
+			local Humanoid69 = child130:FindFirstChild("Humanoid")
+			Humanoid69:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Flashlight",
+	Desc = "Farm Flashlight",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Flashlight", Duration = 2 })
+			local Live134 = workspace:FindFirstChild("Live")
+			local child131 = Live134:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants65 = child131:GetDescendants()
+
+			for k60, v87 in pairs(descendants65) do
+				v87.CanCollide = false
+			end
+
+			local thread68 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread68)
+			local Live135 = workspace:FindFirstChild("Live")
+			local child132 = Live135:FindFirstChild(game.Players.LocalPlayer.Name)
+			v87.CanCollide = true
+			local Humanoid70 = child132:FindFirstChild("Humanoid")
+			Humanoid70:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Radio",
+	Desc = "Farm Radio",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Radio", Duration = 2 })
+			local Live136 = workspace:FindFirstChild("Live")
+			local child133 = Live136:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants66 = child133:GetDescendants()
+
+			for k61, v88 in pairs(descendants66) do
+				v88.CanCollide = false
+			end
+
+			local thread69 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread69)
+			local Live137 = workspace:FindFirstChild("Live")
+			local child134 = Live137:FindFirstChild(game.Players.LocalPlayer.Name)
+			v88.CanCollide = true
+			local Humanoid71 = child134:FindFirstChild("Humanoid")
+			Humanoid71:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Fishing Rod",
+	Desc = "Farm Fishing Rod",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Fishing Rod", Duration = 2 })
+			local Live138 = workspace:FindFirstChild("Live")
+			local child135 = Live138:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants67 = child135:GetDescendants()
+
+			for k62, v89 in pairs(descendants67) do
+				v89.CanCollide = false
+			end
+
+			local thread70 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread70)
+			local Live139 = workspace:FindFirstChild("Live")
+			local child136 = Live139:FindFirstChild(game.Players.LocalPlayer.Name)
+			v89.CanCollide = true
+			local Humanoid72 = child136:FindFirstChild("Humanoid")
+			Humanoid72:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Gas Can",
+	Desc = "Farm Gas Can",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Gas Can", Duration = 2 })
+			local Live140 = workspace:FindFirstChild("Live")
+			local child137 = Live140:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants68 = child137:GetDescendants()
+
+			for k63, v90 in pairs(descendants68) do
+				v90.CanCollide = false
+			end
+
+			local thread71 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread71)
+			local Live141 = workspace:FindFirstChild("Live")
+			local child138 = Live141:FindFirstChild(game.Players.LocalPlayer.Name)
+			v90.CanCollide = true
+			local Humanoid73 = child138:FindFirstChild("Humanoid")
+			Humanoid73:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Baby Venus Guytrap",
+	Desc = "Farm Baby Venus Guytrap",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Baby Venus Guytrap", Duration = 2 })
+			local Live142 = workspace:FindFirstChild("Live")
+			local child139 = Live142:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants69 = child139:GetDescendants()
+
+			for k64, v91 in pairs(descendants69) do
+				v91.CanCollide = false
+			end
+
+			local thread72 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread72)
+			local Live143 = workspace:FindFirstChild("Live")
+			local child140 = Live143:FindFirstChild(game.Players.LocalPlayer.Name)
+			v91.CanCollide = true
+			local Humanoid74 = child140:FindFirstChild("Humanoid")
+			Humanoid74:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Golden Skull",
+	Desc = "Farm Golden Skull",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Golden Skull", Duration = 2 })
+			local Live144 = workspace:FindFirstChild("Live")
+			local child141 = Live144:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants70 = child141:GetDescendants()
+
+			for k65, v92 in pairs(descendants70) do
+				v92.CanCollide = false
+			end
+
+			local thread73 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread73)
+			local Live145 = workspace:FindFirstChild("Live")
+			local child142 = Live145:FindFirstChild(game.Players.LocalPlayer.Name)
+			v92.CanCollide = true
+			local Humanoid75 = child142:FindFirstChild("Humanoid")
+			Humanoid75:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Living Eye",
+	Desc = "Farm Living Eye",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Living Eye", Duration = 2 })
+			local Live146 = workspace:FindFirstChild("Live")
+			local child143 = Live146:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants71 = child143:GetDescendants()
+
+			for k66, v93 in pairs(descendants71) do
+				v93.CanCollide = false
+			end
+
+			local thread74 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread74)
+			local Live147 = workspace:FindFirstChild("Live")
+			local child144 = Live147:FindFirstChild(game.Players.LocalPlayer.Name)
+			v93.CanCollide = true
+			local Humanoid76 = child144:FindFirstChild("Humanoid")
+			Humanoid76:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Gold Ore",
+	Desc = "Farm Gold Ore",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Gold Ore", Duration = 2 })
+			local Live148 = workspace:FindFirstChild("Live")
+			local child145 = Live148:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants72 = child145:GetDescendants()
+
+			for k67, v94 in pairs(descendants72) do
+				v94.CanCollide = false
+			end
+
+			local thread75 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread75)
+			local Live149 = workspace:FindFirstChild("Live")
+			local child146 = Live149:FindFirstChild(game.Players.LocalPlayer.Name)
+			v94.CanCollide = true
+			local Humanoid77 = child146:FindFirstChild("Humanoid")
+			Humanoid77:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Diamond Ore",
+	Desc = "Farm Diamond Ore",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Diamond Ore", Duration = 2 })
+			local Live150 = workspace:FindFirstChild("Live")
+			local child147 = Live150:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants73 = child147:GetDescendants()
+
+			for k68, v95 in pairs(descendants73) do
+				v95.CanCollide = false
+			end
+
+			local thread76 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread76)
+			local Live151 = workspace:FindFirstChild("Live")
+			local child148 = Live151:FindFirstChild(game.Players.LocalPlayer.Name)
+			v95.CanCollide = true
+			local Humanoid78 = child148:FindFirstChild("Humanoid")
+			Humanoid78:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Paintings",
+	Desc = "Farm Paintings",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Paintings", Duration = 2 })
+			local Live152 = workspace:FindFirstChild("Live")
+			local child149 = Live152:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants74 = child149:GetDescendants()
+
+			for k69, v96 in pairs(descendants74) do
+				v96.CanCollide = false
+			end
+
+			local thread77 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread77)
+			local Live153 = workspace:FindFirstChild("Live")
+			local child150 = Live153:FindFirstChild(game.Players.LocalPlayer.Name)
+			v96.CanCollide = true
+			local Humanoid79 = child150:FindFirstChild("Humanoid")
+			Humanoid79:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Books",
+	Desc = "Farm Books",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Books", Duration = 2 })
+			local Live154 = workspace:FindFirstChild("Live")
+			local child151 = Live154:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants75 = child151:GetDescendants()
+
+			for k70, v97 in pairs(descendants75) do
+				v97.CanCollide = false
+			end
+
+			local thread78 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread78)
+			local Live155 = workspace:FindFirstChild("Live")
+			local child152 = Live155:FindFirstChild(game.Players.LocalPlayer.Name)
+			v97.CanCollide = true
+			local Humanoid80 = child152:FindFirstChild("Humanoid")
+			Humanoid80:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Black Book",
+	Desc = "Farm Black Book",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Black Book", Duration = 2 })
+			local Live156 = workspace:FindFirstChild("Live")
+			local child153 = Live156:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants76 = child153:GetDescendants()
+
+			for k71, v98 in pairs(descendants76) do
+				v98.CanCollide = false
+			end
+
+			local thread79 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread79)
+			local Live157 = workspace:FindFirstChild("Live")
+			local child154 = Live157:FindFirstChild(game.Players.LocalPlayer.Name)
+			v98.CanCollide = true
+			local Humanoid81 = child154:FindFirstChild("Humanoid")
+			Humanoid81:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Brown Book",
+	Desc = "Farm Brown Book",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Brown Book", Duration = 2 })
+			local Live158 = workspace:FindFirstChild("Live")
+			local child155 = Live158:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants77 = child155:GetDescendants()
+
+			for k72, v99 in pairs(descendants77) do
+				v99.CanCollide = false
+			end
+
+			local thread80 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread80)
+			local Live159 = workspace:FindFirstChild("Live")
+			local child156 = Live159:FindFirstChild(game.Players.LocalPlayer.Name)
+			v99.CanCollide = true
+			local Humanoid82 = child156:FindFirstChild("Humanoid")
+			Humanoid82:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Green Book",
+	Desc = "Farm Green Book",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Green Book", Duration = 2 })
+			local Live160 = workspace:FindFirstChild("Live")
+			local child157 = Live160:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants78 = child157:GetDescendants()
+
+			for k73, v100 in pairs(descendants78) do
+				v100.CanCollide = false
+			end
+
+			local thread81 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread81)
+			local Live161 = workspace:FindFirstChild("Live")
+			local child158 = Live161:FindFirstChild(game.Players.LocalPlayer.Name)
+			v100.CanCollide = true
+			local Humanoid83 = child158:FindFirstChild("Humanoid")
+			Humanoid83:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Health Blessing",
+	Desc = "Farm Health Blessing",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Health Blessing", Duration = 2 })
+			local Live162 = workspace:FindFirstChild("Live")
+			local child159 = Live162:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants79 = child159:GetDescendants()
+
+			for k74, v101 in pairs(descendants79) do
+				v101.CanCollide = false
+			end
+
+			local thread82 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread82)
+			local Live163 = workspace:FindFirstChild("Live")
+			local child160 = Live163:FindFirstChild(game.Players.LocalPlayer.Name)
+			v101.CanCollide = true
+			local Humanoid84 = child160:FindFirstChild("Humanoid")
+			Humanoid84:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Speed Blessing",
+	Desc = "Farm Speed Blessing",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Speed Blessing", Duration = 2 })
+			local Live164 = workspace:FindFirstChild("Live")
+			local child161 = Live164:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants80 = child161:GetDescendants()
+
+			for k75, v102 in pairs(descendants80) do
+				v102.CanCollide = false
+			end
+
+			local thread83 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread83)
+			local Live165 = workspace:FindFirstChild("Live")
+			local child162 = Live165:FindFirstChild(game.Players.LocalPlayer.Name)
+			v102.CanCollide = true
+			local Humanoid85 = child162:FindFirstChild("Humanoid")
+			Humanoid85:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Defense Blessing",
+	Desc = "Farm Defense Blessing",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Defense Blessing", Duration = 2 })
+			local Live166 = workspace:FindFirstChild("Live")
+			local child163 = Live166:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants81 = child163:GetDescendants()
+
+			for k76, v103 in pairs(descendants81) do
+				v103.CanCollide = false
+			end
+
+			local thread84 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread84)
+			local Live167 = workspace:FindFirstChild("Live")
+			local child164 = Live167:FindFirstChild(game.Players.LocalPlayer.Name)
+			v103.CanCollide = true
+			local Humanoid86 = child164:FindFirstChild("Humanoid")
+			Humanoid86:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Superhuman Blessing",
+	Desc = "Farm Superhuman Blessing",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Superhuman Blessing", Duration = 2 })
+			local Live168 = workspace:FindFirstChild("Live")
+			local child165 = Live168:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants82 = child165:GetDescendants()
+
+			for k77, v104 in pairs(descendants82) do
+				v104.CanCollide = false
+			end
+
+			local thread85 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread85)
+			local Live169 = workspace:FindFirstChild("Live")
+			local child166 = Live169:FindFirstChild(game.Players.LocalPlayer.Name)
+			v104.CanCollide = true
+			local Humanoid87 = child166:FindFirstChild("Humanoid")
+			Humanoid87:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Armor Pads",
+	Desc = "Farm Armor Pads",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Armor Pads", Duration = 2 })
+			local Live170 = workspace:FindFirstChild("Live")
+			local child167 = Live170:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants83 = child167:GetDescendants()
+
+			for k78, v105 in pairs(descendants83) do
+				v105.CanCollide = false
+			end
+
+			local thread86 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread86)
+			local Live171 = workspace:FindFirstChild("Live")
+			local child168 = Live171:FindFirstChild(game.Players.LocalPlayer.Name)
+			v105.CanCollide = true
+			local Humanoid88 = child168:FindFirstChild("Humanoid")
+			Humanoid88:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "The Stuff",
+	Desc = "Farm The Stuff",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: The Stuff", Duration = 2 })
+			local Live172 = workspace:FindFirstChild("Live")
+			local child169 = Live172:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants84 = child169:GetDescendants()
+
+			for k79, v106 in pairs(descendants84) do
+				v106.CanCollide = false
+			end
+
+			local thread87 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread87)
+			local Live173 = workspace:FindFirstChild("Live")
+			local child170 = Live173:FindFirstChild(game.Players.LocalPlayer.Name)
+			v106.CanCollide = true
+			local Humanoid89 = child170:FindFirstChild("Humanoid")
+			Humanoid89:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Light Ammo",
+	Desc = "Farm Light Ammo",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Light Ammo", Duration = 2 })
+			local Live174 = workspace:FindFirstChild("Live")
+			local child171 = Live174:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants85 = child171:GetDescendants()
+
+			for k80, v107 in pairs(descendants85) do
+				v107.CanCollide = false
+			end
+
+			local thread88 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread88)
+			local Live175 = workspace:FindFirstChild("Live")
+			local child172 = Live175:FindFirstChild(game.Players.LocalPlayer.Name)
+			v107.CanCollide = true
+			local Humanoid90 = child172:FindFirstChild("Humanoid")
+			Humanoid90:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Medium Ammo",
+	Desc = "Farm Medium Ammo",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Medium Ammo", Duration = 2 })
+			local Live176 = workspace:FindFirstChild("Live")
+			local child173 = Live176:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants86 = child173:GetDescendants()
+
+			for k81, v108 in pairs(descendants86) do
+				v108.CanCollide = false
+			end
+
+			local thread89 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread89)
+			local Live177 = workspace:FindFirstChild("Live")
+			local child174 = Live177:FindFirstChild(game.Players.LocalPlayer.Name)
+			v108.CanCollide = true
+			local Humanoid91 = child174:FindFirstChild("Humanoid")
+			Humanoid91:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Shotgun Ammo",
+	Desc = "Farm Shotgun Ammo",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Shotgun Ammo", Duration = 2 })
+			local Live178 = workspace:FindFirstChild("Live")
+			local child175 = Live178:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants87 = child175:GetDescendants()
+
+			for k82, v109 in pairs(descendants87) do
+				v109.CanCollide = false
+			end
+
+			local thread90 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread90)
+			local Live179 = workspace:FindFirstChild("Live")
+			local child176 = Live179:FindFirstChild(game.Players.LocalPlayer.Name)
+			v109.CanCollide = true
+			local Humanoid92 = child176:FindFirstChild("Humanoid")
+			Humanoid92:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+ItemsTab:Toggle({
+	Title = "Shotgun Ammo Pack",
+	Desc = "Farm Shotgun Ammo Pack",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Item Farm", Content = "Searching for: Shotgun Ammo Pack", Duration = 2 })
+			local Live180 = workspace:FindFirstChild("Live")
+			local child177 = Live180:FindFirstChild(game.Players.LocalPlayer.Name)
+			local descendants88 = child177:GetDescendants()
+
+			for k83, v110 in pairs(descendants88) do
+				v110.CanCollide = false
+			end
+
+			local thread91 = task.spawn(function()
+				task.wait(0.4)
+			end)
+		else
+			task.cancel(thread91)
+			local Live181 = workspace:FindFirstChild("Live")
+			local child178 = Live181:FindFirstChild(game.Players.LocalPlayer.Name)
+			v110.CanCollide = true
+			local Humanoid93 = child178:FindFirstChild("Humanoid")
+			Humanoid93:ChangeState(Enum.HumanoidStateType.Landed)
+		end
+	end
+})
+
+TeleportTab:Section({ Title = "Locations", Opened = true })
+
+TeleportTab:Button({
+	Title = "Base",
+	Desc = "Teleport to your storage base",
+	Icon = "house",
+	Callback = function(state)
+		if state then
+			local HumanoidRootPart6 = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+			local Storages3 = workspace:FindFirstChild("Storages")
+			local children22 = Storages3:GetChildren()
+
+			for i28, v111 in ipairs(children22) do
+				local ClaimedStorage = v111:FindFirstChild("ClaimedStorage")
+				local Gui = ClaimedStorage:FindFirstChild("Gui")
+				local Label = Gui:FindFirstChild("Label")
+				Label.Text:find(game.Players.LocalPlayer.Name, 1, true)
+				local Floor = v111:FindFirstChild("Floor")
+				HumanoidRootPart6.CFrame = (Floor.CFrame + Vector3.new(0, 3, 0))
+				WindUI:Notify({ Title = "Base", Content = "Teleported!", Duration = 3 })
+			end
+		else
+			local HumanoidRootPart7 = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+			local Storages4 = workspace:FindFirstChild("Storages")
+			local children23 = Storages4:GetChildren()
+
+			for i29, v112 in ipairs(children23) do
+				local ClaimedStorage2 = v112:FindFirstChild("ClaimedStorage")
+				local Gui2 = ClaimedStorage2:FindFirstChild("Gui")
+				local Label2 = Gui2:FindFirstChild("Label")
+				Label2.Text:find(game.Players.LocalPlayer.Name, 1, true)
+				local Floor2 = v112:FindFirstChild("Floor")
+				HumanoidRootPart7.CFrame = (Floor2.CFrame + Vector3.new(0, 3, 0))
+				WindUI:Notify({ Title = "Base", Content = "Teleported!", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Elevator",
+	Desc = "Teleport to elevator",
+	Icon = "arrow-up-down",
+	Callback = function(state)
+		if state then
+			local Live182 = workspace:FindFirstChild("Live")
+			local child179 = Live182:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart8 = child179:FindFirstChild("HumanoidRootPart")
+			HumanoidRootPart8.CFrame = CFrame.new(Vector3.new(-696.5269775390625, 5.5999999046325684, 0.093000002205371857))
+		else
+			local Live183 = workspace:FindFirstChild("Live")
+			local child180 = Live183:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart9 = child180:FindFirstChild("HumanoidRootPart")
+			HumanoidRootPart9.CFrame = CFrame.new(Vector3.new(692.26702880859375, 5.5999999046325684, -0.13199999928474426))
+		end
+
+		WindUI:Notify({ Title = "Teleport", Content = "Elevator!", Duration = 2 })
+	end
+})
+
+TeleportTab:Button({
+	Title = "Surface",
+	Desc = "Teleport to surface",
+	Icon = "sun",
+	Callback = function(state)
+		if state then
+			local Live184 = workspace:FindFirstChild("Live")
+			local child181 = Live184:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart10 = child181:FindFirstChild("HumanoidRootPart")
+			HumanoidRootPart10.CFrame = CFrame.new(-2.429, 5.6, 4.122)
+		else
+			local Live185 = workspace:FindFirstChild("Live")
+			local child182 = Live185:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart11 = child182:FindFirstChild("HumanoidRootPart")
+			HumanoidRootPart11.CFrame = CFrame.new(-2.429, 5.6, 4.122)
+		end
+
+		WindUI:Notify({ Title = "Teleport", Content = "Surface!", Duration = 2 })
+	end
+})
+
+TeleportTab:Button({
+	Title = "Basement",
+	Desc = "Teleport to basement",
+	Icon = "map",
+	Callback = function(state)
+		if state then
+			local Live186 = workspace:FindFirstChild("Live")
+			local child183 = Live186:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart12 = child183:FindFirstChild("HumanoidRootPart")
+			HumanoidRootPart12.CFrame = CFrame.new(147.225, -88.5, -0.224)
+		else
+			local Live187 = workspace:FindFirstChild("Live")
+			local child184 = Live187:FindFirstChild(game.Players.LocalPlayer.Name)
+			local HumanoidRootPart13 = child184:FindFirstChild("HumanoidRootPart")
+			HumanoidRootPart13.CFrame = CFrame.new(147.225, -88.5, -0.224)
+		end
+
+		WindUI:Notify({ Title = "Teleport", Content = "Basement!", Duration = 2 })
+	end
+})
+
+TeleportTab:Divider()
+TeleportTab:Section({ Title = "NPCs", Opened = true })
+
+TeleportTab:Button({
+	Title = "Coleman",
+	Desc = "Teleport to Coleman",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages5 = workspace:FindFirstChild("Storages")
+			local children24 = Storages5:GetChildren()
+
+			for i30, v113 in ipairs(children24) do
+				local Contents6 = v113:FindFirstChild("Contents")
+				local NPC = Contents6:FindFirstChild("NPC")
+				local Coleman = NPC:FindFirstChild("Coleman")
+				local pivot = Coleman:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot.Position + ((pivot.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Coleman", Duration = 3 })
+			end
+		else
+			local Storages6 = workspace:FindFirstChild("Storages")
+			local children25 = Storages6:GetChildren()
+
+			for i31, v114 in ipairs(children25) do
+				local Contents7 = v114:FindFirstChild("Contents")
+				local NPC2 = Contents7:FindFirstChild("NPC")
+				local Coleman2 = NPC2:FindFirstChild("Coleman")
+				local pivot2 = Coleman2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot2.Position + ((pivot2.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Coleman", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Priest Jonathan",
+	Desc = "Teleport to Priest Jonathan",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages7 = workspace:FindFirstChild("Storages")
+			local children26 = Storages7:GetChildren()
+
+			for i32, v115 in ipairs(children26) do
+				local Contents8 = v115:FindFirstChild("Contents")
+				local NPC3 = Contents8:FindFirstChild("NPC")
+				local PriestJonathan = NPC3:FindFirstChild("Priest Jonathan")
+				local pivot3 = PriestJonathan:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot3.Position + ((pivot3.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Priest Jonathan", Duration = 3 })
+			end
+		else
+			local Storages8 = workspace:FindFirstChild("Storages")
+			local children27 = Storages8:GetChildren()
+
+			for i33, v116 in ipairs(children27) do
+				local Contents9 = v116:FindFirstChild("Contents")
+				local NPC4 = Contents9:FindFirstChild("NPC")
+				local PriestJonathan2 = NPC4:FindFirstChild("Priest Jonathan")
+				local pivot4 = PriestJonathan2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot4.Position + ((pivot4.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Priest Jonathan", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Gunner Jayce",
+	Desc = "Teleport to Gunner Jayce",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages9 = workspace:FindFirstChild("Storages")
+			local children28 = Storages9:GetChildren()
+
+			for i34, v117 in ipairs(children28) do
+				local Contents10 = v117:FindFirstChild("Contents")
+				local NPC5 = Contents10:FindFirstChild("NPC")
+				local GunnerJayce = NPC5:FindFirstChild("Gunner Jayce")
+				local pivot5 = GunnerJayce:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot5.Position + ((pivot5.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Gunner Jayce", Duration = 3 })
+			end
+		else
+			local Storages10 = workspace:FindFirstChild("Storages")
+			local children29 = Storages10:GetChildren()
+
+			for i35, v118 in ipairs(children29) do
+				local Contents11 = v118:FindFirstChild("Contents")
+				local NPC6 = Contents11:FindFirstChild("NPC")
+				local GunnerJayce2 = NPC6:FindFirstChild("Gunner Jayce")
+				local pivot6 = GunnerJayce2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot6.Position + ((pivot6.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Gunner Jayce", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "The Leader & The Collector",
+	Desc = "Teleport to The Leader & The Collector",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages11 = workspace:FindFirstChild("Storages")
+			local children30 = Storages11:GetChildren()
+
+			for i36, v119 in ipairs(children30) do
+				local Contents12 = v119:FindFirstChild("Contents")
+				local NPC7 = Contents12:FindFirstChild("NPC")
+				local TheLeader = NPC7:FindFirstChild("The Leader")
+				local pivot7 = TheLeader:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot7.Position + ((pivot7.LookVector * 6) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to The Leader", Duration = 3 })
+			end
+		else
+			local Storages12 = workspace:FindFirstChild("Storages")
+			local children31 = Storages12:GetChildren()
+
+			for i37, v120 in ipairs(children31) do
+				local Contents13 = v120:FindFirstChild("Contents")
+				local NPC8 = Contents13:FindFirstChild("NPC")
+				local TheLeader2 = NPC8:FindFirstChild("The Leader")
+				local pivot8 = TheLeader2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot8.Position + ((pivot8.LookVector * 6) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to The Leader", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Agent 3",
+	Desc = "Teleport to Agent 3",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages13 = workspace:FindFirstChild("Storages")
+			local children32 = Storages13:GetChildren()
+
+			for i38, v121 in ipairs(children32) do
+				local Contents14 = v121:FindFirstChild("Contents")
+				local NPC9 = Contents14:FindFirstChild("NPC")
+				local Agent3 = NPC9:FindFirstChild("Agent 3")
+				local pivot9 = Agent3:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot9.Position + ((pivot9.LookVector * 5) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Agent 3", Duration = 3 })
+			end
+		else
+			local Storages14 = workspace:FindFirstChild("Storages")
+			local children33 = Storages14:GetChildren()
+
+			for i39, v122 in ipairs(children33) do
+				local Contents15 = v122:FindFirstChild("Contents")
+				local NPC10 = Contents15:FindFirstChild("NPC")
+				local Agent32 = NPC10:FindFirstChild("Agent 3")
+				local pivot10 = Agent32:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot10.Position + ((pivot10.LookVector * 5) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Agent 3", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Teuchi (Ramen)",
+	Desc = "Teleport to Teuchi (Ramen)",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages15 = workspace:FindFirstChild("Storages")
+			local children34 = Storages15:GetChildren()
+
+			for i40, v123 in ipairs(children34) do
+				local Contents16 = v123:FindFirstChild("Contents")
+				local NPC11 = Contents16:FindFirstChild("NPC")
+				local Teuchi = NPC11:FindFirstChild("Teuchi")
+				local pivot11 = Teuchi:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot11.Position + ((pivot11.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Teuchi", Duration = 3 })
+			end
+		else
+			local Storages16 = workspace:FindFirstChild("Storages")
+			local children35 = Storages16:GetChildren()
+
+			for i41, v124 in ipairs(children35) do
+				local Contents17 = v124:FindFirstChild("Contents")
+				local NPC12 = Contents17:FindFirstChild("NPC")
+				local Teuchi2 = NPC12:FindFirstChild("Teuchi")
+				local pivot12 = Teuchi2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot12.Position + ((pivot12.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Teuchi", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Collector Ali",
+	Desc = "Teleport to Collector Ali",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages17 = workspace:FindFirstChild("Storages")
+			local children36 = Storages17:GetChildren()
+
+			for i42, v125 in ipairs(children36) do
+				local Contents18 = v125:FindFirstChild("Contents")
+				local NPC13 = Contents18:FindFirstChild("NPC")
+				local CollectorAli = NPC13:FindFirstChild("Collector Ali")
+				local pivot13 = CollectorAli:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot13.Position + ((pivot13.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Collector Ali", Duration = 3 })
+			end
+		else
+			local Storages18 = workspace:FindFirstChild("Storages")
+			local children37 = Storages18:GetChildren()
+
+			for i43, v126 in ipairs(children37) do
+				local Contents19 = v126:FindFirstChild("Contents")
+				local NPC14 = Contents19:FindFirstChild("NPC")
+				local CollectorAli2 = NPC14:FindFirstChild("Collector Ali")
+				local pivot14 = CollectorAli2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot14.Position + ((pivot14.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Collector Ali", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Rafael",
+	Desc = "Teleport to Rafael",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages19 = workspace:FindFirstChild("Storages")
+			local children38 = Storages19:GetChildren()
+
+			for i44, v127 in ipairs(children38) do
+				local Contents20 = v127:FindFirstChild("Contents")
+				local NPC15 = Contents20:FindFirstChild("NPC")
+				local Rafael = NPC15:FindFirstChild("Rafael")
+				local pivot15 = Rafael:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot15.Position + ((pivot15.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Rafael", Duration = 3 })
+			end
+		else
+			local Storages20 = workspace:FindFirstChild("Storages")
+			local children39 = Storages20:GetChildren()
+
+			for i45, v128 in ipairs(children39) do
+				local Contents21 = v128:FindFirstChild("Contents")
+				local NPC16 = Contents21:FindFirstChild("NPC")
+				local Rafael2 = NPC16:FindFirstChild("Rafael")
+				local pivot16 = Rafael2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot16.Position + ((pivot16.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Rafael", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Banker Tom",
+	Desc = "Teleport to Banker Tom",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages21 = workspace:FindFirstChild("Storages")
+			local children40 = Storages21:GetChildren()
+
+			for i46, v129 in ipairs(children40) do
+				local Contents22 = v129:FindFirstChild("Contents")
+				local NPC17 = Contents22:FindFirstChild("NPC")
+				local BankerTom = NPC17:FindFirstChild("Banker Tom")
+				local pivot17 = BankerTom:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot17.Position + ((pivot17.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Banker Tom", Duration = 3 })
+			end
+		else
+			local Storages22 = workspace:FindFirstChild("Storages")
+			local children41 = Storages22:GetChildren()
+
+			for i47, v130 in ipairs(children41) do
+				local Contents23 = v130:FindFirstChild("Contents")
+				local NPC18 = Contents23:FindFirstChild("NPC")
+				local BankerTom2 = NPC18:FindFirstChild("Banker Tom")
+				local pivot18 = BankerTom2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot18.Position + ((pivot18.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Banker Tom", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Weapon Collector Neil",
+	Desc = "Teleport to Weapon Collector Neil",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages23 = workspace:FindFirstChild("Storages")
+			local children42 = Storages23:GetChildren()
+
+			for i48, v131 in ipairs(children42) do
+				local Contents24 = v131:FindFirstChild("Contents")
+				local NPC19 = Contents24:FindFirstChild("NPC")
+				local WeaponCollectorNeil = NPC19:FindFirstChild("Weapon Collector Neil")
+				local pivot19 = WeaponCollectorNeil:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot19.Position + ((pivot19.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Weapon Collector Neil", Duration = 3 })
+			end
+		else
+			local Storages24 = workspace:FindFirstChild("Storages")
+			local children43 = Storages24:GetChildren()
+
+			for i49, v132 in ipairs(children43) do
+				local Contents25 = v132:FindFirstChild("Contents")
+				local NPC20 = Contents25:FindFirstChild("NPC")
+				local WeaponCollectorNeil2 = NPC20:FindFirstChild("Weapon Collector Neil")
+				local pivot20 = WeaponCollectorNeil2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot20.Position + ((pivot20.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Weapon Collector Neil", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Squad 5 Leader",
+	Desc = "Teleport to Squad 5 Leader",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages25 = workspace:FindFirstChild("Storages")
+			local children44 = Storages25:GetChildren()
+
+			for i50, v133 in ipairs(children44) do
+				local Contents26 = v133:FindFirstChild("Contents")
+				local NPC21 = Contents26:FindFirstChild("NPC")
+				local Squad5Leader = NPC21:FindFirstChild("Squad 5 Leader")
+				local pivot21 = Squad5Leader:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot21.Position + ((pivot21.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Squad 5 Leader", Duration = 3 })
+			end
+		else
+			local Storages26 = workspace:FindFirstChild("Storages")
+			local children45 = Storages26:GetChildren()
+
+			for i51, v134 in ipairs(children45) do
+				local Contents27 = v134:FindFirstChild("Contents")
+				local NPC22 = Contents27:FindFirstChild("NPC")
+				local Squad5Leader2 = NPC22:FindFirstChild("Squad 5 Leader")
+				local pivot22 = Squad5Leader2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot22.Position + ((pivot22.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Squad 5 Leader", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "The Chained Man",
+	Desc = "Teleport to The Chained Man",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages27 = workspace:FindFirstChild("Storages")
+			local children46 = Storages27:GetChildren()
+
+			for i52, v135 in ipairs(children46) do
+				local Contents28 = v135:FindFirstChild("Contents")
+				local NPC23 = Contents28:FindFirstChild("NPC")
+				local TheChainedMan = NPC23:FindFirstChild("The Chained Man")
+				local pivot23 = TheChainedMan:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot23.Position + ((pivot23.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to The Chained Man", Duration = 3 })
+			end
+		else
+			local Storages28 = workspace:FindFirstChild("Storages")
+			local children47 = Storages28:GetChildren()
+
+			for i53, v136 in ipairs(children47) do
+				local Contents29 = v136:FindFirstChild("Contents")
+				local NPC24 = Contents29:FindFirstChild("NPC")
+				local TheChainedMan2 = NPC24:FindFirstChild("The Chained Man")
+				local pivot24 = TheChainedMan2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot24.Position + ((pivot24.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to The Chained Man", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "King Brian",
+	Desc = "Teleport to King Brian",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages29 = workspace:FindFirstChild("Storages")
+			local children48 = Storages29:GetChildren()
+
+			for i54, v137 in ipairs(children48) do
+				local Contents30 = v137:FindFirstChild("Contents")
+				local NPC25 = Contents30:FindFirstChild("NPC")
+				local KingBrian = NPC25:FindFirstChild("King Brian")
+				local pivot25 = KingBrian:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot25.Position + ((pivot25.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to King Brian", Duration = 3 })
+			end
+		else
+			local Storages30 = workspace:FindFirstChild("Storages")
+			local children49 = Storages30:GetChildren()
+
+			for i55, v138 in ipairs(children49) do
+				local Contents31 = v138:FindFirstChild("Contents")
+				local NPC26 = Contents31:FindFirstChild("NPC")
+				local KingBrian2 = NPC26:FindFirstChild("King Brian")
+				local pivot26 = KingBrian2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot26.Position + ((pivot26.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to King Brian", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Builder Bob",
+	Desc = "Teleport to Builder Bob",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages31 = workspace:FindFirstChild("Storages")
+			local children50 = Storages31:GetChildren()
+
+			for i56, v139 in ipairs(children50) do
+				local Contents32 = v139:FindFirstChild("Contents")
+				local NPC27 = Contents32:FindFirstChild("NPC")
+				local BuilderBob = NPC27:FindFirstChild("Builder Bob")
+				local pivot27 = BuilderBob:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot27.Position + ((pivot27.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Builder Bob", Duration = 3 })
+			end
+		else
+			local Storages32 = workspace:FindFirstChild("Storages")
+			local children51 = Storages32:GetChildren()
+
+			for i57, v140 in ipairs(children51) do
+				local Contents33 = v140:FindFirstChild("Contents")
+				local NPC28 = Contents33:FindFirstChild("NPC")
+				local BuilderBob2 = NPC28:FindFirstChild("Builder Bob")
+				local pivot28 = BuilderBob2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot28.Position + ((pivot28.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Builder Bob", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Fighter Dave",
+	Desc = "Teleport to Fighter Dave",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages33 = workspace:FindFirstChild("Storages")
+			local children52 = Storages33:GetChildren()
+
+			for i58, v141 in ipairs(children52) do
+				local Contents34 = v141:FindFirstChild("Contents")
+				local NPC29 = Contents34:FindFirstChild("NPC")
+				local FighterDave = NPC29:FindFirstChild("Fighter Dave")
+				local pivot29 = FighterDave:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot29.Position + ((pivot29.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Fighter Dave", Duration = 3 })
+			end
+		else
+			local Storages34 = workspace:FindFirstChild("Storages")
+			local children53 = Storages34:GetChildren()
+
+			for i59, v142 in ipairs(children53) do
+				local Contents35 = v142:FindFirstChild("Contents")
+				local NPC30 = Contents35:FindFirstChild("NPC")
+				local FighterDave2 = NPC30:FindFirstChild("Fighter Dave")
+				local pivot30 = FighterDave2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot30.Position + ((pivot30.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Fighter Dave", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Crazy Felix",
+	Desc = "Teleport to Crazy Felix",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages35 = workspace:FindFirstChild("Storages")
+			local children54 = Storages35:GetChildren()
+
+			for i60, v143 in ipairs(children54) do
+				local Contents36 = v143:FindFirstChild("Contents")
+				local NPC31 = Contents36:FindFirstChild("NPC")
+				local CrazyFelix = NPC31:FindFirstChild("Crazy Felix")
+				local pivot31 = CrazyFelix:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot31.Position + ((pivot31.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Crazy Felix", Duration = 3 })
+			end
+		else
+			local Storages36 = workspace:FindFirstChild("Storages")
+			local children55 = Storages36:GetChildren()
+
+			for i61, v144 in ipairs(children55) do
+				local Contents37 = v144:FindFirstChild("Contents")
+				local NPC32 = Contents37:FindFirstChild("NPC")
+				local CrazyFelix2 = NPC32:FindFirstChild("Crazy Felix")
+				local pivot32 = CrazyFelix2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot32.Position + ((pivot32.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Crazy Felix", Duration = 3 })
+			end
+		end
+	end
+})
+
+TeleportTab:Button({
+	Title = "Fisherman James",
+	Desc = "Teleport to Fisherman James",
+	Icon = "user",
+	Callback = function(state)
+		if state then
+			local Storages37 = workspace:FindFirstChild("Storages")
+			local children56 = Storages37:GetChildren()
+
+			for i62, v145 in ipairs(children56) do
+				local Contents38 = v145:FindFirstChild("Contents")
+				local NPC33 = Contents38:FindFirstChild("NPC")
+				local FishermanJames = NPC33:FindFirstChild("Fisherman James")
+				local pivot33 = FishermanJames:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot33.Position + ((pivot33.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Fisherman James", Duration = 3 })
+			end
+		else
+			local Storages38 = workspace:FindFirstChild("Storages")
+			local children57 = Storages38:GetChildren()
+
+			for i63, v146 in ipairs(children57) do
+				local Contents39 = v146:FindFirstChild("Contents")
+				local NPC34 = Contents39:FindFirstChild("NPC")
+				local FishermanJames2 = NPC34:FindFirstChild("Fisherman James")
+				local pivot34 = FishermanJames2:GetPivot()
+				game.Players.LocalPlayer.Character:PivotTo(CFrame.new(pivot34.Position + ((pivot34.LookVector * 3) + Vector3.new(0, 1.5, 0))))
+				WindUI:Notify({ Title = "Success", Content = "Teleported to Fisherman James", Duration = 3 })
+			end
+		end
+	end
+})
+
+MiscTab:Section({ Title = "Combat", Opened = true })
+
+MiscTab:Toggle({
+	Title = "Aimbot",
+	Desc = "Auto-aim when holding left click",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			RaycastParams.new().FilterType = Enum.RaycastFilterType.Blacklist
+
+			local connection10 = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+			end)
+
+			local connection11 = UserInputService.InputEnded:Connect(function(input2, gameProcessed2)
+			end)
+
+			local connection12 = RunService.RenderStepped:Connect(function(deltaTime2)
+			end)
+
+			_G.AimbotConns = { inputBegan = connection10, inputEnded = connection11, render = connection12 }
+			WindUI:Notify({ Title = "Aimbot", Content = "Enabled!", Duration = 2 })
+		else
+			connection10:Disconnect()
+			connection11:Disconnect()
+			connection12:Disconnect()
+			_G.AimbotConns = nil
+			connection12:Disconnect()
+			WindUI:Notify({ Title = "Aimbot", Content = "Disabled!", Duration = 2 })
+		end
+	end
+})
+
+MiscTab:Toggle({
+	Title = "Auto Reload",
+	Desc = "Reload when bullets reach 0",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local thread92 = task.spawn(function()
+				local Remotes3 = ReplicatedStorage:FindFirstChild("Remotes")
+				Remotes3:FindFirstChild("RemoteEvent")
+				task.wait(0.3)
+			end)
+
+			WindUI:Notify({ Title = "Auto Reload", Content = "Activated!", Duration = 2 })
+		else
+			task.cancel(thread92)
+			WindUI:Notify({ Title = "Auto Reload", Content = "Deactivated!", Duration = 2 })
+		end
+	end
+})
+
+MiscTab:Toggle({
+	Title = "Auto Knife",
+	Desc = "Equip knife when no tool",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local thread93 = task.spawn(function()
+				task.wait(0.1)
+			end)
+
+			WindUI:Notify({ Title = "Auto Knife", Content = "Enabled!", Duration = 2 })
+		else
+			task.cancel(thread93)
+			WindUI:Notify({ Title = "Auto Knife", Content = "Disabled!", Duration = 2 })
+		end
+	end
+})
+
+MiscTab:Divider()
+MiscTab:Section({ Title = "Interaction", Opened = true })
+
+MiscTab:Button({
+	Title = "Remove Interaction Delay",
+	Desc = "Removes hold duration",
+	Icon = "clock",
+	Callback = function(state)
+		if state then
+			local descendants89 = workspace:GetDescendants()
+
+			for i64, v147 in ipairs(descendants89) do
+				v147.HoldDuration = 0
+			end
+
+			workspace.DescendantAdded:Connect(function(descendant2)
+				descendant2.HoldDuration = 0
+			end)
+
+			WindUI:Notify({ Title = "Success!", Content = "Interaction delay removed.", Duration = 3 })
+		else
+			WindUI:Notify({ Title = "Already Done!", Content = "Delay already removed.", Duration = 3 })
+		end
+	end
+})
+
+MiscTab:Divider()
+MiscTab:Section({ Title = "Anti-AFK", Opened = true })
+
+MiscTab:Toggle({
+	Title = "Anti AFK",
+	Desc = "Prevents kick for inactivity",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			local connection13 = game.Players.LocalPlayer.Idled:Connect(function(idleTime)
+				local VirtualUser = game:GetService("VirtualUser")
+				VirtualUser:CaptureController()
+				VirtualUser:ClickButton2(Vector2.new())
+			end)
+
+			WindUI:Notify({ Title = "Anti-AFK", Content = "Enabled!", Duration = 2 })
+		else
+			connection13:Disconnect()
+			WindUI:Notify({ Title = "Anti-AFK", Content = "Disabled!", Duration = 2 })
+		end
+	end
+})
+
+NotificationsTab:Section({ Title = "NPC Alerts", Opened = true })
+
+NotificationsTab:Toggle({
+	Title = "Coleman",
+	Desc = "Notify when Coleman spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Coleman", Duration = 2 })
+			local Storages39 = workspace:FindFirstChild("Storages")
+
+			local connection14 = Storages39.DescendantAdded:Connect(function(descendant3)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Coleman", Duration = 2 })
+			connection14:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Priest Jonathan",
+	Desc = "Notify when Priest Jonathan spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Priest Jonathan", Duration = 2 })
+			local Storages40 = workspace:FindFirstChild("Storages")
+
+			local connection15 = Storages40.DescendantAdded:Connect(function(descendant4)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Priest Jonathan", Duration = 2 })
+			connection15:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Gunner Jayce",
+	Desc = "Notify when Gunner Jayce spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Gunner Jayce", Duration = 2 })
+			local Storages41 = workspace:FindFirstChild("Storages")
+
+			local connection16 = Storages41.DescendantAdded:Connect(function(descendant5)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Gunner Jayce", Duration = 2 })
+			connection16:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "The Leader",
+	Desc = "Notify when The Leader spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching The Leader", Duration = 2 })
+			local Storages42 = workspace:FindFirstChild("Storages")
+
+			local connection17 = Storages42.DescendantAdded:Connect(function(descendant6)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching The Leader", Duration = 2 })
+			connection17:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Agent 3",
+	Desc = "Notify when Agent 3 spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Agent 3", Duration = 2 })
+			local Storages43 = workspace:FindFirstChild("Storages")
+
+			local connection18 = Storages43.DescendantAdded:Connect(function(descendant7)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Agent 3", Duration = 2 })
+			connection18:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Teuchi",
+	Desc = "Notify when Teuchi spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Teuchi", Duration = 2 })
+			local Storages44 = workspace:FindFirstChild("Storages")
+
+			local connection19 = Storages44.DescendantAdded:Connect(function(descendant8)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Teuchi", Duration = 2 })
+			connection19:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Collector Ali",
+	Desc = "Notify when Collector Ali spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Collector Ali", Duration = 2 })
+			local Storages45 = workspace:FindFirstChild("Storages")
+
+			local connection20 = Storages45.DescendantAdded:Connect(function(descendant9)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Collector Ali", Duration = 2 })
+			connection20:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Rafael",
+	Desc = "Notify when Rafael spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Rafael", Duration = 2 })
+			local Storages46 = workspace:FindFirstChild("Storages")
+
+			local connection21 = Storages46.DescendantAdded:Connect(function(descendant10)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Rafael", Duration = 2 })
+			connection21:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Banker Tom",
+	Desc = "Notify when Banker Tom spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Banker Tom", Duration = 2 })
+			local Storages47 = workspace:FindFirstChild("Storages")
+
+			local connection22 = Storages47.DescendantAdded:Connect(function(descendant11)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Banker Tom", Duration = 2 })
+			connection22:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Weapon Collector Neil",
+	Desc = "Notify when Weapon Collector Neil spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Weapon Collector Neil", Duration = 2 })
+			local Storages48 = workspace:FindFirstChild("Storages")
+
+			local connection23 = Storages48.DescendantAdded:Connect(function(descendant12)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Weapon Collector Neil", Duration = 2 })
+			connection23:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Squad 5 Leader",
+	Desc = "Notify when Squad 5 Leader spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Squad 5 Leader", Duration = 2 })
+			local Storages49 = workspace:FindFirstChild("Storages")
+
+			local connection24 = Storages49.DescendantAdded:Connect(function(descendant13)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Squad 5 Leader", Duration = 2 })
+			connection24:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "The Chained Man",
+	Desc = "Notify when The Chained Man spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching The Chained Man", Duration = 2 })
+			local Storages50 = workspace:FindFirstChild("Storages")
+
+			local connection25 = Storages50.DescendantAdded:Connect(function(descendant14)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching The Chained Man", Duration = 2 })
+			connection25:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "King Brian",
+	Desc = "Notify when King Brian spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching King Brian", Duration = 2 })
+			local Storages51 = workspace:FindFirstChild("Storages")
+
+			local connection26 = Storages51.DescendantAdded:Connect(function(descendant15)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching King Brian", Duration = 2 })
+			connection26:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Builder Bob",
+	Desc = "Notify when Builder Bob spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Builder Bob", Duration = 2 })
+			local Storages52 = workspace:FindFirstChild("Storages")
+
+			local connection27 = Storages52.DescendantAdded:Connect(function(descendant16)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Builder Bob", Duration = 2 })
+			connection27:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Fighter Dave",
+	Desc = "Notify when Fighter Dave spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Fighter Dave", Duration = 2 })
+			local Storages53 = workspace:FindFirstChild("Storages")
+
+			local connection28 = Storages53.DescendantAdded:Connect(function(descendant17)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Fighter Dave", Duration = 2 })
+			connection28:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Crazy Felix",
+	Desc = "Notify when Crazy Felix spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Crazy Felix", Duration = 2 })
+			local Storages54 = workspace:FindFirstChild("Storages")
+
+			local connection29 = Storages54.DescendantAdded:Connect(function(descendant18)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Crazy Felix", Duration = 2 })
+			connection29:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Fisherman James",
+	Desc = "Notify when Fisherman James spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "NPC Alert", Content = "Watching Fisherman James", Duration = 2 })
+			local Storages55 = workspace:FindFirstChild("Storages")
+
+			local connection30 = Storages55.DescendantAdded:Connect(function(descendant19)
+			end)
+		else
+			WindUI:Notify({ Title = "NPC Alert", Content = "Stopped watching Fisherman James", Duration = 2 })
+			connection30:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Divider()
+NotificationsTab:Section({ Title = "Mobs Alerts", Opened = true })
+
+NotificationsTab:Toggle({
+	Title = "Agent 7",
+	Desc = "Notify when Agent 7 spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Agent 7", Duration = 2 })
+			local Storages56 = workspace:FindFirstChild("Storages")
+			local BasementStorages2 = workspace:FindFirstChild("BasementStorages")
+			local children58 = Storages56:GetChildren()
+
+			for i65, v148 in ipairs(children58) do
+				local Contents40 = v148:FindFirstChild("Contents")
+				local Mobs4 = Contents40:FindFirstChild("Mobs")
+
+				local connection31 = Mobs4.ChildAdded:Connect(function(child10)
+				end)
+			end
+
+			local children59 = BasementStorages2:GetChildren()
+
+			for i66, v149 in ipairs(children59) do
+				local Contents41 = v149:FindFirstChild("Contents")
+				local Mobs5 = Contents41:FindFirstChild("Mobs")
+
+				local connection32 = Mobs5.ChildAdded:Connect(function(child11)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Agent 7", Duration = 2 })
+			connection31:Disconnect()
+			connection32:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Agent 1",
+	Desc = "Notify when Agent 1 spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Agent 1", Duration = 2 })
+			local Storages57 = workspace:FindFirstChild("Storages")
+			local BasementStorages3 = workspace:FindFirstChild("BasementStorages")
+			local children60 = Storages57:GetChildren()
+
+			for i67, v150 in ipairs(children60) do
+				local Contents42 = v150:FindFirstChild("Contents")
+				local Mobs6 = Contents42:FindFirstChild("Mobs")
+
+				local connection33 = Mobs6.ChildAdded:Connect(function(child12)
+				end)
+			end
+
+			local children61 = BasementStorages3:GetChildren()
+
+			for i68, v151 in ipairs(children61) do
+				local Contents43 = v151:FindFirstChild("Contents")
+				local Mobs7 = Contents43:FindFirstChild("Mobs")
+
+				local connection34 = Mobs7.ChildAdded:Connect(function(child13)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Agent 1", Duration = 2 })
+			connection33:Disconnect()
+			connection34:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Brand Arsonist",
+	Desc = "Notify when Brand Arsonist spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Brand Arsonist", Duration = 2 })
+			local Storages58 = workspace:FindFirstChild("Storages")
+			local BasementStorages4 = workspace:FindFirstChild("BasementStorages")
+			local children62 = Storages58:GetChildren()
+
+			for i69, v152 in ipairs(children62) do
+				local Contents44 = v152:FindFirstChild("Contents")
+				local Mobs8 = Contents44:FindFirstChild("Mobs")
+
+				local connection35 = Mobs8.ChildAdded:Connect(function(child14)
+				end)
+			end
+
+			local children63 = BasementStorages4:GetChildren()
+
+			for i70, v153 in ipairs(children63) do
+				local Contents45 = v153:FindFirstChild("Contents")
+				local Mobs9 = Contents45:FindFirstChild("Mobs")
+
+				local connection36 = Mobs9.ChildAdded:Connect(function(child15)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Brand Arsonist", Duration = 2 })
+			connection35:Disconnect()
+			connection36:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Mummified King",
+	Desc = "Notify when Mummified King spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Mummified King", Duration = 2 })
+			local Storages59 = workspace:FindFirstChild("Storages")
+			local BasementStorages5 = workspace:FindFirstChild("BasementStorages")
+			local children64 = Storages59:GetChildren()
+
+			for i71, v154 in ipairs(children64) do
+				local Contents46 = v154:FindFirstChild("Contents")
+				local Mobs10 = Contents46:FindFirstChild("Mobs")
+
+				local connection37 = Mobs10.ChildAdded:Connect(function(child16)
+				end)
+			end
+
+			local children65 = BasementStorages5:GetChildren()
+
+			for i72, v155 in ipairs(children65) do
+				local Contents47 = v155:FindFirstChild("Contents")
+				local Mobs11 = Contents47:FindFirstChild("Mobs")
+
+				local connection38 = Mobs11.ChildAdded:Connect(function(child17)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Mummified King", Duration = 2 })
+			connection37:Disconnect()
+			connection38:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Shotty Beck",
+	Desc = "Notify when Shotty Beck spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Shotty Beck", Duration = 2 })
+			local Storages60 = workspace:FindFirstChild("Storages")
+			local BasementStorages6 = workspace:FindFirstChild("BasementStorages")
+			local children66 = Storages60:GetChildren()
+
+			for i73, v156 in ipairs(children66) do
+				local Contents48 = v156:FindFirstChild("Contents")
+				local Mobs12 = Contents48:FindFirstChild("Mobs")
+
+				local connection39 = Mobs12.ChildAdded:Connect(function(child18)
+				end)
+			end
+
+			local children67 = BasementStorages6:GetChildren()
+
+			for i74, v157 in ipairs(children67) do
+				local Contents49 = v157:FindFirstChild("Contents")
+				local Mobs13 = Contents49:FindFirstChild("Mobs")
+
+				local connection40 = Mobs13.ChildAdded:Connect(function(child19)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Shotty Beck", Duration = 2 })
+			connection39:Disconnect()
+			connection40:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Shotty Ben",
+	Desc = "Notify when Shotty Ben spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Shotty Ben", Duration = 2 })
+			local Storages61 = workspace:FindFirstChild("Storages")
+			local BasementStorages7 = workspace:FindFirstChild("BasementStorages")
+			local children68 = Storages61:GetChildren()
+
+			for i75, v158 in ipairs(children68) do
+				local Contents50 = v158:FindFirstChild("Contents")
+				local Mobs14 = Contents50:FindFirstChild("Mobs")
+
+				local connection41 = Mobs14.ChildAdded:Connect(function(child20)
+				end)
+			end
+
+			local children69 = BasementStorages7:GetChildren()
+
+			for i76, v159 in ipairs(children69) do
+				local Contents51 = v159:FindFirstChild("Contents")
+				local Mobs15 = Contents51:FindFirstChild("Mobs")
+
+				local connection42 = Mobs15.ChildAdded:Connect(function(child21)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Shotty Ben", Duration = 2 })
+			connection41:Disconnect()
+			connection42:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Dweller Tyrone",
+	Desc = "Notify when Dweller Tyrone spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Dweller Tyrone", Duration = 2 })
+			local Storages62 = workspace:FindFirstChild("Storages")
+			local BasementStorages8 = workspace:FindFirstChild("BasementStorages")
+			local children70 = Storages62:GetChildren()
+
+			for i77, v160 in ipairs(children70) do
+				local Contents52 = v160:FindFirstChild("Contents")
+				local Mobs16 = Contents52:FindFirstChild("Mobs")
+
+				local connection43 = Mobs16.ChildAdded:Connect(function(child22)
+				end)
+			end
+
+			local children71 = BasementStorages8:GetChildren()
+
+			for i78, v161 in ipairs(children71) do
+				local Contents53 = v161:FindFirstChild("Contents")
+				local Mobs17 = Contents53:FindFirstChild("Mobs")
+
+				local connection44 = Mobs17.ChildAdded:Connect(function(child23)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Dweller Tyrone", Duration = 2 })
+			connection43:Disconnect()
+			connection44:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Front Man",
+	Desc = "Notify when Front Man spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Front Man", Duration = 2 })
+			local Storages63 = workspace:FindFirstChild("Storages")
+			local BasementStorages9 = workspace:FindFirstChild("BasementStorages")
+			local children72 = Storages63:GetChildren()
+
+			for i79, v162 in ipairs(children72) do
+				local Contents54 = v162:FindFirstChild("Contents")
+				local Mobs18 = Contents54:FindFirstChild("Mobs")
+
+				local connection45 = Mobs18.ChildAdded:Connect(function(child24)
+				end)
+			end
+
+			local children73 = BasementStorages9:GetChildren()
+
+			for i80, v163 in ipairs(children73) do
+				local Contents55 = v163:FindFirstChild("Contents")
+				local Mobs19 = Contents55:FindFirstChild("Mobs")
+
+				local connection46 = Mobs19.ChildAdded:Connect(function(child25)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Front Man", Duration = 2 })
+			connection45:Disconnect()
+			connection46:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Strong Goblin",
+	Desc = "Notify when Strong Goblin spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Strong Goblin", Duration = 2 })
+			local Storages64 = workspace:FindFirstChild("Storages")
+			local BasementStorages10 = workspace:FindFirstChild("BasementStorages")
+			local children74 = Storages64:GetChildren()
+
+			for i81, v164 in ipairs(children74) do
+				local Contents56 = v164:FindFirstChild("Contents")
+				local Mobs20 = Contents56:FindFirstChild("Mobs")
+
+				local connection47 = Mobs20.ChildAdded:Connect(function(child26)
+				end)
+			end
+
+			local children75 = BasementStorages10:GetChildren()
+
+			for i82, v165 in ipairs(children75) do
+				local Contents57 = v165:FindFirstChild("Contents")
+				local Mobs21 = Contents57:FindFirstChild("Mobs")
+
+				local connection48 = Mobs21.ChildAdded:Connect(function(child27)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Strong Goblin", Duration = 2 })
+			connection47:Disconnect()
+			connection48:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Mike Crusher",
+	Desc = "Notify when Mike Crusher spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Mike Crusher", Duration = 2 })
+			local Storages65 = workspace:FindFirstChild("Storages")
+			local BasementStorages11 = workspace:FindFirstChild("BasementStorages")
+			local children76 = Storages65:GetChildren()
+
+			for i83, v166 in ipairs(children76) do
+				local Contents58 = v166:FindFirstChild("Contents")
+				local Mobs22 = Contents58:FindFirstChild("Mobs")
+
+				local connection49 = Mobs22.ChildAdded:Connect(function(child28)
+				end)
+			end
+
+			local children77 = BasementStorages11:GetChildren()
+
+			for i84, v167 in ipairs(children77) do
+				local Contents59 = v167:FindFirstChild("Contents")
+				local Mobs23 = Contents59:FindFirstChild("Mobs")
+
+				local connection50 = Mobs23.ChildAdded:Connect(function(child29)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Mike Crusher", Duration = 2 })
+			connection49:Disconnect()
+			connection50:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Tabitha Witch",
+	Desc = "Notify when Tabitha Witch spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Tabitha Witch", Duration = 2 })
+			local Storages66 = workspace:FindFirstChild("Storages")
+			local BasementStorages12 = workspace:FindFirstChild("BasementStorages")
+			local children78 = Storages66:GetChildren()
+
+			for i85, v168 in ipairs(children78) do
+				local Contents60 = v168:FindFirstChild("Contents")
+				local Mobs24 = Contents60:FindFirstChild("Mobs")
+
+				local connection51 = Mobs24.ChildAdded:Connect(function(child30)
+				end)
+			end
+
+			local children79 = BasementStorages12:GetChildren()
+
+			for i86, v169 in ipairs(children79) do
+				local Contents61 = v169:FindFirstChild("Contents")
+				local Mobs25 = Contents61:FindFirstChild("Mobs")
+
+				local connection52 = Mobs25.ChildAdded:Connect(function(child31)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Tabitha Witch", Duration = 2 })
+			connection51:Disconnect()
+			connection52:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Flame Twins",
+	Desc = "Notify when Flame Twins spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Flame Twins", Duration = 2 })
+			local Storages67 = workspace:FindFirstChild("Storages")
+			local BasementStorages13 = workspace:FindFirstChild("BasementStorages")
+			local children80 = Storages67:GetChildren()
+
+			for i87, v170 in ipairs(children80) do
+				local Contents62 = v170:FindFirstChild("Contents")
+				local Mobs26 = Contents62:FindFirstChild("Mobs")
+
+				local connection53 = Mobs26.ChildAdded:Connect(function(child32)
+				end)
+			end
+
+			local children81 = BasementStorages13:GetChildren()
+
+			for i88, v171 in ipairs(children81) do
+				local Contents63 = v171:FindFirstChild("Contents")
+				local Mobs27 = Contents63:FindFirstChild("Mobs")
+
+				local connection54 = Mobs27.ChildAdded:Connect(function(child33)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Flame Twins", Duration = 2 })
+			connection53:Disconnect()
+			connection54:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Possessed Skeleton",
+	Desc = "Notify when Possessed Skeleton spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Possessed Skeleton", Duration = 2 })
+			local Storages68 = workspace:FindFirstChild("Storages")
+			local BasementStorages14 = workspace:FindFirstChild("BasementStorages")
+			local children82 = Storages68:GetChildren()
+
+			for i89, v172 in ipairs(children82) do
+				local Contents64 = v172:FindFirstChild("Contents")
+				local Mobs28 = Contents64:FindFirstChild("Mobs")
+
+				local connection55 = Mobs28.ChildAdded:Connect(function(child34)
+				end)
+			end
+
+			local children83 = BasementStorages14:GetChildren()
+
+			for i90, v173 in ipairs(children83) do
+				local Contents65 = v173:FindFirstChild("Contents")
+				local Mobs29 = Contents65:FindFirstChild("Mobs")
+
+				local connection56 = Mobs29.ChildAdded:Connect(function(child35)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Possessed Skeleton", Duration = 2 })
+			connection55:Disconnect()
+			connection56:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "The Bear",
+	Desc = "Notify when The Bear spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching The Bear", Duration = 2 })
+			local Storages69 = workspace:FindFirstChild("Storages")
+			local BasementStorages15 = workspace:FindFirstChild("BasementStorages")
+			local children84 = Storages69:GetChildren()
+
+			for i91, v174 in ipairs(children84) do
+				local Contents66 = v174:FindFirstChild("Contents")
+				local Mobs30 = Contents66:FindFirstChild("Mobs")
+
+				local connection57 = Mobs30.ChildAdded:Connect(function(child36)
+				end)
+			end
+
+			local children85 = BasementStorages15:GetChildren()
+
+			for i92, v175 in ipairs(children85) do
+				local Contents67 = v175:FindFirstChild("Contents")
+				local Mobs31 = Contents67:FindFirstChild("Mobs")
+
+				local connection58 = Mobs31.ChildAdded:Connect(function(child37)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching The Bear", Duration = 2 })
+			connection57:Disconnect()
+			connection58:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Dark Skeleton",
+	Desc = "Notify when Dark Skeleton spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Dark Skeleton", Duration = 2 })
+			local Storages70 = workspace:FindFirstChild("Storages")
+			local BasementStorages16 = workspace:FindFirstChild("BasementStorages")
+			local children86 = Storages70:GetChildren()
+
+			for i93, v176 in ipairs(children86) do
+				local Contents68 = v176:FindFirstChild("Contents")
+				local Mobs32 = Contents68:FindFirstChild("Mobs")
+
+				local connection59 = Mobs32.ChildAdded:Connect(function(child38)
+				end)
+			end
+
+			local children87 = BasementStorages16:GetChildren()
+
+			for i94, v177 in ipairs(children87) do
+				local Contents69 = v177:FindFirstChild("Contents")
+				local Mobs33 = Contents69:FindFirstChild("Mobs")
+
+				local connection60 = Mobs33.ChildAdded:Connect(function(child39)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Dark Skeleton", Duration = 2 })
+			connection59:Disconnect()
+			connection60:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Ghoul",
+	Desc = "Notify when Ghoul spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Ghoul", Duration = 2 })
+			local Storages71 = workspace:FindFirstChild("Storages")
+			local BasementStorages17 = workspace:FindFirstChild("BasementStorages")
+			local children88 = Storages71:GetChildren()
+
+			for i95, v178 in ipairs(children88) do
+				local Contents70 = v178:FindFirstChild("Contents")
+				local Mobs34 = Contents70:FindFirstChild("Mobs")
+
+				local connection61 = Mobs34.ChildAdded:Connect(function(child40)
+				end)
+			end
+
+			local children89 = BasementStorages17:GetChildren()
+
+			for i96, v179 in ipairs(children89) do
+				local Contents71 = v179:FindFirstChild("Contents")
+				local Mobs35 = Contents71:FindFirstChild("Mobs")
+
+				local connection62 = Mobs35.ChildAdded:Connect(function(child41)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Ghoul", Duration = 2 })
+			connection61:Disconnect()
+			connection62:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "Angry Banana",
+	Desc = "Notify when Angry Banana spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching Angry Banana", Duration = 2 })
+			local Storages72 = workspace:FindFirstChild("Storages")
+			local BasementStorages18 = workspace:FindFirstChild("BasementStorages")
+			local children90 = Storages72:GetChildren()
+
+			for i97, v180 in ipairs(children90) do
+				local Contents72 = v180:FindFirstChild("Contents")
+				local Mobs36 = Contents72:FindFirstChild("Mobs")
+
+				local connection63 = Mobs36.ChildAdded:Connect(function(child42)
+				end)
+			end
+
+			local children91 = BasementStorages18:GetChildren()
+
+			for i98, v181 in ipairs(children91) do
+				local Contents73 = v181:FindFirstChild("Contents")
+				local Mobs37 = Contents73:FindFirstChild("Mobs")
+
+				local connection64 = Mobs37.ChildAdded:Connect(function(child43)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching Angry Banana", Duration = 2 })
+			connection63:Disconnect()
+			connection64:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Toggle({
+	Title = "The Muck",
+	Desc = "Notify when The Muck spawns",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function(state)
+		if state then
+			WindUI:Notify({ Title = "Mob Alert", Content = "Watching The Muck", Duration = 2 })
+			local Storages73 = workspace:FindFirstChild("Storages")
+			local BasementStorages19 = workspace:FindFirstChild("BasementStorages")
+			local children92 = Storages73:GetChildren()
+
+			for i99, v182 in ipairs(children92) do
+				local Contents74 = v182:FindFirstChild("Contents")
+				local Mobs38 = Contents74:FindFirstChild("Mobs")
+
+				local connection65 = Mobs38.ChildAdded:Connect(function(child44)
+				end)
+			end
+
+			local children93 = BasementStorages19:GetChildren()
+
+			for i100, v183 in ipairs(children93) do
+				local Contents75 = v183:FindFirstChild("Contents")
+				local Mobs39 = Contents75:FindFirstChild("Mobs")
+
+				local connection66 = Mobs39.ChildAdded:Connect(function(child45)
+				end)
+			end
+		else
+			WindUI:Notify({ Title = "Mob Alert", Content = "Stopped watching The Muck", Duration = 2 })
+			connection65:Disconnect()
+			connection66:Disconnect()
+		end
+	end
+})
+
+NotificationsTab:Divider()
+NotificationsTab:Section({ Title = "Bounty Alerts", Opened = true })
+
+Players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(function(character)
+		task.wait(1)
+		local leaderstats2 = player:FindFirstChild("leaderstats")
+		leaderstats2:FindFirstChild("Bounty")
+		-- [envlog] error: Luraph Script:1: Luraph Script:1: [string "Luraph "]:1: attempt to compare number <= userdata
+	end)
+end)
+
+NotificationsTab:Toggle({
+	Title = "Alert when high bounty player joins",
+	Desc = "Notify when a player reaches 1000 bounty",
+	Type = "Checkbox",
+	Value = false,
+	Callback = function()
+		WindUI:Notify({ Title = "Bounty Alerts", Content = "Monitoring players with bounty > 1000", Duration = 3 })
+		local players = Players:GetPlayers()
+
+		for i101, v184 in ipairs(players) do
+			local leaderstats = v184:FindFirstChild("leaderstats")
+			leaderstats:FindFirstChild("Bounty")
+		end
+		-- [envlog] error: Luraph Script:1: Luraph Script:1: Luraph Script:1: [string "Luraph "]:1: attempt to compare number <= userdata
+	end
+})
+
+WindUI:Notify({ Title = "The Storage HUB", Content = "Loaded successfully!", Duration = 3 })

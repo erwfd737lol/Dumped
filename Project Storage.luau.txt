@@ -1,0 +1,3193 @@
+--!nocheck
+--[[
+    The Storage — Advanced Utility Suite (v7)
+
+    Expanded: ESP modes/filters/rarity, movement modes+ramp+bhop, combat target
+    algorithms+triggers, waypoints, alerts, presets, search UI, bind registry,
+    config export/import. All hook-free paths preserved.
+--]]
+
+local ENV = (getgenv and getgenv()) or _G
+if ENV.__StorageSuite then pcall(function() ENV.__StorageSuite.Unload() end) end
+
+--=====================================================================
+-- 0. Env
+--=====================================================================
+
+local Env, CAP = {}, {}
+
+local LEX = {
+    Drawing = function() return Drawing end,
+    hookmetamethod = function() return hookmetamethod end,
+    getnamecallmethod = function() return getnamecallmethod end,
+    newcclosure = function() return newcclosure end,
+    checkcaller = function() return checkcaller end,
+    cloneref = function() return cloneref end,
+    identifyexecutor = function() return identifyexecutor end,
+    writefile = function() return writefile end,
+    readfile = function() return readfile end,
+    isfile = function() return isfile end,
+    setclipboard = function() return setclipboard end,
+}
+
+function Env.get(name)
+    local getter = LEX[name]
+    if getter then
+        local ok, v = pcall(getter)
+        if ok and v ~= nil then return v end
+    end
+    for _, source in ipairs({ function() return getgenv()[name] end, function() return _G[name] end,
+        function() return rawget(getfenv(0), name) end }) do
+        local ok, v = pcall(source)
+        if ok and v ~= nil then return v end
+    end
+    return nil
+end
+
+local function shim(name, fallback)
+    local v = Env.get(name)
+    if v ~= nil then return v end
+    return fallback
+end
+
+local cloneref = shim("cloneref", function(i) return i end)
+local newcclosure = shim("newcclosure", function(f) return f end)
+local checkcaller = shim("checkcaller", function() return false end)
+local hookmetamethod = shim("hookmetamethod", nil)
+local getnamecallmethod = shim("getnamecallmethod", nil)
+local identifyexecutor = shim("identifyexecutor", function() return "unknown", "unknown" end)
+local setclipboard = shim("setclipboard", nil)
+
+function Env.probeDrawing()
+    if CAP.drawing ~= nil then return CAP.drawing end
+    local d = Env.get("Drawing")
+    CAP.drawing = d ~= nil and pcall(function()
+        local o = d.new("Square")
+        o.Visible = false
+        o:Remove()
+    end) or false
+    return CAP.drawing
+end
+
+function Env.probeHook()
+    if CAP.hook ~= nil then return CAP.hook end
+    local ok = hookmetamethod ~= nil and getnamecallmethod ~= nil
+    if ok then
+        ok = pcall(function()
+            local o = hookmetamethod(game, "__namecall", newcclosure(function() end))
+            hookmetamethod(game, "__namecall", o)
+        end)
+    end
+    CAP.hook = ok
+    return ok
+end
+
+local Players = cloneref(game:GetService("Players"))
+local RunService = cloneref(game:GetService("RunService"))
+local UserInputService = cloneref(game:GetService("UserInputService"))
+local Lighting = cloneref(game:GetService("Lighting"))
+local TweenService = cloneref(game:GetService("TweenService"))
+local HttpService = cloneref(game:GetService("HttpService"))
+local Workspace = cloneref(game:GetService("Workspace"))
+local ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
+local VirtualUser = cloneref(game:GetService("VirtualUser"))
+
+local LocalPlayer = Players.LocalPlayer
+local HAS_HOOKS, HAS_DRAWING = Env.probeHook(), Env.probeDrawing()
+
+local LIVE, MOBS, SURFACE, BASEMENT = "Live", "Mobs", "Storages", "BasementStorages"
+local CAM_STEP, WRITER_STEP = "SS_Cam", "SS_Writer"
+
+--=====================================================================
+-- 1. Forward declarations
+--=====================================================================
+
+local Util, Refs, State, Config, Cfg, Notify, Diagnostics, Perf, Sched, Binds
+local Scanner, NativeESP, OverlayESP, Interact, Movement, Combat, Travel, Panic, World, Utility, Alerts
+local Theme, Widgets, Menu
+
+--=====================================================================
+-- 2. Util
+--=====================================================================
+
+Util = {}
+Util.tracked = {}
+
+function Util.track(c)
+    Util.tracked[#Util.tracked + 1] = c
+    return c
+end
+
+function Util.untrackAll()
+    for _, c in ipairs(Util.tracked) do pcall(function() c:Disconnect() end) end
+    table.clear(Util.tracked)
+end
+
+function Util.character()
+    local c = LocalPlayer.Character
+    return (c and c.Parent) and c or nil
+end
+
+function Util.humanoid()
+    local c = Util.character()
+    return c and c:FindFirstChildOfClass("Humanoid")
+end
+
+function Util.root()
+    local c = Util.character()
+    return c and c:FindFirstChild("HumanoidRootPart")
+end
+
+function Util.alive()
+    local h = Util.humanoid()
+    return h ~= nil and h.Health > 0
+end
+
+function Util.cam()
+    return Workspace.CurrentCamera
+end
+
+function Util.screen(pos)
+    local cam = Util.cam()
+    if not cam then return nil end
+    local p = cam:WorldToViewportPoint(pos)
+    if p.Z <= 0 then return nil end
+    return Vector2.new(p.X, p.Y)
+end
+
+function Util.raycast(origin, dir, ignore)
+    local rp = RaycastParams.new()
+    rp.FilterType = Enum.RaycastFilterType.Exclude
+    rp.FilterDescendantsInstances = ignore or { Util.character() }
+    rp.IgnoreWater = true
+    local ok, r = pcall(Workspace.Raycast, Workspace, origin, dir, rp)
+    return ok and r or nil
+end
+
+function Util.visible(a, b)
+    local d = b - a
+    local hit = Util.raycast(a, d)
+    return not hit or (hit.Position - a).Magnitude >= d.Magnitude - 1.5
+end
+
+function Util.container(n)
+    return Workspace:FindFirstChild(n)
+end
+
+function Util.part(i)
+    if i:IsA("BasePart") then return i end
+    return i:FindFirstChildWhichIsA("BasePart", true)
+end
+
+local roomCache, roomAt = {}, 0
+function Util.rooms()
+    local now = tick()
+    if now - roomAt < 1 and #roomCache > 0 then return roomCache end
+    roomAt = now
+    local out = {}
+    for _, n in ipairs({ SURFACE, BASEMENT }) do
+        local c = Util.container(n)
+        if c then
+            for _, r in ipairs(c:GetChildren()) do out[#out + 1] = r end
+        end
+    end
+    roomCache = out
+    return out
+end
+
+function Util.dist(a, b)
+    return (a - b).Magnitude
+end
+
+--=====================================================================
+-- 3. Perf + Sched + Binds
+--=====================================================================
+
+Perf = { frames = 0, acc = 0, fps = 0 }
+
+function Perf.sample(dt)
+    Perf.frames += 1
+    Perf.acc += dt
+    if Perf.acc >= 1 then
+        Perf.fps = math.floor(Perf.frames / Perf.acc + 0.5)
+        Perf.frames, Perf.acc = 0, 0
+    end
+end
+
+Sched = { tasks = {}, conn = nil }
+
+function Sched.add(name, interval, fn)
+    Sched.tasks[name] = { interval = interval, nextAt = 0, fn = fn, enabled = false }
+end
+
+function Sched.on(name, enabled)
+    local t = Sched.tasks[name]
+    if t then t.enabled = enabled end
+end
+
+function Sched.start()
+    if Sched.conn then return end
+    Sched.conn = RunService.Heartbeat:Connect(function()
+        local now = tick()
+        for _, t in pairs(Sched.tasks) do
+            if t.enabled and now >= t.nextAt then
+                t.nextAt = now + t.interval
+                local ok, err = pcall(t.fn)
+                if not ok then warn("[SS] task " .. err) end
+            end
+        end
+    end)
+end
+
+function Sched.stop()
+    if Sched.conn then
+        pcall(function() Sched.conn:Disconnect() end)
+        Sched.conn = nil
+    end
+end
+
+Binds = { list = {}, capturing = nil }
+
+function Binds.add(action, get, run)
+    Binds.list[#Binds.list + 1] = { action = action, get = get, run = run }
+end
+
+function Binds.dispatch(code)
+    for _, b in ipairs(Binds.list) do
+        if b.get() == code then
+            b.run()
+            return true
+        end
+    end
+    return false
+end
+
+--=====================================================================
+-- 4. Refs
+--=====================================================================
+
+Refs = {}
+
+function Refs.refresh()
+    local r = ReplicatedStorage:FindFirstChild("Remotes")
+    Refs.RE = (r and r:FindFirstChild("RemoteEvent")) or ReplicatedStorage:FindFirstChild("RemoteEvent")
+    Refs.UR = r and r:FindFirstChild("UnreliableRemoteEvent")
+    Refs.RF = (r and r:FindFirstChild("RemoteFunction")) or ReplicatedStorage:FindFirstChild("RemoteFunction")
+end
+
+function Refs.fire(a, ...)
+    if not Refs.RE then return false end
+    return pcall(Refs.RE.FireServer, Refs.RE, a, ...)
+end
+
+function Refs.invoke(a, ...)
+    if not Refs.RF then return nil end
+    local ok, r = pcall(Refs.RF.InvokeServer, Refs.RF, a, ...)
+    return ok and r or nil
+end
+
+--=====================================================================
+-- 5. State
+--=====================================================================
+
+State = {
+    uiOpen = true, master = true, combat = false, lastShot = 0,
+    aimPoint = nil, aimOrigin = nil, target = nil, camRot = nil,
+    aimAccum = 0, deathCF = nil, overlayAccum = 0, flyHeld = false,
+    targetInfo = nil,
+}
+
+--=====================================================================
+-- 6. Config
+--=====================================================================
+
+local PATH, MEM = "SS.json", "__SSConfig"
+
+local function rgb(r, g, b) return Color3.fromRGB(r, g, b) end
+
+Config = {
+    General = { Master = true, MenuKey = Enum.KeyCode.RightShift, Accent = rgb(96, 170, 255), Compact = false },
+    Perf = { EspDist = 350, OvDist = 300, OvMax = 90, CullRate = 0.25, LowFps = false },
+    Main = {
+        AutoRun = false, Sprint = false, InstantOpen = false, InstantPickup = false,
+        RemoveDelay = false, ChatWindow = true, HideSpinner = false, AntiAfk = false,
+        AutoRollSell = false, RollInterval = 1.2, SellWeapons = {}, SellSkins = {},
+    },
+    Player = {
+        Speed = false, SpeedValue = 3, SpeedMode = "Add", SpeedRamp = 0,
+        SpeedKey = Enum.KeyCode.V, Preset = "Custom",
+        Noclip = false, NoclipKey = Enum.KeyCode.C,
+        InfJump = false, InfJumpKey = Enum.KeyCode.B, Bhop = false,
+        Fly = false, FlyMode = "Camera", FlySpeed = 55, FlyKey = Enum.KeyCode.F, FlyHold = false,
+        RagdollSuspend = true, PanicKey = Enum.KeyCode.P,
+    },
+    ESP = {
+        Mode = "Native", DistPlayers = 350, DistMobs = 300, DistItems = 200,
+        MaxPlayers = 40, MaxMobs = 60, MaxItems = 120,
+        TeamCheck = true, FriendCheck = true, HideVanilla = true,
+        MobFilter = "", PlayerFilter = "",
+        RarityColor = true, HighlightOnly = false,
+    },
+    Native = { Players = false, Mobs = false, Items = false, Base = false, Elevator = false },
+    Overlay = {
+        Players = false, Mobs = false, Items = false,
+        Box = true, Name = true, Distance = true, Health = true, Tracer = false, Ring = false,
+        Colors = { Player = rgb(90, 200, 255), Friend = rgb(120, 255, 150), Team = rgb(255, 210, 90),
+            Mob = rgb(255, 120, 120), Common = rgb(230, 230, 120), Uncommon = rgb(140, 255, 160),
+            Rare = rgb(120, 180, 255), Legendary = rgb(255, 170, 60) },
+    },
+    Combat = {
+        Mode = "Off", Trigger = "Hold", TriggerKey = Enum.KeyCode.E,
+        TargetMode = "Crosshair", FovShape = "Circle",
+        FovRadius = 220, MaxDistance = 400, WallCheck = false,
+        WeightDistance = 0.55, WeightCrosshair = 0.45, Prediction = 0.0,
+        HitboxPadding = 0.35, Smoothing = 0.28, InjectAim = not HAS_HOOKS,
+        AutoKnife = false, KnifeMode = "Empty", KnifeRange = 14,
+        AutoReload = false, ReloadAt = 1, NoSpread = false, NoRecoil = false,
+    },
+    World = { Fullbright = false, Brightness = 3, Fov = false, FovValue = 70 },
+    Travel = { Target = nil, Height = 3.5, Waypoints = {}, Favorites = {} },
+    Panic = { Destination = "Base" },
+    Alerts = {
+        Bounty = false, BountyThreshold = 1000, Npc = {}, Mob = {}, Rarity = {},
+        PlayerJoin = false, PlayerLeave = false, Proximity = false, ProximityRange = 60,
+    },
+}
+
+Cfg = { backend = "none", dirty = false }
+
+function Cfg.detect()
+    local w, r = Env.get("writefile"), Env.get("readfile")
+    if w and r and pcall(w, PATH, "{}") then Cfg.backend = "file"
+    elseif getgenv then Cfg.backend = "memory"
+    else Cfg.backend = "none" end
+end
+
+function Cfg.merge(section, values)
+    local target = Config[section]
+    if type(target) ~= "table" then return end
+    for k, def in pairs(target) do
+        local v = values[k]
+        if type(def) == type(v) and type(v) ~= "table" then target[k] = v
+        elseif type(def) == "table" and type(v) == "table" then
+            if k == "Colors" then
+                for n, c in pairs(v) do
+                    if target.Colors[n] and typeof(c) == "Color3" then target.Colors[n] = c end
+                end
+            else
+                for n, c in pairs(v) do target[n] = c end
+            end
+        end
+    end
+end
+
+function Cfg.serialize()
+    local out = {}
+    for s, sec in pairs(Config) do
+        local copy = {}
+        for k, v in pairs(sec) do
+            if k == "Colors" then
+                copy.Colors = {}
+                for n, c in pairs(v) do
+                    copy.Colors[n] = { math.floor(c.R * 255), math.floor(c.G * 255), math.floor(c.B * 255) }
+                end
+            elseif type(v) ~= "table" then
+                copy[k] = typeof(v) == "EnumItem" and v.Name or v
+            else
+                copy[k] = v
+            end
+        end
+        out[s] = copy
+    end
+    return out
+end
+
+function Cfg.save()
+    if Cfg.backend == "none" or Cfg.dirty then return end
+    Cfg.dirty = true
+    task.delay(1, function()
+        Cfg.dirty = false
+        local ok, enc = pcall(HttpService.JSONEncode, HttpService, Cfg.serialize())
+        if not ok then return end
+        if Cfg.backend == "file" then
+            local w = Env.get("writefile")
+            if w then pcall(w, PATH, enc) end
+        else
+            pcall(function() getgenv()[MEM] = enc end)
+        end
+    end)
+end
+
+function Cfg.load()
+    if Cfg.backend == "none" then return end
+    local raw
+    if Cfg.backend == "file" then
+        local isf, rd = Env.get("isfile"), Env.get("readfile")
+        if isf and not isf(PATH) then return end
+        if rd then
+            local ok, c = pcall(rd, PATH)
+            if ok then raw = c end
+        end
+    else
+        local ok, c = pcall(function() return getgenv()[MEM] end)
+        if ok then raw = c end
+    end
+    if type(raw) ~= "string" or #raw < 2 then return end
+    local ok, dec = pcall(HttpService.JSONDecode, HttpService, raw)
+    if not ok or type(dec) ~= "table" then return end
+    for s, v in pairs(dec) do
+        if type(v) == "table" and Config[s] then
+            if v.Colors then
+                for n, c in pairs(v.Colors) do
+                    if type(c) == "table" and Config[s].Colors[n] then
+                        v.Colors[n] = rgb(c[1] or 255, c[2] or 255, c[3] or 255)
+                    end
+                end
+            end
+            for k, val in pairs(v) do
+                if k ~= "Colors" and type(val) == "string" then
+                    local eo, ei = pcall(function() return Enum.KeyCode[val] end)
+                    if eo and ei and type(Config[s][k]) == "EnumItem" then v[k] = ei end
+                end
+            end
+            Cfg.merge(s, v)
+        end
+    end
+end
+
+function Cfg.export()
+    local ok, enc = pcall(HttpService.JSONEncode, HttpService, Cfg.serialize())
+    if not ok then return nil end
+    if setclipboard then pcall(setclipboard, enc) end
+    return enc
+end
+
+function Cfg.import(text)
+    local ok, dec = pcall(HttpService.JSONDecode, HttpService, text)
+    if not ok or type(dec) ~= "table" then return false end
+    for s, v in pairs(dec) do
+        if type(v) == "table" and Config[s] then Cfg.merge(s, v) end
+    end
+    Cfg.save()
+    return true
+end
+
+--=====================================================================
+-- 7. Notify
+--=====================================================================
+
+Notify = { gui = nil }
+
+function Notify.init(parent)
+    Notify.gui = Instance.new("Frame")
+    Notify.gui.BackgroundTransparency = 1
+    Notify.gui.AnchorPoint = Vector2.new(1, 1)
+    Notify.gui.Position = UDim2.new(1, -16, 1, -16)
+    Notify.gui.Size = UDim2.new(0, 300, 0, 260)
+    Notify.gui.Parent = parent
+    local l = Instance.new("UIListLayout")
+    l.VerticalAlignment = Enum.VerticalAlignment.Bottom
+    l.Padding = UDim.new(0, 6)
+    l.Parent = Notify.gui
+end
+
+function Notify.push(text, tone)
+    if not Notify.gui then return end
+    local lb = Instance.new("TextLabel")
+    lb.BackgroundColor3 = rgb(18, 18, 22)
+    lb.BackgroundTransparency = 0.12
+    lb.Size = UDim2.new(1, 0, 0, 26)
+    lb.Font = Enum.Font.Gotham
+    lb.TextSize = 12
+    lb.TextColor3 = tone == "bad" and rgb(255, 140, 140) or tone == "good" and rgb(140, 240, 160) or rgb(226, 226, 232)
+    lb.Text = text
+    lb.TextXAlignment = Enum.TextXAlignment.Left
+    lb.Parent = Notify.gui
+    local p = Instance.new("UIPadding")
+    p.PaddingLeft = UDim.new(0, 8)
+    p.Parent = lb
+    task.delay(3.2, function()
+        TweenService:Create(lb, TweenInfo.new(0.3), { BackgroundTransparency = 1, TextTransparency = 1 }):Play()
+        task.wait(0.35)
+        lb:Destroy()
+    end)
+end
+
+--=====================================================================
+-- 8. Diagnostics
+--=====================================================================
+
+Diagnostics = { results = {} }
+
+function Diagnostics.add(label, pass, detail)
+    Diagnostics.results[#Diagnostics.results + 1] = { label = label, pass = pass, detail = detail }
+end
+
+function Diagnostics.run()
+    table.clear(Diagnostics.results)
+    local _, v = identifyexecutor()
+    Diagnostics.add("Executor", true, tostring(v))
+    Diagnostics.add("FPS", Perf.fps >= 30, tostring(Perf.fps))
+    Diagnostics.add("Drawing", HAS_DRAWING, HAS_DRAWING and "available" or "overlay limited")
+    Diagnostics.add("Hooks", HAS_HOOKS, HAS_HOOKS and "available" or "injection fallback")
+    Diagnostics.add("Backend", Cfg.backend ~= "none", Cfg.backend)
+    Diagnostics.add("Clipboard", setclipboard ~= nil, setclipboard and "available" or "unavailable")
+    Diagnostics.add("ESP index", true, tostring(NativeESP.count()))
+    Diagnostics.add("Overlay", true, tostring(OverlayESP.count()))
+
+    Refs.refresh()
+    Diagnostics.add("Remotes", Refs.RE ~= nil)
+    Diagnostics.add("Live folder", Util.container(LIVE) ~= nil)
+
+    local room = Panic.ownedRoom()
+    Diagnostics.add("Owned base", room ~= nil, room and room.Name or "none")
+    Diagnostics.add("Bed", room ~= nil and Panic.bedIn(room) ~= nil)
+
+    local rep = Movement.report()
+    Diagnostics.add("Speed writer", rep.writer, rep.detail)
+    Diagnostics.add("Override", rep.holds, rep.delta)
+
+    for _, r in ipairs(Diagnostics.results) do
+        print(("[SS] %s %s%s"):format(r.pass and "PASS" or "FAIL", r.label, r.detail and (" - " .. r.detail) or ""))
+    end
+end
+
+--=====================================================================
+-- 9. Rarity
+--=====================================================================
+
+local RARITY = {
+    Legendary = { "Dark Scythe", ["Hallow's Scythe"] = true, Scythe = true, ["Megalodon Knife"] = true,
+        ["False Trident"] = true, Chainsaw = true, ["Hallow's Saw"] = true, ["Hallow's Revolvers"] = true },
+    Rare = { Katana = true, ["Fire Axe"] = true, LMG = true, ["Grenade Launcher"] = true,
+        Flamethrower = true, ["Harpoon Gun"] = true, ["Ancient Knife"] = true },
+    Uncommon = { AK47 = true, Shotgun = true, SMG = true, Sledgehammer = true, Revolver = true,
+        ["Double Barrel Shotgun"] = true, Turret = true },
+}
+
+local RARITY_NAMES = { Legendary = true, Rare = true, Uncommon = true, Common = true }
+
+local function rarityOf(name)
+    for tier, set in pairs(RARITY) do
+        if type(set) == "table" and set[name] then return tier end
+    end
+    return "Common"
+end
+
+--=====================================================================
+-- 10. NativeESP
+--=====================================================================
+
+NativeESP = { index = {}, conns = {}, pending = false }
+
+local TAGS = { Player = { "PlayerHighlight", "PlayerESP" }, Mob = { "MobHighlight", "MobESP" },
+    Item = { "LootHighlight", "LootName" } }
+
+local function pushObj(entry, o)
+    if o:IsA("Highlight") or o:IsA("BillboardGui") or o:IsA("SurfaceGui")
+        or o:IsA("ScreenGui") or o:IsA("Beam") then
+        entry.objects[#entry.objects + 1] = o
+    end
+end
+
+local function indexModel(model, kind, tags)
+    local entry = { model = model, kind = kind, objects = {}, last = nil }
+    for _, t in ipairs(tags or {}) do
+        local f = model:FindFirstChild(t, true)
+        if f then pushObj(entry, f) end
+    end
+    local folder = model:FindFirstChild("ESP")
+    if folder then
+        for _, d in ipairs(folder:GetDescendants()) do pushObj(entry, d) end
+    end
+    if #entry.objects > 0 then NativeESP.index[#NativeESP.index + 1] = entry end
+end
+
+function NativeESP.count() return #NativeESP.index end
+
+function NativeESP.rebuild()
+    table.clear(NativeESP.index)
+    local live = Util.container(LIVE)
+    if live then
+        for _, m in ipairs(live:GetChildren()) do
+            if m ~= LocalPlayer.Character and m:IsA("Model") then indexModel(m, "Player", TAGS.Player) end
+        end
+    end
+    local mobs = Util.container(MOBS)
+    if mobs then
+        for _, m in ipairs(mobs:GetChildren()) do
+            if m:IsA("Model") then indexModel(m, "Mob", TAGS.Mob) end
+        end
+    end
+    for _, room in ipairs(Util.rooms()) do
+        local contents = room:FindFirstChild("Contents")
+        if contents then
+            local loot = contents:FindFirstChild("Loot")
+            if loot then
+                for _, i in ipairs(loot:GetChildren()) do indexModel(i, "Item", TAGS.Item) end
+            end
+            local rm = contents:FindFirstChild("Mobs")
+            if rm then
+                for _, m in ipairs(rm:GetChildren()) do
+                    if m:IsA("Model") then indexModel(m, "Mob", TAGS.Mob) end
+                end
+            end
+        end
+        if Panic.isOwned(room) then indexModel(room, "Base", { "ESP" }) end
+    end
+    local ev = Util.container("Elevator")
+    if ev then
+        for _, c in ipairs(ev:GetChildren()) do indexModel(c, "Elevator", { "ESP" }) end
+    end
+end
+
+function NativeESP.queueRebuild()
+    if NativeESP.pending then return end
+    NativeESP.pending = true
+    task.delay(0.6, function()
+        NativeESP.pending = false
+        NativeESP.rebuild()
+    end)
+end
+
+local function allowed(entry)
+    if entry.kind == "Player" then
+        if not Config.Native.Players then return false end
+        local filter = Config.ESP.PlayerFilter
+        if filter ~= "" and not entry.model.Name:lower():find(filter:lower(), 1, true) then return false end
+        return true
+    elseif entry.kind == "Mob" then
+        if not Config.Native.Mobs then return false end
+        local filter = Config.ESP.MobFilter
+        if filter ~= "" and not entry.model.Name:lower():find(filter:lower(), 1, true) then return false end
+        return true
+    elseif entry.kind == "Item" then
+        return Config.Native.Items
+    end
+    return entry.kind == "Base" and Config.Native.Base or entry.kind == "Elevator" and Config.Native.Elevator
+end
+
+function NativeESP.cull()
+    if #NativeESP.index == 0 then return end
+    local cam = Util.cam()
+    local origin = cam and cam.CFrame.Position
+    local budgets = { Player = Config.ESP.MaxPlayers, Mob = Config.ESP.MaxMobs, Item = Config.ESP.MaxItems }
+    local used = { Player = 0, Mob = 0, Item = 0 }
+
+    for _, e in ipairs(NativeESP.index) do
+        local want = false
+        if origin and allowed(e) then
+            local distLimit = e.kind == "Player" and Config.ESP.DistPlayers
+                or e.kind == "Mob" and Config.ESP.DistMobs
+                or e.kind == "Item" and Config.ESP.DistItems or math.huge
+            if e.kind == "Base" or e.kind == "Elevator" then
+                want = true
+            else
+                local a = e.anchor
+                if not (a and a.Parent) then
+                    a = Util.part(e.model)
+                    e.anchor = a
+                end
+                if a then
+                    want = Util.dist(a.Position, origin) <= distLimit
+                    if want and budgets[e.kind] then
+                        used[e.kind] += 1
+                        if used[e.kind] > budgets[e.kind] then want = false end
+                    end
+                end
+            end
+        end
+        if want ~= e.last then
+            e.last = want
+            for _, o in ipairs(e.objects) do
+                if o.Parent then pcall(function() o.Enabled = want end) end
+            end
+        end
+    end
+end
+
+function NativeESP.applyTags()
+    if not Config.ESP.HideVanilla then return end
+    local live = Util.container(LIVE)
+    if not live then return end
+    for _, m in ipairs(live:GetChildren()) do
+        local h = m:FindFirstChildOfClass("Humanoid")
+        if h then
+            local want = Config.Native.Players and Enum.HumanoidDisplayDistanceType.None
+                or Enum.HumanoidDisplayDistanceType.Subject
+            if h.DisplayDistanceType ~= want then h.DisplayDistanceType = want end
+        end
+    end
+end
+
+function NativeESP.start()
+    NativeESP.stop()
+    NativeESP.rebuild()
+    for _, n in ipairs({ LIVE, MOBS, SURFACE, BASEMENT }) do
+        local f = Util.container(n)
+        if f then
+            NativeESP.conns[#NativeESP.conns + 1] = f.ChildAdded:Connect(NativeESP.queueRebuild)
+            NativeESP.conns[#NativeESP.conns + 1] = f.ChildRemoved:Connect(NativeESP.queueRebuild)
+        end
+    end
+    Sched.on("cull", true)
+    Sched.on("tags", true)
+end
+
+function NativeESP.stop()
+    for _, c in ipairs(NativeESP.conns) do pcall(function() c:Disconnect() end) end
+    table.clear(NativeESP.conns)
+    Sched.on("cull", false)
+    Sched.on("tags", false)
+    table.clear(NativeESP.index)
+end
+
+--=====================================================================
+-- 11. OverlayESP
+--=====================================================================
+
+OverlayESP = { entries = {} }
+
+local function dispose(e)
+    if e.highlight then pcall(function() e.highlight:Destroy() end) end
+    if e.gui then pcall(function() e.gui:Destroy() end) end
+end
+
+local function build(instance, kind)
+    local e = { instance = instance, kind = kind, anchor = nil }
+    if not Config.ESP.HighlightOnly then
+        local hl = Instance.new("Highlight")
+        hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        hl.FillTransparency = 0.72
+        hl.Parent = instance
+        e.highlight = hl
+    end
+    if not Config.ESP.HighlightOnly then
+        local gui = Instance.new("BillboardGui")
+        gui.Size = UDim2.fromScale(12, 2)
+        gui.StudsOffsetWorldSpace = Vector3.new(0, 2.9, 0)
+        gui.AlwaysOnTop = true
+        gui.MaxDistance = Config.Perf.OvDist
+        local name = Instance.new("TextLabel")
+        name.Size = UDim2.new(1, 0, 0.5, 0)
+        name.BackgroundTransparency = 1
+        name.Font = Enum.Font.GothamBold
+        name.TextSize = 13
+        name.TextStrokeTransparency = 0.35
+        name.Parent = gui
+        local sub = Instance.new("TextLabel")
+        sub.Size = UDim2.new(1, 0, 0.5, 0)
+        sub.Position = UDim2.new(0, 0, 0.5, 0)
+        sub.BackgroundTransparency = 1
+        sub.Font = Enum.Font.Gotham
+        sub.TextSize = 12
+        sub.TextStrokeTransparency = 0.35
+        sub.Parent = gui
+        gui.Parent = instance
+        e.gui, e.name, e.sub = gui, name, sub
+    end
+    return e
+end
+
+function OverlayESP.count()
+    local n = 0
+    for _ in pairs(OverlayESP.entries) do n += 1 end
+    return n
+end
+
+function OverlayESP.activeFor(kind)
+    if Config.ESP.Mode == "Off" or Config.ESP.Mode == "Native" then return false end
+    if kind == "Player" then return Config.Overlay.Players end
+    if kind == "Mob" then return Config.Overlay.Mobs end
+    if kind == "Item" then return Config.Overlay.Items end
+    return false
+end
+
+function OverlayESP.onFound(instance, kind)
+    if OverlayESP.entries[instance] or not OverlayESP.activeFor(kind) then return end
+    if OverlayESP.count() >= Config.Perf.OvMax then return end
+    OverlayESP.entries[instance] = build(instance, kind)
+end
+
+function OverlayESP.onLost(instance)
+    local e = OverlayESP.entries[instance]
+    if not e then return end
+    dispose(e)
+    OverlayESP.entries[instance] = nil
+end
+
+function OverlayESP.resync()
+    for i in pairs(OverlayESP.entries) do
+        if not i.Parent or not Scanner.known[i] then OverlayESP.onLost(i) end
+    end
+    for i, k in pairs(Scanner.known) do
+        if OverlayESP.activeFor(k) then OverlayESP.onFound(i, k) end
+    end
+end
+
+function OverlayESP.update()
+    if Config.ESP.Mode == "Off" or Config.ESP.Mode == "Native" then return end
+    local cam = Util.cam()
+    if not cam then return end
+    local origin = cam.CFrame.Position
+    local center = Vector2.new(cam.ViewportSize.X * 0.5, cam.ViewportSize.Y * 0.5)
+
+    for i, e in pairs(OverlayESP.entries) do
+        if not i.Parent then
+            OverlayESP.onLost(i)
+            continue
+        end
+        local a = e.anchor
+        if not (a and a.Parent) then
+            a = Util.part(i)
+            e.anchor = a
+        end
+        local show = a ~= nil
+        local d = 0
+        if show then
+            d = Util.dist(a.Position, origin)
+            if d > Config.Perf.OvDist then show = false end
+        end
+        if show and e.kind == "Player" and e.player then
+            if Config.ESP.TeamCheck and e.player.Team == LocalPlayer.Team then show = false end
+            if Config.ESP.FriendCheck and e.friend then show = false end
+        end
+        if not show then
+            if e.gui and e.gui.Enabled then e.gui.Enabled = false end
+            if e.highlight then e.highlight.Enabled = false end
+            continue
+        end
+
+        local color = e.kind == "Item"
+            and (Config.ESP.RarityColor and Config.Overlay.Colors[rarityOf(i.Name)] or Config.Overlay.Colors.Common)
+            or e.kind == "Mob" and Config.Overlay.Colors.Mob
+            or e.team and Config.Overlay.Colors.Team
+            or e.friend and Config.Overlay.Colors.Friend
+            or Config.Overlay.Colors.Player
+
+        if e.highlight then
+            e.highlight.Enabled = true
+            e.highlight.FillColor = color
+            e.highlight.OutlineColor = color
+        end
+        if e.gui then
+            e.gui.Enabled = true
+            e.name.Text = Config.Overlay.Name and i.Name or ""
+            e.name.TextColor3 = color
+            e.sub.Text = Config.Overlay.Distance and ("%d m"):format(d) or ""
+            e.sub.TextColor3 = color
+            e.gui.StudsOffsetWorldSpace = Config.Overlay.Health
+                and Vector3.new(0, 2.9, 0) or Vector3.new(0, 2.9, 0)
+        end
+        if Config.Overlay.Tracer then
+            local s = Util.screen(a.Position)
+            if s then e.screenPos = s end
+        end
+        e.centerOffset = e.gui and Util.screen(a.Position) and (Util.screen(a.Position) - center).Magnitude or nil
+    end
+end
+
+function OverlayESP.stop()
+    for i in pairs(OverlayESP.entries) do OverlayESP.onLost(i) end
+end
+
+--=====================================================================
+-- 12. Scanner
+--=====================================================================
+
+Scanner = { known = {} }
+
+function Scanner.register(i, k)
+    if Scanner.known[i] then return end
+    Scanner.known[i] = k
+    OverlayESP.onFound(i, k)
+end
+
+function Scanner.unregister(i)
+    if not Scanner.known[i] then return end
+    Scanner.known[i] = nil
+    OverlayESP.onLost(i)
+end
+
+function Scanner.sweep()
+    if Config.ESP.Mode == "Off" or Config.ESP.Mode == "Native" then return end
+    local live = Util.container(LIVE)
+    if live and Config.Overlay.Players then
+        for _, m in ipairs(live:GetChildren()) do
+            if m:IsA("Model") and m ~= LocalPlayer.Character then Scanner.register(m, "Player") end
+        end
+    end
+    local mobs = Util.container(MOBS)
+    if mobs and Config.Overlay.Mobs then
+        for _, m in ipairs(mobs:GetChildren()) do
+            if m:IsA("Model") then Scanner.register(m, "Mob") end
+        end
+    end
+    if Config.Overlay.Items then
+        for _, r in ipairs(Util.rooms()) do
+            local c = r:FindFirstChild("Contents")
+            local loot = c and c:FindFirstChild("Loot")
+            if loot then
+                for _, i in ipairs(loot:GetChildren()) do Scanner.register(i, "Item") end
+            end
+        end
+    end
+end
+
+function Scanner.clear()
+    for i in pairs(Scanner.known) do OverlayESP.onLost(i) end
+    table.clear(Scanner.known)
+end
+
+--=====================================================================
+-- 13. Interact
+--=====================================================================
+
+Interact = { conns = {} }
+
+local function zero(inst)
+    local p = inst:FindFirstChildOfClass("ProximityPrompt")
+    if p and p.HoldDuration ~= 0 then p.HoldDuration = 0 end
+end
+
+local function roomSweep()
+    for _, r in ipairs(Util.rooms()) do
+        if Config.Main.InstantOpen then
+            local door = r:FindFirstChild("Door")
+            local h = door and door:FindFirstChild("Handle")
+            if h then zero(h) end
+        end
+        if Config.Main.InstantPickup then
+            local c = r:FindFirstChild("Contents")
+            local loot = c and c:FindFirstChild("Loot")
+            if loot then
+                for _, i in ipairs(loot:GetChildren()) do zero(i) end
+            end
+        end
+    end
+end
+
+local function bulk()
+    if not Config.Main.RemoveDelay then return end
+    for _, d in ipairs(Workspace:GetDescendants()) do
+        if d:IsA("ProximityPrompt") and d.HoldDuration ~= 0 then d.HoldDuration = 0 end
+    end
+end
+
+function Interact.start()
+    Interact.stop()
+    roomSweep()
+    bulk()
+    for _, n in ipairs({ SURFACE, BASEMENT }) do
+        local c = Util.container(n)
+        if c then
+            Interact.conns[#Interact.conns + 1] = c.DescendantAdded:Connect(function(d)
+                if d:IsA("ProximityPrompt") then d.HoldDuration = 0
+                elseif d:IsA("Model") or d:IsA("BasePart") then zero(d) end
+            end)
+        end
+    end
+    if Config.Main.RemoveDelay then
+        Interact.conns[#Interact.conns + 1] = Workspace.DescendantAdded:Connect(function(d)
+            if d:IsA("ProximityPrompt") then d.HoldDuration = 0 end
+        end)
+    end
+end
+
+function Interact.stop()
+    for _, c in ipairs(Interact.conns) do pcall(function() c:Disconnect() end) end
+    table.clear(Interact.conns)
+end
+
+--=====================================================================
+-- 14. Movement
+--=====================================================================
+
+Movement = {
+    hook = nil, writing = false, suspended = false, writerOk = false,
+    base = nil, flyV = nil, flyG = nil, noclipConn = nil, jumpConn = nil, bhopConn = nil,
+    runState = false, current = nil,
+}
+
+local DEFAULT_SPEED = 16
+
+function Movement.isTarget(h)
+    return h:IsA("Humanoid") and h.Parent ~= nil and h.Parent == LocalPlayer.Character
+end
+
+function Movement.write(h, k, v)
+    Movement.writing = true
+    local ok = pcall(function() h[k] = v end)
+    Movement.writing = false
+    return ok
+end
+
+function Movement.baseSpeed()
+    local b = Movement.base
+    if b and b.h == Util.humanoid() then return b.speed end
+    return DEFAULT_SPEED
+end
+
+function Movement.targetSpeed()
+    if Movement.suspended or not State.master or not Config.Player.Speed then return nil end
+    local v = Config.Player.SpeedValue
+    if Config.Player.SpeedMode == "Add" then return Movement.baseSpeed() + v end
+    if Config.Player.SpeedMode == "Multiply" then return Movement.baseSpeed() * (v / 10) end
+    return v
+end
+
+function Movement.installHook()
+    if Movement.hook or not HAS_HOOKS then return end
+    pcall(function()
+        Movement.hook = hookmetamethod(game, "__newindex", newcclosure(function(self, k, v)
+            if Movement.writing or k ~= "WalkSpeed" then return Movement.hook(self, k, v) end
+            if not Movement.isTarget(self) then return Movement.hook(self, k, v) end
+            local t = Movement.targetSpeed()
+            if t then v = t end
+            return Movement.hook(self, k, v)
+        end))
+    end)
+end
+
+function Movement.uninstallHook()
+    if not Movement.hook then return end
+    pcall(function() hookmetamethod(game, "__newindex", Movement.hook) end)
+    Movement.hook = nil
+end
+
+local function writerStep(dt)
+    if Movement.suspended or not State.master then return end
+    local h = Util.humanoid()
+    if not h then return end
+    local t = Movement.targetSpeed()
+    if not t then return end
+
+    local cur = Movement.current or h.WalkSpeed
+    local ramp = Config.Player.SpeedRamp
+    if ramp > 0 and math.abs(t - cur) > 0.05 then
+        local step = ramp * math.max(dt, 0.001)
+        cur = t > cur and math.min(t, cur + step) or math.max(t, cur - step)
+    else
+        cur = t
+    end
+    Movement.current = cur
+    if math.abs(h.WalkSpeed - cur) > 0.01 then Movement.write(h, "WalkSpeed", cur) end
+end
+
+function Movement.bindWriter()
+    if Movement.writerOk then return end
+    Movement.writerOk = pcall(function()
+        RunService:UnbindFromRenderStep(WRITER_STEP)
+        RunService:BindToRenderStep(WRITER_STEP, Enum.RenderPriority.Last.Value, writerStep)
+    end)
+end
+
+function Movement.unbindWriter()
+    if not Movement.writerOk then return end
+    pcall(function() RunService:UnbindFromRenderStep(WRITER_STEP) end)
+    Movement.writerOk = false
+end
+
+function Movement.capture(h)
+    if Movement.base and Movement.base.h == h then return end
+    local cur = h.WalkSpeed
+    Movement.base = { h = h, speed = cur > 0 and cur or DEFAULT_SPEED }
+end
+
+function Movement.applySpeed()
+    local h = Util.humanoid()
+    if not h then return end
+    Movement.capture(h)
+    Movement.bindWriter()
+    Movement.current = nil
+    local t = Movement.targetSpeed()
+    if t and Config.Player.SpeedRamp <= 0 then Movement.write(h, "WalkSpeed", t) end
+end
+
+function Movement.revertSpeed()
+    local h = Util.humanoid()
+    local b = Movement.base
+    Movement.current = nil
+    if h and b and b.h == h then Movement.write(h, "WalkSpeed", b.speed) end
+end
+
+function Movement.onSpeed(on)
+    if on then
+        Movement.suspended = false
+        Movement.applySpeed()
+    else
+        Movement.revertSpeed()
+    end
+end
+
+function Movement.onSpeedValue()
+    if not Config.Player.Speed then return end
+    Movement.current = nil
+    if Config.Player.SpeedRamp <= 0 then
+        local h = Util.humanoid()
+        local t = Movement.targetSpeed()
+        if h and t then Movement.write(h, "WalkSpeed", t) end
+    end
+end
+
+function Movement.setNoclip(on)
+    if Movement.noclipConn then
+        pcall(function() Movement.noclipConn:Disconnect() end)
+        Movement.noclipConn = nil
+    end
+    local c = Util.character()
+    if not on then
+        if c then
+            for _, p in ipairs(c:GetDescendants()) do
+                if p:IsA("BasePart") then p.CanCollide = true end
+            end
+        end
+        return
+    end
+    Movement.noclipConn = RunService.Stepped:Connect(function()
+        local ch = Util.character()
+        if not ch then return end
+        for _, p in ipairs(ch:GetDescendants()) do
+            if p:IsA("BasePart") and p.CanCollide then p.CanCollide = false end
+        end
+    end)
+end
+
+function Movement.setInfJump(on)
+    if Movement.jumpConn then
+        pcall(function() Movement.jumpConn:Disconnect() end)
+        Movement.jumpConn = nil
+    end
+    if not on then return end
+    Movement.jumpConn = UserInputService.JumpRequest:Connect(function()
+        local h = Util.humanoid()
+        if h then pcall(function() h:ChangeState(Enum.HumanoidStateType.Jumping) end) end
+    end)
+end
+
+function Movement.setBhop(on)
+    if Movement.bhopConn then
+        pcall(function() Movement.bhopConn:Disconnect() end)
+        Movement.bhopConn = nil
+    end
+    if not on then return end
+    local h = Util.humanoid()
+    if not h then return end
+    Movement.bhopConn = h.StateChanged:Connect(function(_, new)
+        if new ~= Enum.HumanoidStateType.Landed then return end
+        local hum = Util.humanoid()
+        if not hum then return end
+        if hum.MoveDirection.Magnitude > 0.1 then
+            pcall(function() hum:ChangeState(Enum.HumanoidStateType.Jumping) end)
+        end
+    end)
+end
+
+function Movement.setAutoRun(on)
+    if on == Movement.runState then return end
+    Movement.runState = on
+    Refs.fire("Run")
+end
+
+function Movement.startFly()
+    local r, h = Util.root(), Util.humanoid()
+    if not r or not h then return end
+    Movement.stopFly()
+    h.PlatformStand = true
+    local v = Instance.new("BodyVelocity")
+    v.MaxForce = Vector3.new(4e4, 4e4, 4e4)
+    v.Parent = r
+    Movement.flyV = v
+    local g = Instance.new("BodyGyro")
+    g.MaxTorque = Vector3.new(4e4, 4e4, 4e4)
+    g.P = 2000
+    g.D = 200
+    g.Parent = r
+    Movement.flyG = g
+end
+
+function Movement.stopFly()
+    if Movement.flyV then
+        pcall(function() Movement.flyV:Destroy() end)
+        Movement.flyV = nil
+    end
+    if Movement.flyG then
+        pcall(function() Movement.flyG:Destroy() end)
+        Movement.flyG = nil
+    end
+    local h = Util.humanoid()
+    if h then h.PlatformStand = false end
+end
+
+function Movement.updateFly()
+    if not Movement.flyV or not Movement.flyG then return end
+    local r, cam = Util.root(), Util.cam()
+    if not r or not cam then return end
+
+    if Config.Player.FlyHold and not State.flyHeld then
+        Movement.flyV.Velocity = Vector3.zero
+        Movement.flyG.CFrame = CFrame.new(r.Position) * cam.CFrame.Rotation
+        return
+    end
+
+    local dir = Vector3.zero
+    local mode = Config.Player.FlyMode
+    if mode ~= "Vertical" then
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then dir += cam.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then dir -= cam.CFrame.LookVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then dir += cam.CFrame.RightVector end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then dir -= cam.CFrame.RightVector end
+    end
+    if mode ~= "Horizontal" then
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then dir += Vector3.yAxis end
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then dir -= Vector3.yAxis end
+    end
+
+    Movement.flyV.Velocity = dir.Magnitude > 0 and dir.Unit * Config.Player.FlySpeed or Vector3.zero
+    Movement.flyG.CFrame = CFrame.new(r.Position) * cam.CFrame.Rotation
+end
+
+function Movement.report()
+    local h = Util.humanoid()
+    local t = Movement.targetSpeed()
+    local d = (h and t) and math.abs(h.WalkSpeed - t) or nil
+    return {
+        writer = Movement.writerOk,
+        detail = Movement.writerOk and "bound" or "unbound",
+        holds = t ~= nil and d ~= nil and d <= 0.75,
+        delta = t and h and ("target %s actual %s"):format(tostring(t), tostring(h.WalkSpeed)) or "none",
+    }
+end
+
+function Movement.onSpawn()
+    Movement.base = nil
+    Movement.current = nil
+    task.wait(0.6)
+    if Movement.suspended then return end
+    if Config.Player.Speed then Movement.applySpeed() end
+    if Config.Player.Noclip then Movement.setNoclip(true) end
+    if Config.Player.Fly then Movement.startFly() end
+    if Config.Player.Bhop then Movement.setBhop(true) end
+    if Config.Main.AutoRun then Movement.setAutoRun(true) end
+end
+
+function Movement.shutdown()
+    Movement.revertSpeed()
+    Movement.stopFly()
+    Movement.setNoclip(false)
+    Movement.setInfJump(false)
+    Movement.setBhop(false)
+    Movement.setAutoRun(false)
+    Movement.unbindWriter()
+    Movement.uninstallHook()
+    Movement.base = nil
+end
+
+--=====================================================================
+-- 15. Combat
+--=====================================================================
+
+Combat = { hookFn = nil, cands = {}, knifeAt = 0, reloadAt = 0 }
+
+local KNIVES = { Knife = true, ["Ancient Knife"] = true, Claymore = true, Crowbar = true }
+
+function Combat.equipped()
+    local c = Util.character()
+    return c and c:FindFirstChildOfClass("Tool")
+end
+
+function Combat.knifeIfEmpty()
+    if Combat.equipped() then return end
+    local bp = LocalPlayer:FindFirstChild("Backpack")
+    if not bp then return end
+    for _, t in ipairs(bp:GetChildren()) do
+        if t:IsA("Tool") and KNIVES[t.Name] then
+            local c = Util.character()
+            if c then
+                for _, verb in ipairs({ "EquipTool", "Equip", "Hotbar" }) do Refs.fire(verb, t.Name) end
+                pcall(function() t.Parent = c end)
+            end
+            return
+        end
+    end
+end
+
+function Combat.knifeNear()
+    local t = State.target
+    if not t or t.distance > Config.Combat.KnifeRange then return end
+    local cur = Combat.equipped()
+    if cur and KNIVES[cur.Name] then return end
+    Combat.knifeIfEmpty()
+end
+
+function Combat.collect()
+    table.clear(Combat.cands)
+    local cam = Util.cam()
+    if not cam then return end
+    local origin = cam.CFrame.Position
+    local center = Vector2.new(cam.ViewportSize.X * 0.5, cam.ViewportSize.Y * 0.5)
+    local radius = Config.Combat.FovRadius
+    local cone = Config.Combat.FovShape == "Cone"
+
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then
+            local c = p.Character
+            local h = c and c:FindFirstChildOfClass("Humanoid")
+            local head = c and c:FindFirstChild("Head")
+            local root = c and c:FindFirstChild("HumanoidRootPart")
+            if h and h.Health > 0 and head and root then
+                local d = Util.dist(head.Position, origin)
+                if d <= Config.Combat.MaxDistance then
+                    local scr = Util.screen(head.Position)
+                    local cross = scr and (scr - center).Magnitude or radius
+                    local inFov = cone
+                        and (scr ~= nil and (scr - center).Magnitude <= radius and scr.Y <= center.Y + radius * 0.5)
+                        or cross <= radius
+                    if inFov and (not Config.Combat.WallCheck or Util.visible(origin, head.Position)) then
+                        local w
+                        if Config.Combat.TargetMode == "Health" then
+                            w = 1 - math.clamp(h.Health / math.max(h.MaxHealth, 1), 0, 1)
+                        elseif Config.Combat.TargetMode == "Distance" then
+                            w = 1 - math.clamp(d / Config.Combat.MaxDistance, 0, 1)
+                        else
+                            w = (1 - math.clamp(d / Config.Combat.MaxDistance, 0, 1)) * Config.Combat.WeightDistance
+                                + (1 - math.clamp(cross / radius, 0, 1)) * Config.Combat.WeightCrosshair
+                        end
+                        if w > 0 then
+                            Combat.cands[#Combat.cands + 1] = { pos = head.Position, vel = root.AssemblyLinearVelocity,
+                                distance = d, weight = w, player = p, health = h.Health }
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+function Combat.pick()
+    local pool = Combat.cands
+    if #pool == 0 then return nil end
+    if Config.Combat.TargetMode ~= "Crosshair" then
+        local best, bw = nil, -1
+        for _, c in ipairs(pool) do
+            if c.weight > bw then best, bw = c, c.weight end
+        end
+        return best
+    end
+    local total = 0
+    for _, c in ipairs(pool) do total += c.weight end
+    local roll = math.random() * total
+    for _, c in ipairs(pool) do
+        roll -= c.weight
+        if roll <= 0 then return c end
+    end
+    return pool[#pool]
+end
+
+function Combat.aimFor(c)
+    local p = c.pos
+    if Config.Combat.Prediction > 0 then
+        p += c.vel * ((c.distance / 900) * Config.Combat.Prediction)
+    end
+    local pad = Config.Combat.HitboxPadding
+    if pad > 0 then
+        p += Vector3.new((math.random() - 0.5) * pad, (math.random() - 0.5) * pad, (math.random() - 0.5) * pad)
+    end
+    return p
+end
+
+function Combat.centerPoint()
+    local cam = Util.cam()
+    if not cam then return nil end
+    local o = cam.CFrame.Position
+    local d = cam.CFrame.LookVector * 1000
+    local hit = Util.raycast(o, d)
+    return hit and hit.Position or (o + d)
+end
+
+function Combat.active()
+    if not State.combat or not State.master or Config.Combat.Mode == "Off" then return false end
+    if Config.Combat.Trigger == "Hold" then return State.triggerHeld end
+    return true
+end
+
+function Combat.inject(dt)
+    if not Config.Combat.InjectAim or not Config.Combat.Silent then return end
+    if not State.target or not State.aimPoint or Combat.hookFn then return end
+    State.aimAccum += dt
+    if State.aimAccum < 0.033 then return end
+    State.aimAccum = 0
+    if Refs.UR then pcall(Refs.UR.FireServer, Refs.UR, "ReportAim", State.aimPoint) end
+end
+
+function Combat.update(dt)
+    if not State.combat or not State.master or Config.Combat.Mode == "Off" then
+        State.aimPoint = nil
+        State.targetInfo = nil
+        return
+    end
+
+    local useAim = Combat.active()
+    if useAim and (Config.Combat.Mode == "Silent" or Config.Combat.Mode == "Both") then
+        Combat.collect()
+        State.target = Combat.pick()
+    else
+        State.target = nil
+    end
+
+    local cam = Util.cam()
+    if not cam then return end
+
+    if State.target then
+        State.aimPoint = Combat.aimFor(State.target)
+        State.targetInfo = State.target.player and {
+            name = State.target.player.Name,
+            health = State.target.health,
+            distance = State.target.distance,
+        } or nil
+    elseif Config.Combat.NoSpread then
+        State.aimPoint = Combat.centerPoint()
+    else
+        State.aimPoint = nil
+        State.targetInfo = nil
+    end
+
+    if useAim and (Config.Combat.Mode == "Aimbot" or Config.Combat.Mode == "Both") and State.aimPoint then
+        cam.CFrame = cam.CFrame:Lerp(CFrame.lookAt(cam.CFrame.Position, State.aimPoint),
+            math.clamp(Config.Combat.Smoothing, 0.02, 1))
+        State.camRot = cam.CFrame.Rotation
+    end
+
+    Combat.inject(dt)
+end
+
+function Combat.resolve()
+    if not Combat.active() or not State.aimPoint then return nil end
+    local cam = Util.cam()
+    if not cam then return nil end
+    State.aimOrigin = cam.CFrame.Position
+    return State.aimPoint
+end
+
+function Combat.installHook()
+    if not HAS_HOOKS or Combat.hookFn then return end
+    pcall(function()
+        Combat.hookFn = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+            if checkcaller() or getnamecallmethod() ~= "FireServer" then return Combat.hookFn(self, ...) end
+            if self ~= Refs.RE and self ~= Refs.UR then return Combat.hookFn(self, ...) end
+            local args = table.pack(...)
+            local act = args[1]
+            local pt = Combat.resolve()
+            if pt then
+                if self == Refs.RE and (act == "M1D" or act == "M2D") then
+                    if (Config.Combat.Silent and State.target) or Config.Combat.NoSpread then
+                        local o = State.aimOrigin or Util.cam().CFrame.Position
+                        args[2] = typeof(args[2]) == "CFrame" and CFrame.lookAt(o, pt) or pt
+                        State.lastShot = tick()
+                    end
+                elseif self == Refs.UR and act == "ReportAim" and Config.Combat.Silent and State.target then
+                    args[2] = pt
+                elseif self == Refs.RE and act == "Reload" and Config.Combat.AutoReload then
+                    Combat.reloadAt = tick()
+                end
+            end
+            return Combat.hookFn(self, table.unpack(args, 1, args.n))
+        end))
+    end)
+end
+
+function Combat.uninstallHook()
+    if not Combat.hookFn then return end
+    pcall(function() hookmetamethod(game, "__namecall", Combat.hookFn) end)
+    Combat.hookFn = nil
+end
+
+function Combat.start()
+    if State.combat then return end
+    State.combat = true
+    Combat.installHook()
+    Sched.on("knife", true)
+    Sched.on("reload", true)
+end
+
+function Combat.stop()
+    if not State.combat then return end
+    State.combat = false
+    Combat.uninstallHook()
+    Sched.on("knife", false)
+    Sched.on("reload", false)
+    State.target, State.aimPoint, State.targetInfo = nil, nil, nil
+end
+
+--=====================================================================
+-- 16. Travel
+--=====================================================================
+
+Travel = {
+    points = { Surface = CFrame.new(-2.429, 5.6, 4.122), Basement = CFrame.new(147.225, -88.5, -0.224),
+        Elevator = CFrame.new(-696.527, 5.6, 0.093) },
+    npcs = { "Coleman", "Priest Jonathan", "Gunner Jayce", "The Leader", "Agent 3", "Teuchi",
+        "Collector Ali", "Rafael", "Banker Tom", "Weapon Collector Neil", "Squad 5 Leader",
+        "The Chained Man", "King Brian", "Builder Bob", "Fighter Dave", "Crazy Felix", "Fisherman James" },
+}
+
+function Travel.go(cf, label)
+    local c = Util.character()
+    if not c or not cf then
+        Notify.push(("Travel: %s unavailable"):format(label or "target"), "bad")
+        return
+    end
+    c:PivotTo(cf + Vector3.new(0, Config.Travel.Height, 0))
+    local r = Util.root()
+    if r then r.AssemblyLinearVelocity = Vector3.zero end
+    Notify.push(("Travel: %s"):format(label), "good")
+end
+
+function Travel.toPoint(n) Travel.go(Travel.points[n], n) end
+
+function Travel.toNpc(name)
+    for _, room in ipairs(Util.rooms()) do
+        local c = room:FindFirstChild("Contents")
+        local f = c and c:FindFirstChild("NPC")
+        local n = f and f:FindFirstChild(name)
+        if n then
+            local pv = n:GetPivot()
+            Travel.go(CFrame.new(pv.Position + pv.LookVector * 3), name)
+            return
+        end
+    end
+    Notify.push(("Travel: %s absent"):format(name), "bad")
+end
+
+function Travel.toPlayer(p)
+    local r = p and p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+    if not r then
+        Notify.push("Travel: no target", "bad")
+        return
+    end
+    Travel.go(r.CFrame, p.Name)
+end
+
+function Travel.toElevator()
+    local ev = Util.container("Elevator")
+    local box = ev and ev:FindFirstChild("Box")
+    local doors = box and box:FindFirstChild("Doors")
+    Travel.go(doors and doors.WorldPivot or Travel.points.Elevator, "Elevator")
+end
+
+function Travel.toMap()
+    local m = Util.container("Map")
+    local pts = m and m:FindFirstChild("Points")
+    local l = pts and pts:GetChildren()
+    if not l or #l == 0 then
+        Notify.push("Travel: no map points", "bad")
+        return
+    end
+    Travel.go(l[math.random(#l)].CFrame, "Map")
+end
+
+function Travel.toDeath()
+    if not State.deathCF then
+        Notify.push("Travel: no death point", "bad")
+        return
+    end
+    Travel.go(State.deathCF, "Death point")
+end
+
+function Travel.saveWaypoint(name)
+    local r = Util.root()
+    if not r then return end
+    Config.Travel.Waypoints[name] = { r.CFrame.X, r.CFrame.Y, r.CFrame.Z }
+    Cfg.save()
+    Notify.push(("Waypoint saved: %s"):format(name), "good")
+end
+
+function Travel.toWaypoint(name)
+    local w = Config.Travel.Waypoints[name]
+    if not w then return end
+    Travel.go(CFrame.new(w[1], w[2], w[3]), name)
+end
+
+--=====================================================================
+-- 17. Panic
+--=====================================================================
+
+Panic = {}
+
+function Panic.isOwned(room)
+    for _, a in ipairs({ "Owner", "OwnerId", "OwnerName", "Claimer", "ClaimedBy" }) do
+        local v = room:GetAttribute(a)
+        if v ~= nil and (v == LocalPlayer.Name or v == LocalPlayer.UserId
+            or tostring(v) == tostring(LocalPlayer.UserId)) then return true end
+    end
+    local cs = room:FindFirstChild("ClaimedStorage")
+    if cs then
+        for _, d in ipairs(cs:GetDescendants()) do
+            if d:IsA("TextLabel") and typeof(d.Text) == "string" and d.Text:find(LocalPlayer.Name, 1, true) then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+function Panic.ownedRoom()
+    for _, r in ipairs(Util.rooms()) do
+        if Panic.isOwned(r) then return r end
+    end
+    return nil
+end
+
+function Panic.bedIn(room)
+    for _, d in ipairs(room:GetDescendants()) do
+        if (d:IsA("Model") or d:IsA("BasePart")) and d.Name:lower():find("bed") then return d end
+    end
+    return nil
+end
+
+function Panic.anchor(i)
+    if i:IsA("BasePart") then return i.Position end
+    local ok, pv = pcall(function() return i:GetPivot().Position end)
+    if ok and pv then return pv end
+    local p = Util.part(i)
+    return p and p.Position or nil
+end
+
+function Panic.teleport(dest)
+    if not Util.alive() then
+        Notify.push("Panic: no character", "bad")
+        return
+    end
+    local room = Panic.ownedRoom()
+    if not room then
+        Notify.push("Panic: no base", "bad")
+        return
+    end
+    local a
+    if dest == "Bed" then
+        local bed = Panic.bedIn(room)
+        if not bed then
+            Notify.push("Panic: no bed", "bad")
+            return
+        end
+        a = Panic.anchor(bed)
+    else
+        local f = room:FindFirstChild("Floor")
+        a = f and f.Position or Panic.anchor(room)
+    end
+    if not a then
+        Notify.push("Panic: no anchor", "bad")
+        return
+    end
+    local c = Util.character()
+    if not c then return end
+    c:PivotTo(CFrame.new(a + Vector3.new(0, Config.Travel.Height, 0)))
+    local r = Util.root()
+    if r then r.AssemblyLinearVelocity = Vector3.zero end
+    Notify.push(("Panic: %s"):format(dest), "good")
+end
+
+--=====================================================================
+-- 18. World
+--=====================================================================
+
+World = { backup = nil, fx = nil, fovBack = nil, conn = nil }
+
+local function atmos()
+    local a = Lighting:FindFirstChildOfClass("Atmosphere")
+    if a then a.Density, a.Haze, a.Glare, a.Offset = 0, 0, 0, 0 end
+end
+
+function World.fullbright()
+    if World.backup then return end
+    World.backup = { Ambient = Lighting.Ambient, OutdoorAmbient = Lighting.OutdoorAmbient,
+        Brightness = Lighting.Brightness, ClockTime = Lighting.ClockTime, FogEnd = Lighting.FogEnd }
+    World.fx = {}
+    for _, e in ipairs(Lighting:GetChildren()) do
+        if e:IsA("PostEffect") then
+            World.fx[e] = e.Enabled
+            e.Enabled = false
+        end
+    end
+    Lighting.Ambient = rgb(170, 170, 170)
+    Lighting.OutdoorAmbient = rgb(170, 170, 170)
+    Lighting.Brightness = Config.World.Brightness
+    Lighting.ClockTime = 14
+    Lighting.FogEnd = 1e6
+    atmos()
+    World.conn = Lighting.ChildAdded:Connect(function(c)
+        if c:IsA("Atmosphere") then task.defer(atmos) end
+    end)
+end
+
+function World.restoreBright()
+    if World.conn then
+        pcall(function() World.conn:Disconnect() end)
+        World.conn = nil
+    end
+    if World.backup then
+        for k, v in pairs(World.backup) do pcall(function() Lighting[k] = v end) end
+        World.backup = nil
+    end
+    if World.fx then
+        for e, en in pairs(World.fx) do
+            if e.Parent then pcall(function() e.Enabled = en end) end
+        end
+        World.fx = nil
+    end
+end
+
+function World.fov()
+    local c = Util.cam()
+    if not c then return end
+    if not World.fovBack then World.fovBack = c.FieldOfView end
+    c.FieldOfView = Config.World.FovValue
+end
+
+function World.restoreFov()
+    local c = Util.cam()
+    if c and World.fovBack then c.FieldOfView = World.fovBack end
+    World.fovBack = nil
+end
+
+function World.resetFov()
+    Config.World.FovValue = 70
+    if Config.World.Fov then World.fov() else World.restoreFov() end
+    Cfg.save()
+end
+
+function World.spinner(hide)
+    local g = LocalPlayer:FindFirstChild("PlayerGui")
+    local s = g and g:FindFirstChild("Spinner")
+    if s then pcall(function() s.Enabled = not hide end) end
+end
+
+function World.chat(on)
+    local ok, svc = pcall(function() return game:GetService("TextChatService") end)
+    if not ok or not svc then return end
+    local c = svc:FindFirstChild("ChatWindowConfiguration")
+    if c then pcall(function() c.Enabled = on end) end
+end
+
+--=====================================================================
+-- 19. Utility
+--=====================================================================
+
+Utility = { afk = nil, roll = nil }
+
+Utility.weapons = { "SMG", "LMG", "Double Barrel Shotgun", "Revolver", "AK47", "Turret", "Shotgun" }
+Utility.skins = { "Hot Pink", "Agent", "Checkered", "Grey Camo", "Rusted Red", "Green Camo",
+    "Orange Crush", "Painted Yellow", "Painted Orange", "Damaged", "Earth", "Painted Blue",
+    "Painted Green", "Painted Red", "Painted Pink", "Painted Purple", "Green Sentry", "Pink Sentry",
+    "Red Sentry", "Royal", "Fallen Agent" }
+
+function Utility.setAfk(on)
+    if Utility.afk then
+        pcall(function() Utility.afk:Disconnect() end)
+        Utility.afk = nil
+    end
+    if not on then return end
+    Utility.afk = LocalPlayer.Idled:Connect(function()
+        pcall(function()
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+    end)
+end
+
+function Utility.setRoll(on)
+    if Utility.roll then
+        pcall(task.cancel, Utility.roll)
+        Utility.roll = nil
+    end
+    if not on then return end
+    Utility.roll = task.spawn(function()
+        while Config.Main.AutoRollSell do
+            pcall(function() Refs.invoke("PremRollSkin10") end)
+            for _, w in ipairs(Utility.weapons) do
+                if not Config.Main.AutoRollSell then break end
+                if not Config.Main.SellWeapons[w] then
+                    for _, s in ipairs(Utility.skins) do
+                        if Config.Main.SellSkins[s] ~= false then Refs.fire("SellSkin", w, s) end
+                    end
+                    task.wait(0.05)
+                end
+            end
+            task.wait(Config.Main.RollInterval)
+        end
+        Utility.roll = nil
+    end)
+end
+
+--=====================================================================
+-- 20. Alerts
+--=====================================================================
+
+Alerts = { conns = {}, bounty = {} }
+
+function Alerts.start()
+    Alerts.stop()
+    for _, n in ipairs({ SURFACE, BASEMENT }) do
+        local c = Util.container(n)
+        if c then
+            Alerts.conns[#Alerts.conns + 1] = c.DescendantAdded:Connect(function(d)
+                local p = d.Parent
+                if not p then return end
+                if p.Name == "NPC" and Config.Alerts.Npc[d.Name] then
+                    Notify.push(("NPC: %s"):format(d.Name), "good")
+                elseif p.Name == "Mobs" and Config.Alerts.Mob[d.Name] then
+                    Notify.push(("Mob: %s"):format(d.Name), "bad")
+                elseif p.Name == "Loot" and Config.Alerts.Rarity[rarityOf(d.Name)] then
+                    Notify.push(("%s: %s"):format(rarityOf(d.Name), d.Name), "good")
+                end
+            end)
+        end
+    end
+end
+
+function Alerts.stop()
+    for _, c in ipairs(Alerts.conns) do pcall(function() c:Disconnect() end) end
+    table.clear(Alerts.conns)
+    for _, c in ipairs(Alerts.bounty) do pcall(function() c:Disconnect() end) end
+    table.clear(Alerts.bounty)
+end
+
+function Alerts.watchBounty(p)
+    local ls = p:FindFirstChild("leaderstats")
+    local b = ls and ls:FindFirstChild("Bounty")
+    if not b then return end
+    Alerts.bounty[#Alerts.bounty + 1] = b:GetPropertyChangedSignal("Value"):Connect(function()
+        if Config.Alerts.Bounty and b.Value >= Config.Alerts.BountyThreshold then
+            Notify.push(("%s bounty %d"):format(p.Name, b.Value), "bad")
+        end
+    end)
+end
+
+function Alerts.proximity()
+    if not Config.Alerts.Proximity or not Util.alive() then return end
+    local r = Util.root()
+    if not r then return end
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then
+            local pr = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+            if pr and Util.dist(pr.Position, r.Position) <= Config.Alerts.ProximityRange then
+                Notify.push(("Nearby: %s"):format(p.Name), "bad")
+            end
+        end
+    end
+end
+
+--=====================================================================
+-- 21. Theme / Widgets
+--=====================================================================
+
+Theme = { bg = rgb(14, 14, 17), panel = rgb(20, 20, 25), stroke = rgb(38, 38, 46),
+    text = rgb(226, 226, 232), muted = rgb(140, 140, 152), accent = rgb(96, 170, 255),
+    off = rgb(48, 48, 58), good = rgb(120, 230, 140) }
+
+local function corner(p, r)
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, r or 6)
+    c.Parent = p
+end
+
+local function stroke(p)
+    local s = Instance.new("UIStroke")
+    s.Color = Theme.stroke
+    s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    s.Parent = p
+end
+
+Widgets = {}
+local renders, binds, searchables = {}, {}, {}
+
+local function reg(row, text)
+    row:SetAttribute("SearchText", text)
+    searchables[#searchables + 1] = row
+    return row
+end
+
+function Widgets.section(parent, text)
+    local f = Instance.new("Frame")
+    f.BackgroundTransparency = 1
+    f.Size = UDim2.new(1, 0, 0, 22)
+    f.Parent = parent
+    local l = Instance.new("TextLabel")
+    l.BackgroundTransparency = 1
+    l.Size = UDim2.new(1, 0, 0, 20)
+    l.Font = Enum.Font.GothamBold
+    l.TextSize = 11
+    l.TextColor3 = Theme.muted
+    l.TextXAlignment = Enum.TextXAlignment.Left
+    l.Text = text:upper()
+    l.Parent = f
+    f:SetAttribute("IsSection", true)
+    return f
+end
+
+function Widgets.toggle(parent, text, get, set)
+    local row = Instance.new("Frame")
+    row.BackgroundColor3 = Theme.panel
+    row.Size = UDim2.new(1, 0, 0, 30)
+    row.Parent = parent
+    corner(row, 5)
+    stroke(row)
+
+    local l = Instance.new("TextLabel")
+    l.BackgroundTransparency = 1
+    l.Position = UDim2.new(0, 10, 0, 0)
+    l.Size = UDim2.new(1, -60, 1, 0)
+    l.Font = Enum.Font.Gotham
+    l.TextSize = 12
+    l.TextColor3 = Theme.text
+    l.TextXAlignment = Enum.TextXAlignment.Left
+    l.Text = text
+    l.Parent = row
+
+    local b = Instance.new("TextButton")
+    b.BackgroundColor3 = Theme.off
+    b.Position = UDim2.new(1, -46, 0.5, -9)
+    b.Size = UDim2.new(0, 36, 0, 18)
+    b.Text = ""
+    b.AutoButtonColor = false
+    b.Parent = row
+    corner(b, 9)
+
+    local k = Instance.new("Frame")
+    k.BackgroundColor3 = rgb(200, 200, 210)
+    k.Size = UDim2.new(0, 14, 0, 14)
+    k.Position = UDim2.new(0, 2, 0.5, -7)
+    k.Parent = b
+    corner(k, 7)
+
+    local function render()
+        local v = get()
+        b.BackgroundColor3 = v and Theme.accent or Theme.off
+        l.TextColor3 = v and Theme.text or Theme.muted
+        k.Position = v and UDim2.new(1, -16, 0.5, -7) or UDim2.new(0, 2, 0.5, -7)
+    end
+
+    b.MouseButton1Click:Connect(function()
+        set(not get())
+        render()
+    end)
+    renders[#renders + 1] = render
+    render()
+    return reg(row, text)
+end
+
+function Widgets.slider(parent, text, min, max, get, set, fmt)
+    local row = Instance.new("Frame")
+    row.BackgroundColor3 = Theme.panel
+    row.Size = UDim2.new(1, 0, 0, 42)
+    row.Parent = parent
+    corner(row, 5)
+    stroke(row)
+
+    local l = Instance.new("TextLabel")
+    l.BackgroundTransparency = 1
+    l.Position = UDim2.new(0, 10, 0, 4)
+    l.Size = UDim2.new(1, -60, 0, 16)
+    l.Font = Enum.Font.Gotham
+    l.TextSize = 12
+    l.TextColor3 = Theme.text
+    l.TextXAlignment = Enum.TextXAlignment.Left
+    l.Text = text
+    l.Parent = row
+
+    local vl = Instance.new("TextLabel")
+    vl.BackgroundTransparency = 1
+    vl.Position = UDim2.new(1, -56, 0, 4)
+    vl.Size = UDim2.new(0, 46, 0, 16)
+    vl.Font = Enum.Font.Gotham
+    vl.TextSize = 12
+    vl.TextColor3 = Theme.accent
+    vl.TextXAlignment = Enum.TextXAlignment.Right
+    vl.Parent = row
+
+    local track = Instance.new("Frame")
+    track.BackgroundColor3 = Theme.off
+    track.Position = UDim2.new(0, 10, 0, 26)
+    track.Size = UDim2.new(1, -20, 0, 4)
+    track.Parent = row
+    corner(track, 2)
+
+    local fill = Instance.new("Frame")
+    fill.BackgroundColor3 = Theme.accent
+    fill.Size = UDim2.new(0, 0, 1, 0)
+    fill.Parent = track
+    corner(fill, 2)
+
+    local function render()
+        local v = get()
+        local a = math.clamp((v - min) / (max - min), 0, 1)
+        fill.Size = UDim2.new(a, 0, 1, 0)
+        vl.Text = fmt and fmt(v) or tostring(v)
+    end
+
+    local drag = false
+    local function apply(x)
+        local a = math.clamp((x - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
+        set(math.floor((min + a * (max - min)) * 100 + 0.5) / 100)
+        render()
+    end
+
+    track.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then
+            drag = true
+            apply(i.Position.X)
+        end
+    end)
+    Util.track(UserInputService.InputChanged:Connect(function(i)
+        if drag and i.UserInputType == Enum.UserInputType.MouseMovement then apply(i.Position.X) end
+    end))
+    Util.track(UserInputService.InputEnded:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then drag = false end
+    end))
+    renders[#renders + 1] = render
+    render()
+    return reg(row, text)
+end
+
+function Widgets.input(parent, text, get, set)
+    local row = Instance.new("Frame")
+    row.BackgroundColor3 = Theme.panel
+    row.Size = UDim2.new(1, 0, 0, 30)
+    row.Parent = parent
+    corner(row, 5)
+    stroke(row)
+
+    local l = Instance.new("TextLabel")
+    l.BackgroundTransparency = 1
+    l.Position = UDim2.new(0, 10, 0, 0)
+    l.Size = UDim2.new(0.5, -10, 1, 0)
+    l.Font = Enum.Font.Gotham
+    l.TextSize = 12
+    l.TextColor3 = Theme.text
+    l.TextXAlignment = Enum.TextXAlignment.Left
+    l.Text = text
+    l.Parent = row
+
+    local box = Instance.new("TextBox")
+    box.BackgroundColor3 = Theme.off
+    box.Position = UDim2.new(0.5, 0, 0.5, -10)
+    box.Size = UDim2.new(0.5, -10, 0, 20)
+    box.Font = Enum.Font.Gotham
+    box.TextSize = 12
+    box.TextColor3 = Theme.accent
+    box.Text = tostring(get())
+    box.ClearTextOnFocus = false
+    box.Parent = row
+    corner(box, 4)
+
+    box.FocusLost:Connect(function()
+        local v = tonumber(box.Text)
+        if v then set(v) end
+        box.Text = tostring(get())
+    end)
+    return reg(row, text)
+end
+
+function Widgets.dropdown(parent, text, options, get, set)
+    local row = Instance.new("Frame")
+    row.BackgroundColor3 = Theme.panel
+    row.Size = UDim2.new(1, 0, 0, 30)
+    row.ClipsDescendants = true
+    row.Parent = parent
+    corner(row, 5)
+    stroke(row)
+
+    local l = Instance.new("TextLabel")
+    l.BackgroundTransparency = 1
+    l.Position = UDim2.new(0, 10, 0, 0)
+    l.Size = UDim2.new(0.5, -10, 0, 30)
+    l.Font = Enum.Font.Gotham
+    l.TextSize = 12
+    l.TextColor3 = Theme.text
+    l.TextXAlignment = Enum.TextXAlignment.Left
+    l.Text = text
+    l.Parent = row
+
+    local cur = Instance.new("TextButton")
+    cur.BackgroundTransparency = 1
+    cur.Position = UDim2.new(0.5, 0, 0, 0)
+    cur.Size = UDim2.new(0.5, -10, 0, 30)
+    cur.Font = Enum.Font.Gotham
+    cur.TextSize = 12
+    cur.TextColor3 = Theme.accent
+    cur.TextXAlignment = Enum.TextXAlignment.Right
+    cur.Text = tostring(get())
+    cur.Parent = row
+
+    local open, btns = false, {}
+    local function close()
+        open = false
+        for _, b in ipairs(btns) do b:Destroy() end
+        table.clear(btns)
+        row.Size = UDim2.new(1, 0, 0, 30)
+    end
+
+    cur.MouseButton1Click:Connect(function()
+        if open then
+            close()
+            return
+        end
+        local list = typeof(options) == "function" and options() or options
+        if not list or #list == 0 then return end
+        open = true
+        row.Size = UDim2.new(1, 0, 0, 30 + #list * 24)
+        for i, o in ipairs(list) do
+            local b = Instance.new("TextButton")
+            b.BackgroundColor3 = Theme.bg
+            b.Position = UDim2.new(0, 6, 0, 28 + (i - 1) * 24)
+            b.Size = UDim2.new(1, -12, 0, 22)
+            b.Font = Enum.Font.Gotham
+            b.TextSize = 12
+            b.TextColor3 = o == get() and Theme.accent or Theme.muted
+            b.Text = o
+            b.Parent = row
+            corner(b, 4)
+            b.MouseButton1Click:Connect(function()
+                set(o)
+                cur.Text = o
+                close()
+            end)
+            btns[#btns + 1] = b
+        end
+    end)
+    renders[#renders + 1] = function() cur.Text = tostring(get()) end
+    return reg(row, text)
+end
+
+function Widgets.keybind(parent, text, get, set)
+    local row = Instance.new("Frame")
+    row.BackgroundColor3 = Theme.panel
+    row.Size = UDim2.new(1, 0, 0, 30)
+    row.Parent = parent
+    corner(row, 5)
+    stroke(row)
+
+    local l = Instance.new("TextLabel")
+    l.BackgroundTransparency = 1
+    l.Position = UDim2.new(0, 10, 0, 0)
+    l.Size = UDim2.new(1, -90, 1, 0)
+    l.Font = Enum.Font.Gotham
+    l.TextSize = 12
+    l.TextColor3 = Theme.text
+    l.TextXAlignment = Enum.TextXAlignment.Left
+    l.Text = text
+    l.Parent = row
+
+    local b = Instance.new("TextButton")
+    b.BackgroundColor3 = Theme.off
+    b.Position = UDim2.new(1, -76, 0.5, -10)
+    b.Size = UDim2.new(0, 66, 0, 20)
+    b.Font = Enum.Font.GothamBold
+    b.TextSize = 11
+    b.TextColor3 = Theme.text
+    b.Text = get().Name
+    b.Parent = row
+    corner(b, 4)
+
+    local listen = false
+    b.MouseButton1Click:Connect(function()
+        listen = true
+        b.Text = "..."
+    end)
+    binds[#binds + 1] = {
+        isListening = function() return listen end,
+        finish = function(key)
+            listen = false
+            set(key)
+            b.Text = key.Name
+        end,
+    }
+    return reg(row, text)
+end
+
+function Widgets.color(parent, text, get, set)
+    local row = Instance.new("Frame")
+    row.BackgroundColor3 = Theme.panel
+    row.Size = UDim2.new(1, 0, 0, 62)
+    row.Parent = parent
+    corner(row, 5)
+    stroke(row)
+
+    local l = Instance.new("TextLabel")
+    l.BackgroundTransparency = 1
+    l.Position = UDim2.new(0, 10, 0, 4)
+    l.Size = UDim2.new(1, -60, 0, 16)
+    l.Font = Enum.Font.Gotham
+    l.TextSize = 12
+    l.TextColor3 = Theme.text
+    l.TextXAlignment = Enum.TextXAlignment.Left
+    l.Text = text
+    l.Parent = row
+
+    local sw = Instance.new("Frame")
+    sw.BackgroundColor3 = get()
+    sw.Position = UDim2.new(1, -44, 0, 4)
+    sw.Size = UDim2.new(0, 34, 0, 16)
+    sw.Parent = row
+    corner(sw, 4)
+
+    for i, ch in ipairs({ "R", "G", "B" }) do
+        local track = Instance.new("Frame")
+        track.BackgroundColor3 = Theme.off
+        track.Position = UDim2.new(0, 10, 0, 24 + (i - 1) * 12)
+        track.Size = UDim2.new(1, -20, 0, 5)
+        track.Parent = row
+        corner(track, 2)
+        local fill = Instance.new("Frame")
+        fill.BackgroundColor3 = Theme.accent
+        fill.Size = UDim2.new(get()[ch], 0, 1, 0)
+        fill.Parent = track
+        corner(fill, 2)
+
+        local drag = false
+        local function apply(x)
+            local a = math.clamp((x - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
+            local c = get()
+            local n = Color3.new(ch == "R" and a or c.R, ch == "G" and a or c.G, ch == "B" and a or c.B)
+            set(n)
+            fill.Size = UDim2.new(a, 0, 1, 0)
+            sw.BackgroundColor3 = n
+        end
+        track.InputBegan:Connect(function(inp)
+            if inp.UserInputType == Enum.UserInputType.MouseButton1 then
+                drag = true
+                apply(inp.Position.X)
+            end
+        end)
+        Util.track(UserInputService.InputChanged:Connect(function(inp)
+            if drag and inp.UserInputType == Enum.UserInputType.MouseMovement then apply(inp.Position.X) end
+        end))
+        Util.track(UserInputService.InputEnded:Connect(function(inp)
+            if inp.UserInputType == Enum.UserInputType.MouseButton1 then drag = false end
+        end))
+    end
+    return reg(row, text)
+end
+
+function Widgets.button(parent, text, cb, accent)
+    local b = Instance.new("TextButton")
+    b.BackgroundColor3 = accent and Theme.accent or Theme.panel
+    b.Size = UDim2.new(1, 0, 0, 30)
+    b.Font = Enum.Font.GothamBold
+    b.TextSize = 12
+    b.TextColor3 = accent and Color3.new(0, 0, 0) or Theme.text
+    b.Text = text
+    b.Parent = parent
+    corner(b, 5)
+    stroke(b)
+    b.MouseButton1Click:Connect(cb)
+    return reg(b, text)
+end
+
+function Widgets.segmented(parent, text, options, get, set)
+    local row = Instance.new("Frame")
+    row.BackgroundColor3 = Theme.panel
+    row.Size = UDim2.new(1, 0, 0, 46)
+    row.Parent = parent
+    corner(row, 5)
+    stroke(row)
+
+    local l = Instance.new("TextLabel")
+    l.BackgroundTransparency = 1
+    l.Position = UDim2.new(0, 10, 0, 2)
+    l.Size = UDim2.new(1, -20, 0, 16)
+    l.Font = Enum.Font.Gotham
+    l.TextSize = 12
+    l.TextColor3 = Theme.text
+    l.TextXAlignment = Enum.TextXAlignment.Left
+    l.Text = text
+    l.Parent = row
+
+    local holder = Instance.new("Frame")
+    holder.BackgroundTransparency = 1
+    holder.Position = UDim2.new(0, 10, 0, 22)
+    holder.Size = UDim2.new(1, -20, 0, 20)
+    holder.Parent = row
+    local hl = Instance.new("UIListLayout")
+    hl.FillDirection = Enum.FillDirection.Horizontal
+    hl.Padding = UDim.new(0, 4)
+    hl.Parent = holder
+
+    local btns = {}
+    local function render()
+        for name, b in pairs(btns) do
+            b.BackgroundColor3 = name == get() and Theme.accent or Theme.off
+            b.TextColor3 = name == get() and Color3.new(0, 0, 0) or Theme.muted
+        end
+    end
+
+    for _, o in ipairs(options) do
+        local b = Instance.new("TextButton")
+        b.Size = UDim2.new(0, 62, 1, 0)
+        b.Font = Enum.Font.GothamBold
+        b.TextSize = 11
+        b.Text = o
+        b.Parent = holder
+        corner(b, 4)
+        b.MouseButton1Click:Connect(function()
+            set(o)
+            render()
+        end)
+        btns[o] = b
+    end
+    renders[#renders + 1] = render
+    render()
+    return reg(row, text)
+end
+
+--=====================================================================
+-- 22. Menu
+--=====================================================================
+
+Menu = { gui = nil, pages = {}, tabs = {} }
+
+local function page(name)
+    if not Menu.pages[name] then
+        local s = Instance.new("ScrollingFrame")
+        s.Size = UDim2.new(1, -16, 1, -16)
+        s.Position = UDim2.new(0, 16, 0, 8)
+        s.BackgroundTransparency = 1
+        s.BorderSizePixel = 0
+        s.ScrollBarThickness = 3
+        s.CanvasSize = UDim2.new()
+        s.AutomaticCanvasSize = Enum.AutomaticSize.Y
+        s.Visible = false
+        s.Parent = Menu.content
+        local l = Instance.new("UIListLayout")
+        l.Padding = UDim.new(0, 6)
+        l.SortOrder = Enum.SortOrder.LayoutOrder
+        l.Parent = s
+        Menu.pages[name] = s
+    end
+    return Menu.pages[name]
+end
+
+function Menu.select(name)
+    for n, f in pairs(Menu.pages) do f.Visible = n == name end
+    for n, b in pairs(Menu.tabs) do
+        b.BackgroundColor3 = n == name and Theme.panel or Theme.bg
+        b.TextColor3 = n == name and Theme.accent or Theme.muted
+    end
+end
+
+function Menu.refresh()
+    for _, r in ipairs(renders) do pcall(r) end
+end
+
+function Menu.search(query)
+    local q = query:lower()
+    local showAll = q == ""
+    for _, row in ipairs(searchables) do
+        local txt = row:GetAttribute("SearchText")
+        row.Visible = showAll or (type(txt) == "string" and txt:lower():find(q, 1, true) ~= nil)
+    end
+    for _, p in pairs(Menu.pages) do
+        for _, child in ipairs(p:GetChildren()) do
+            if child:GetAttribute("IsSection") then child.Visible = showAll end
+        end
+    end
+end
+
+local function flag(section, field, after)
+    return function(v)
+        Config[section][field] = v
+        Cfg.save()
+        if after then after(v) end
+        Menu.status()
+    end
+end
+
+function Menu.status()
+    if not Menu.st then return end
+    local a = {}
+    if Config.Player.Speed then a[#a + 1] = "SPD" end
+    if Config.Player.Fly then a[#a + 1] = "FLY" end
+    if Config.ESP.Mode ~= "Off" then a[#a + 1] = "ESP" end
+    if Config.Combat.Mode ~= "Off" then a[#a + 1] = "AIM" end
+    if Config.Main.AutoRollSell then a[#a + 1] = "ROLL" end
+    Menu.st.Text = not Config.General.Master and "off" or (#a > 0 and table.concat(a, " ") or "ready")
+    Menu.st.TextColor3 = Config.General.Master and Theme.accent or Theme.muted
+end
+
+function Menu.build()
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "SS"
+    gui.ResetOnSpawn = false
+    gui.IgnoreGuiInset = true
+    gui.DisplayOrder = 999
+    gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    Menu.gui = gui
+
+    local win = Instance.new("Frame")
+    win.BackgroundColor3 = Theme.bg
+    win.Position = UDim2.new(0, 60, 0, 50)
+    win.Size = UDim2.new(0, 680, 0, 500)
+    win.Parent = gui
+    corner(win, 8)
+    stroke(win)
+    Menu.win = win
+
+    local head = Instance.new("Frame")
+    head.BackgroundColor3 = Theme.panel
+    head.Size = UDim2.new(1, 0, 0, 34)
+    head.Parent = win
+    corner(head, 8)
+    stroke(head)
+
+    local title = Instance.new("TextLabel")
+    title.BackgroundTransparency = 1
+    title.Position = UDim2.new(0, 12, 0, 0)
+    title.Size = UDim2.new(0.4, 0, 1, 0)
+    title.Font = Enum.Font.GothamBold
+    title.TextSize = 13
+    title.TextColor3 = Theme.text
+    title.TextXAlignment = Enum.TextXAlignment.Left
+    title.Text = "THE STORAGE"
+    title.Parent = head
+
+    local search = Instance.new("TextBox")
+    search.BackgroundColor3 = Theme.bg
+    search.Position = UDim2.new(0.4, 0, 0.5, -9)
+    search.Size = UDim2.new(0.3, 0, 0, 18)
+    search.Font = Enum.Font.Gotham
+    search.TextSize = 11
+    search.PlaceholderText = "search..."
+    search.Text = ""
+    search.ClearTextOnFocus = false
+    search.Parent = head
+    corner(search, 4)
+    search:GetPropertyChangedSignal("Text"):Connect(function() Menu.search(search.Text) end)
+
+    local st = Instance.new("TextLabel")
+    st.BackgroundTransparency = 1
+    st.AnchorPoint = Vector2.new(1, 0)
+    st.Position = UDim2.new(1, -40, 0, 0)
+    st.Size = UDim2.new(0, 130, 1, 0)
+    st.Font = Enum.Font.Gotham
+    st.TextSize = 11
+    st.TextColor3 = Theme.muted
+    st.TextXAlignment = Enum.TextXAlignment.Right
+    st.Text = "ready"
+    st.Parent = head
+    Menu.st = st
+
+    local close = Instance.new("TextButton")
+    close.BackgroundTransparency = 1
+    close.AnchorPoint = Vector2.new(1, 0)
+    close.Position = UDim2.new(1, -8, 0, 0)
+    close.Size = UDim2.new(0, 26, 1, 0)
+    close.Font = Enum.Font.GothamBold
+    close.TextSize = 14
+    close.TextColor3 = Theme.muted
+    close.Text = "x"
+    close.Parent = head
+    close.MouseButton1Click:Connect(function()
+        State.uiOpen = false
+        win.Visible = false
+    end)
+
+    local rail = Instance.new("Frame")
+    rail.BackgroundColor3 = Theme.bg
+    rail.Size = UDim2.new(0, 130, 1, -34)
+    rail.Position = UDim2.new(0, 0, 0, 34)
+    rail.Parent = win
+
+    local content = Instance.new("Frame")
+    content.BackgroundTransparency = 1
+    content.Size = UDim2.new(1, -130, 1, -34)
+    content.Position = UDim2.new(0, 130, 0, 34)
+    content.Parent = win
+    Menu.content = content
+
+    local drag, ds, sp
+    head.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then
+            drag = true
+            ds = i.Position
+            sp = win.Position
+        end
+    end)
+    Util.track(UserInputService.InputChanged:Connect(function(i)
+        if drag and i.UserInputType == Enum.UserInputType.MouseMovement then
+            local d = i.Position - ds
+            win.Position = UDim2.new(sp.X.Scale, sp.X.Offset + d.X, sp.Y.Scale, sp.Y.Offset + d.Y)
+        end
+    end))
+    Util.track(UserInputService.InputEnded:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then drag = false end
+    end))
+
+    for i, e in ipairs({ { "Main", "Main" }, { "Movement", "Player" }, { "ESP", "ESP" },
+        { "Combat", "Combat" }, { "Teleport", "Travel" }, { "Alerts", "Alerts" },
+        { "Presets", "Presets" }, { "Settings", "Settings" }, { "Diagnostics", "Diag" } }) do
+        local b = Instance.new("TextButton")
+        b.BackgroundColor3 = Theme.bg
+        b.Position = UDim2.new(0, 6, 0, (i - 1) * 30 + 6)
+        b.Size = UDim2.new(1, -12, 0, 26)
+        b.Font = Enum.Font.GothamBold
+        b.TextSize = 11
+        b.TextColor3 = Theme.muted
+        b.TextXAlignment = Enum.TextXAlignment.Left
+        b.Text = "  " .. e[1]
+        b.Parent = rail
+        corner(b, 5)
+        b.MouseButton1Click:Connect(function() Menu.select(e[2]) end)
+        Menu.tabs[e[2]] = b
+    end
+
+    -- Main
+    local main = page("Main")
+    Widgets.section(main, "Automation")
+    Widgets.toggle(main, "Auto Run", function() return Config.Main.AutoRun end,
+        flag("Main", "AutoRun", function(v) Movement.setAutoRun(v) end))
+    Widgets.toggle(main, "Instant Open", function() return Config.Main.InstantOpen end, flag("Main", "InstantOpen", Interact.start))
+    Widgets.toggle(main, "Instant Pickup", function() return Config.Main.InstantPickup end, flag("Main", "InstantPickup", Interact.start))
+    Widgets.toggle(main, "Remove Interaction Delay", function() return Config.Main.RemoveDelay end, flag("Main", "RemoveDelay", Interact.start))
+    Widgets.section(main, "Economy")
+    Widgets.toggle(main, "Auto Roll & Sell", function() return Config.Main.AutoRollSell end,
+        flag("Main", "AutoRollSell", function(v) Utility.setRoll(v) end))
+    Widgets.slider(main, "Interval", 0.4, 5, function() return Config.Main.RollInterval end,
+        flag("Main", "RollInterval"), function(v) return ("%.1fs"):format(v) end)
+    Widgets.section(main, "Interface")
+    Widgets.toggle(main, "Chat Window", function() return Config.Main.ChatWindow end, flag("Main", "ChatWindow", World.chat))
+    Widgets.toggle(main, "Hide Spinner", function() return Config.Main.HideSpinner end, flag("Main", "HideSpinner", World.spinner))
+    Widgets.toggle(main, "Anti AFK", function() return Config.Main.AntiAfk end, flag("Main", "AntiAfk", Utility.setAfk))
+    Widgets.button(main, "Teleport to death", Travel.toDeath, true)
+
+    -- Movement
+    local pl = page("Player")
+    Widgets.section(pl, "Speed")
+    Widgets.toggle(pl, "Speed", function() return Config.Player.Speed end, flag("Player", "Speed", Movement.onSpeed))
+    Widgets.input(pl, "Value", function() return Config.Player.SpeedValue end, function(v)
+        Config.Player.SpeedValue = v
+        Movement.onSpeedValue()
+        Cfg.save()
+    end)
+    Widgets.segmented(pl, "Mode", { "Add", "Set", "Multiply" }, function() return Config.Player.SpeedMode end,
+        flag("Player", "SpeedMode", Movement.onSpeedValue))
+    Widgets.slider(pl, "Acceleration", 0, 400, function() return Config.Player.SpeedRamp end,
+        flag("Player", "SpeedRamp"), function(v) return v == 0 and "instant" or ("%d"):format(v) end)
+    Widgets.keybind(pl, "Speed key", function() return Config.Player.SpeedKey end, flag("Player", "SpeedKey"))
+    Widgets.section(pl, "Presets")
+    Widgets.segmented(pl, "Speed preset", { "Walk", "Fast", "Sprint", "Zoom", "Custom" },
+        function() return Config.Player.Preset end, function(v)
+            Config.Player.Preset = v
+            local map = { Walk = { "Add", 4 }, Fast = { "Add", 12 }, Sprint = { "Set", 45 }, Zoom = { "Set", 90 } }
+            local m = map[v]
+            if m then
+                Config.Player.SpeedMode, Config.Player.SpeedValue = m[1], m[2]
+                Movement.onSpeedValue()
+                Menu.refresh()
+            end
+            Cfg.save()
+        end)
+    Widgets.section(pl, "Jump")
+    Widgets.toggle(pl, "Inf Jump", function() return Config.Player.InfJump end, flag("Player", "InfJump", Movement.setInfJump))
+    Widgets.toggle(pl, "Bunny Hop", function() return Config.Player.Bhop end, flag("Player", "Bhop", Movement.setBhop))
+    Widgets.keybind(pl, "Inf Jump key", function() return Config.Player.InfJumpKey end, flag("Player", "InfJumpKey"))
+    Widgets.section(pl, "Flight")
+    Widgets.toggle(pl, "Fly", function() return Config.Player.Fly end,
+        flag("Player", "Fly", function(v) if v then Movement.startFly() else Movement.stopFly() end end))
+    Widgets.segmented(pl, "Fly mode", { "Camera", "Vertical", "Horizontal" },
+        function() return Config.Player.FlyMode end, flag("Player", "FlyMode"))
+    Widgets.toggle(pl, "Hold to fly", function() return Config.Player.FlyHold end, flag("Player", "FlyHold"))
+    Widgets.slider(pl, "Fly speed", 10, 250, function() return Config.Player.FlySpeed end, flag("Player", "FlySpeed"))
+    Widgets.keybind(pl, "Fly key", function() return Config.Player.FlyKey end, flag("Player", "FlyKey"))
+    Widgets.section(pl, "Collision")
+    Widgets.toggle(pl, "Noclip", function() return Config.Player.Noclip end, flag("Player", "Noclip", Movement.setNoclip))
+    Widgets.keybind(pl, "Noclip key", function() return Config.Player.NoclipKey end, flag("Player", "NoclipKey"))
+    Widgets.toggle(pl, "Suspend on ragdoll", function() return Config.Player.RagdollSuspend end, flag("Player", "RagdollSuspend"))
+    Widgets.section(pl, "Panic")
+    Widgets.dropdown(pl, "Destination", { "Base", "Bed" }, function() return Config.Panic.Destination end, flag("Panic", "Destination"))
+    Widgets.keybind(pl, "Panic key", function() return Config.Player.PanicKey end, flag("Player", "PanicKey"))
+    Widgets.button(pl, "Panic now", function() Panic.teleport(Config.Panic.Destination) end, true)
+
+    -- ESP
+    local esp = page("ESP")
+    Widgets.section(esp, "Mode")
+    Widgets.segmented(esp, "ESP mode", { "Off", "Native", "Overlay", "Both" }, function() return Config.ESP.Mode end,
+        function(v)
+            Config.ESP.Mode = v
+            if v == "Native" or v == "Both" then NativeESP.start() else NativeESP.stop() end
+            if v == "Overlay" or v == "Both" then Scanner.sweep(); OverlayESP.resync() else OverlayESP.stop() end
+            Cfg.save()
+            Menu.status()
+        end)
+    Widgets.section(esp, "Native categories")
+    for _, e in ipairs({ { "Players", "Players" }, { "Mobs", "Mobs" }, { "Items", "Items" },
+        { "Base", "Base" }, { "Elevator", "Elevator" } }) do
+        Widgets.toggle(esp, e[1], function() return Config.Native[e[2]] end, flag("Native", e[2], NativeESP.rebuild))
+    end
+    Widgets.slider(esp, "Player distance", 30, 1200, function() return Config.ESP.DistPlayers end,
+        flag("ESP", "DistPlayers"), function(v) return ("%d m"):format(v) end)
+    Widgets.slider(esp, "Mob distance", 30, 1200, function() return Config.ESP.DistMobs end,
+        flag("ESP", "DistMobs"), function(v) return ("%d m"):format(v) end)
+    Widgets.slider(esp, "Item distance", 20, 900, function() return Config.ESP.DistItems end,
+        flag("ESP", "DistItems"), function(v) return ("%d m"):format(v) end)
+    Widgets.slider(esp, "Max players", 1, 100, function() return Config.ESP.MaxPlayers end, flag("ESP", "MaxPlayers"))
+    Widgets.slider(esp, "Max mobs", 1, 200, function() return Config.ESP.MaxMobs end, flag("ESP", "MaxMobs"))
+    Widgets.slider(esp, "Max items", 1, 400, function() return Config.ESP.MaxItems end, flag("ESP", "MaxItems"))
+    Widgets.section(esp, "Filters")
+    Widgets.toggle(esp, "Team filter", function() return Config.ESP.TeamCheck end, flag("ESP", "TeamCheck"))
+    Widgets.toggle(esp, "Friend filter", function() return Config.ESP.FriendCheck end, flag("ESP", "FriendCheck"))
+    Widgets.toggle(esp, "Hide vanilla tags", function() return Config.ESP.HideVanilla end, flag("ESP", "HideVanilla", NativeESP.applyTags))
+    Widgets.toggle(esp, "Rarity colours", function() return Config.ESP.RarityColor end, flag("ESP", "RarityColor"))
+    Widgets.toggle(esp, "Highlight only", function() return Config.ESP.HighlightOnly end, flag("ESP", "HighlightOnly", OverlayESP.stop))
+    Widgets.section(esp, "Overlay elements")
+    Widgets.toggle(esp, "Players##o", function() return Config.Overlay.Players end, flag("Overlay", "Players", OverlayESP.resync))
+    Widgets.toggle(esp, "Mobs##o", function() return Config.Overlay.Mobs end, flag("Overlay", "Mobs", OverlayESP.resync))
+    Widgets.toggle(esp, "Items##o", function() return Config.Overlay.Items end, flag("Overlay", "Items", OverlayESP.resync))
+    Widgets.toggle(esp, "Name", function() return Config.Overlay.Name end, flag("Overlay", "Name"))
+    Widgets.toggle(esp, "Distance", function() return Config.Overlay.Distance end, flag("Overlay", "Distance"))
+    Widgets.slider(esp, "Overlay distance", 20, 800, function() return Config.Perf.OvDist end,
+        flag("Perf", "OvDist"), function(v) return ("%d m"):format(v) end)
+    Widgets.slider(esp, "Overlay ceiling", 10, 300, function() return Config.Perf.OvMax end, flag("Perf", "OvMax"))
+    Widgets.section(esp, "Colours")
+    for n in pairs(Config.Overlay.Colors) do
+        Widgets.color(esp, n, function() return Config.Overlay.Colors[n] end, function(c)
+            Config.Overlay.Colors[n] = c
+            Cfg.save()
+        end)
+    end
+
+    -- Combat
+    local cb = page("Combat")
+    Widgets.section(cb, "Aim")
+    Widgets.segmented(cb, "Aim mode", { "Off", "Silent", "Aimbot", "Both" }, function() return Config.Combat.Mode end,
+        flag("Combat", "Mode", function(v)
+            if v == "Off" then Combat.stop() else Combat.start() end
+        end))
+    Widgets.segmented(cb, "Trigger", { "Hold", "Always" }, function() return Config.Combat.Trigger end, flag("Combat", "Trigger"))
+    Widgets.keybind(cb, "Trigger key", function() return Config.Combat.TriggerKey end, flag("Combat", "TriggerKey"))
+    Widgets.dropdown(cb, "Target", { "Crosshair", "Distance", "Health" }, function() return Config.Combat.TargetMode end,
+        flag("Combat", "TargetMode"))
+    Widgets.segmented(cb, "FOV shape", { "Circle", "Cone" }, function() return Config.Combat.FovShape end, flag("Combat", "FovShape"))
+    Widgets.slider(cb, "FOV radius", 40, 800, function() return Config.Combat.FovRadius end, flag("Combat", "FovRadius"))
+    Widgets.slider(cb, "Max distance", 20, 1000, function() return Config.Combat.MaxDistance end, flag("Combat", "MaxDistance"))
+    Widgets.slider(cb, "Smoothing", 0.05, 1, function() return Config.Combat.Smoothing end, flag("Combat", "Smoothing"))
+    Widgets.slider(cb, "Prediction", 0, 1, function() return Config.Combat.Prediction end, flag("Combat", "Prediction"))
+    Widgets.slider(cb, "Hitbox padding", 0, 3, function() return Config.Combat.HitboxPadding end, flag("Combat", "HitboxPadding"))
+    Widgets.toggle(cb, "Wall check", function() return Config.Combat.WallCheck end, flag("Combat", "WallCheck"))
+    Widgets.toggle(cb, "Aim injection", function() return Config.Combat.InjectAim end, flag("Combat", "InjectAim"))
+    Widgets.section(cb, "Weapon")
+    Widgets.toggle(cb, "Auto Knife", function() return Config.Combat.AutoKnife end, flag("Combat", "AutoKnife"))
+    Widgets.segmented(cb, "Knife mode", { "Empty", "Near" }, function() return Config.Combat.KnifeMode end, flag("Combat", "KnifeMode"))
+    Widgets.slider(cb, "Knife range", 4, 40, function() return Config.Combat.KnifeRange end, flag("Combat", "KnifeRange"))
+    Widgets.toggle(cb, "Auto Reload", function() return Config.Combat.AutoReload end, flag("Combat", "AutoReload"))
+    Widgets.toggle(cb, "No spread", function() return Config.Combat.NoSpread end, flag("Combat", "NoSpread"))
+    Widgets.toggle(cb, "No recoil", function() return Config.Combat.NoRecoil end, flag("Combat", "NoRecoil"))
+
+    -- Teleport
+    local tp = page("Travel")
+    Widgets.section(tp, "Locations")
+    Widgets.button(tp, "Base", function() Panic.teleport("Base") end, true)
+    Widgets.button(tp, "Elevator", Travel.toElevator)
+    Widgets.button(tp, "Surface", function() Travel.toPoint("Surface") end)
+    Widgets.button(tp, "Basement", function() Travel.toPoint("Basement") end)
+    Widgets.button(tp, "Random map point", Travel.toMap)
+    Widgets.slider(tp, "Height offset", 0, 20, function() return Config.Travel.Height end,
+        flag("Travel", "Height"), function(v) return ("%.1f"):format(v) end)
+    Widgets.section(tp, "NPCs")
+    for _, n in ipairs(Travel.npcs) do Widgets.button(tp, n, function() Travel.toNpc(n) end) end
+    Widgets.section(tp, "Waypoints")
+    Widgets.input(tp, "New waypoint name", function() return 0 end, function() end)
+    Widgets.button(tp, "Save current position", function()
+        local name = "wp" .. tostring(#searchables)
+        Travel.saveWaypoint(name)
+        Menu.rebuildWaypoints()
+    end)
+    local wpFrame = Instance.new("Frame")
+    wpFrame.BackgroundTransparency = 1
+    wpFrame.Size = UDim2.new(1, 0, 0, 0)
+    wpFrame.AutomaticSize = Enum.AutomaticSize.Y
+    wpFrame.Parent = tp
+    local wl = Instance.new("UIListLayout")
+    wl.Padding = UDim.new(0, 4)
+    wl.Parent = wpFrame
+    Menu.wpFrame = wpFrame
+
+    Widgets.section(tp, "Players")
+    Widgets.dropdown(tp, "Player", function()
+        local n = {}
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer then n[#n + 1] = p.Name end
+        end
+        if #n == 0 then n = { "-" } end
+        return n
+    end, function() return Config.Travel.Target or "-" end, function(v) Config.Travel.Target = v end)
+    Widgets.button(tp, "Teleport to player", function()
+        Travel.toPlayer(Config.Travel.Target and Players:FindFirstChild(Config.Travel.Target))
+    end, true)
+
+    -- Alerts
+    local al = page("Alerts")
+    Widgets.toggle(al, "High bounty", function() return Config.Alerts.Bounty end, flag("Alerts", "Bounty"))
+    Widgets.slider(al, "Bounty threshold", 100, 100000, function() return Config.Alerts.BountyThreshold end,
+        flag("Alerts", "BountyThreshold"), function(v) return ("%d"):format(v) end)
+    Widgets.toggle(al, "Player joined", function() return Config.Alerts.PlayerJoin end, flag("Alerts", "PlayerJoin"))
+    Widgets.toggle(al, "Player left", function() return Config.Alerts.PlayerLeave end, flag("Alerts", "PlayerLeave"))
+    Widgets.toggle(al, "Proximity warning", function() return Config.Alerts.Proximity end, flag("Alerts", "Proximity"))
+    Widgets.slider(al, "Proximity range", 20, 200, function() return Config.Alerts.ProximityRange end,
+        flag("Alerts", "ProximityRange"), function(v) return ("%d m"):format(v) end)
+    Widgets.section(al, "Rarity spawns")
+    for _, r in ipairs({ "Legendary", "Rare", "Uncommon" }) do
+        Widgets.toggle(al, r, function() return Config.Alerts.Rarity[r] == true end,
+            function(v) Config.Alerts.Rarity[r] = v; Cfg.save() end)
+    end
+    Widgets.section(al, "NPC spawns")
+    for _, n in ipairs(Travel.npcs) do
+        Widgets.toggle(al, n, function() return Config.Alerts.Npc[n] == true end,
+            function(v) Config.Alerts.Npc[n] = v; Cfg.save() end)
+    end
+
+    -- Presets
+    local pr = page("Presets")
+    Widgets.section(pr, "Built-in")
+    for _, name in ipairs({ "Off", "Minimal", "Farming", "Legit", "Rage" }) do
+        Widgets.button(pr, name, function() Menu.applyPreset(name) end, name == "Rage")
+    end
+    Widgets.section(pr, "Config")
+    Widgets.button(pr, "Export to clipboard", function()
+        local data = Cfg.export()
+        Notify.push(data and "Exported" or "Export failed", data and "good" or "bad")
+    end)
+    Widgets.button(pr, "Reset all", function()
+        Menu.applyPreset("Off")
+        Notify.push("Reset", "good")
+    end)
+
+    -- Settings
+    local se = page("Settings")
+    Widgets.section(se, "Lighting")
+    Widgets.toggle(se, "Fullbright", function() return Config.World.Fullbright end,
+        flag("World", "Fullbright", function(v) if v then World.fullbright() else World.restoreBright() end end))
+    Widgets.slider(se, "Brightness", 0, 10, function() return Config.World.Brightness end,
+        flag("World", "Brightness", function(v) if Config.World.Fullbright then Lighting.Brightness = v end end))
+    Widgets.section(se, "Camera")
+    Widgets.toggle(se, "FOV override", function() return Config.World.Fov end,
+        flag("World", "Fov", function(v) if v then World.fov() else World.restoreFov() end end))
+    Widgets.slider(se, "Field of view", 40, 120, function() return Config.World.FovValue end,
+        flag("World", "FovValue", function() if Config.World.Fov then World.fov() end end))
+    Widgets.button(se, "Reset FOV", World.resetFov)
+    Widgets.section(se, "General")
+    Widgets.toggle(se, "Global enabled", function() return Config.General.Master end, function(v)
+        Config.General.Master = v
+        State.master = v
+        Cfg.save()
+        Menu.status()
+    end)
+    Widgets.keybind(se, "Menu key", function() return Config.General.MenuKey end, flag("General", "MenuKey"))
+    Widgets.button(se, "Save", function()
+        Cfg.save()
+        Notify.push("Saved", "good")
+    end)
+
+    -- Diagnostics
+    local dg = page("Diag")
+    local df = Instance.new("Frame")
+    df.BackgroundColor3 = Theme.panel
+    df.Size = UDim2.new(1, 0, 0, 320)
+    df.Parent = dg
+    corner(df, 5)
+    stroke(df)
+    Menu.df = df
+    Widgets.button(dg, "Refresh", function()
+        Diagnostics.run()
+        Menu.renderDiag()
+    end, true)
+
+    Menu.select("Main")
+    Menu.rebuildWaypoints()
+end
+
+function Menu.rebuildWaypoints()
+    if not Menu.wpFrame then return end
+    Menu.wpFrame:ClearAllChildren()
+    local l = Instance.new("UIListLayout")
+    l.Padding = UDim.new(0, 4)
+    l.Parent = Menu.wpFrame
+    local names = {}
+    for n in pairs(Config.Travel.Waypoints) do names[#names + 1] = n end
+    table.sort(names)
+    for _, n in ipairs(names) do
+        local b = Instance.new("TextButton")
+        b.BackgroundColor3 = Theme.panel
+        b.Size = UDim2.new(1, 0, 0, 26)
+        b.Font = Enum.Font.Gotham
+        b.TextSize = 12
+        b.TextColor3 = Theme.text
+        b.Text = "  " .. n
+        b.TextXAlignment = Enum.TextXAlignment.Left
+        b.Parent = Menu.wpFrame
+        corner(b, 4)
+        b.MouseButton1Click:Connect(function() Travel.toWaypoint(n) end)
+    end
+end
+
+function Menu.applyPreset(name)
+    local p = {
+        Off = function()
+            Config.ESP.Mode = "Off"
+            Config.Combat.Mode = "Off"
+            Config.Player.Speed = false
+            Config.Player.Fly = false
+            Config.Player.Noclip = false
+            Config.World.Fullbright = false
+            Config.Main.AutoRollSell = false
+        end,
+        Minimal = function()
+            Config.ESP.Mode = "Native"
+            Config.Native.Players = true
+            Config.Native.Items = true
+            Config.Native.Mobs = false
+            Config.ESP.DistItems = 120
+            Config.ESP.MaxItems = 50
+        end,
+        Farming = function()
+            Config.ESP.Mode = "Native"
+            Config.Native.Items = true
+            Config.Native.Mobs = true
+            Config.Native.Base = true
+            Config.Main.InstantOpen = true
+            Config.Main.InstantPickup = true
+            Config.Main.RemoveDelay = true
+            Config.Main.AutoRollSell = true
+            Config.Main.AutoRun = true
+        end,
+        Legit = function()
+            Config.ESP.Mode = "Native"
+            Config.Native.Players = true
+            Config.Combat.Mode = "Silent"
+            Config.Combat.Trigger = "Hold"
+            Config.Combat.FovRadius = 120
+            Config.Combat.WallCheck = true
+            Config.Player.Speed = true
+            Config.Player.SpeedMode = "Add"
+            Config.Player.SpeedValue = 6
+        end,
+        Rage = function()
+            Config.ESP.Mode = "Both"
+            Config.Native.Players = true
+            Config.Native.Mobs = true
+            Config.Native.Items = true
+            Config.Combat.Mode = "Both"
+            Config.Combat.Trigger = "Always"
+            Config.Combat.FovRadius = 500
+            Config.Combat.TargetMode = "Distance"
+            Config.Combat.AutoKnife = true
+            Config.Combat.NoSpread = true
+            Config.Combat.NoRecoil = true
+            Config.Player.Speed = true
+            Config.Player.SpeedMode = "Set"
+            Config.Player.SpeedValue = 45
+            Config.Player.Noclip = true
+            Config.World.Fullbright = true
+        end,
+    }
+    if not p[name] then return end
+    p[name]()
+    Menu.resync()
+end
+
+function Menu.resync()
+    World.restoreBright()
+    World.restoreFov()
+    if Config.World.Fullbright then World.fullbright() end
+    if Config.World.Fov then World.fov() end
+    if Config.ESP.Mode == "Native" or Config.ESP.Mode == "Both" then NativeESP.start() else NativeESP.stop() end
+    if Config.ESP.Mode == "Overlay" or Config.ESP.Mode == "Both" then Scanner.sweep(); OverlayESP.resync() else OverlayESP.stop() end
+    if Config.Combat.Mode == "Off" then Combat.stop() else Combat.start() end
+    if Config.Player.Speed then Movement.onSpeed(true) else Movement.onSpeed(false) end
+    if Config.Player.Fly then Movement.startFly() else Movement.stopFly() end
+    Movement.setNoclip(Config.Player.Noclip)
+    Movement.setBhop(Config.Player.Bhop)
+    Utility.setRoll(Config.Main.AutoRollSell)
+    if Config.Main.InstantOpen or Config.Main.InstantPickup or Config.Main.RemoveDelay then Interact.start() else Interact.stop() end
+    Cfg.save()
+    Menu.refresh()
+    Menu.status()
+end
+
+function Menu.renderDiag()
+    if not Menu.df then return end
+    Menu.df:ClearAllChildren()
+    local l = Instance.new("UIListLayout")
+    l.Padding = UDim.new(0, 2)
+    l.Parent = Menu.df
+    local p = Instance.new("UIPadding")
+    p.PaddingLeft = UDim.new(0, 8)
+    p.PaddingTop = UDim.new(0, 8)
+    p.Parent = Menu.df
+    for _, r in ipairs(Diagnostics.results) do
+        local lb = Instance.new("TextLabel")
+        lb.BackgroundTransparency = 1
+        lb.Size = UDim2.new(1, -16, 0, 16)
+        lb.Font = Enum.Font.Code
+        lb.TextSize = 11
+        lb.TextColor3 = r.pass and Theme.good or rgb(240, 120, 120)
+        lb.TextXAlignment = Enum.TextXAlignment.Left
+        lb.Text = ("%s %s%s"):format(r.pass and "PASS" or "FAIL", r.label, r.detail and (" - " .. r.detail) or "")
+        lb.Parent = Menu.df
+    end
+end
+
+function Menu.toggle()
+    State.uiOpen = not State.uiOpen
+    Menu.win.Visible = State.uiOpen
+end
+
+--=====================================================================
+-- 23. Loops
+--=====================================================================
+
+local renderConn
+local last = tick()
+
+local function camStep()
+    local cam = Util.cam()
+    if not cam then return end
+    local actual = cam.CFrame.Rotation
+    if not State.camRot then
+        State.camRot = actual
+        return
+    end
+    if not Config.Combat.NoRecoil or not State.combat or not State.master or Config.Combat.Mode == "Aimbot" then
+        State.camRot = actual
+        return
+    end
+    local composed = State.camRot * (actual * State.camRot:Inverse())
+    if (tick() - State.lastShot) < 0.35 then composed = State.camRot:Lerp(composed, 0.25) end
+    State.camRot = composed
+    cam.CFrame = CFrame.new(cam.CFrame.Position) * composed
+end
+
+local function start()
+    if renderConn then return end
+    pcall(function() RunService:UnbindFromRenderStep(CAM_STEP) end)
+    pcall(function() RunService:BindToRenderStep(CAM_STEP, Enum.RenderPriority.Camera.Value + 1, camStep) end)
+    renderConn = RunService.RenderStepped:Connect(function()
+        local now = tick()
+        local dt = now - last
+        last = now
+        Perf.sample(dt)
+        if not State.master then return end
+        Combat.update(dt)
+        State.overlayAccum += dt
+        if State.overlayAccum >= 0.033 then
+            State.overlayAccum = 0
+            OverlayESP.update()
+        end
+        if Config.Player.Fly then Movement.updateFly() end
+    end)
+    Sched.start()
+end
+
+local function stop()
+    if renderConn then
+        pcall(function() renderConn:Disconnect() end)
+        renderConn = nil
+    end
+    pcall(function() RunService:UnbindFromRenderStep(CAM_STEP) end)
+    Sched.stop()
+end
+
+--=====================================================================
+-- 24. Input
+--=====================================================================
+
+local function inputBegan(input)
+    if input.UserInputType == Enum.UserInputType.Keyboard then
+        for _, b in ipairs(binds) do
+            if b.isListening() then
+                b.finish(input.KeyCode)
+                Cfg.save()
+                return
+            end
+        end
+    end
+
+    if input.KeyCode == Config.General.MenuKey then
+        Menu.toggle()
+        return
+    end
+
+    if input.KeyCode == Config.Combat.TriggerKey then
+        State.triggerHeld = true
+        return
+    end
+
+    if Binds.dispatch(input.KeyCode) then return end
+
+    if input.KeyCode == Config.Player.PanicKey then Panic.teleport(Config.Panic.Destination) end
+end
+
+local function inputEnded(input)
+    if input.KeyCode == Config.Combat.TriggerKey then State.triggerHeld = false end
+    if input.KeyCode == Config.Player.FlyKey then State.flyHeld = false end
+end
+
+local function registerBinds()
+    Binds.add("speed", function() return Config.Player.SpeedKey end, function()
+        Config.Player.Speed = not Config.Player.Speed
+        Movement.onSpeed(Config.Player.Speed)
+        Notify.push("Speed " .. (Config.Player.Speed and "on" or "off"), Config.Player.Speed and "good" or nil)
+        Menu.refresh()
+    end)
+    Binds.add("noclip", function() return Config.Player.NoclipKey end, function()
+        Config.Player.Noclip = not Config.Player.Noclip
+        Movement.setNoclip(Config.Player.Noclip)
+        Menu.refresh()
+    end)
+    Binds.add("infjump", function() return Config.Player.InfJumpKey end, function()
+        Config.Player.InfJump = not Config.Player.InfJump
+        Movement.setInfJump(Config.Player.InfJump)
+        Menu.refresh()
+    end)
+    Binds.add("fly", function() return Config.Player.FlyKey end, function()
+        if Config.Player.FlyHold then
+            State.flyHeld = true
+        else
+            Config.Player.Fly = not Config.Player.Fly
+            if Config.Player.Fly then Movement.startFly() else Movement.stopFly() end
+            Menu.refresh()
+        end
+    end)
+end
+
+--=====================================================================
+-- 25. Lifecycle
+--=====================================================================
+
+local module = {}
+
+local function registerTasks()
+    Sched.add("cull", Config.Perf.CullRate, NativeESP.cull)
+    Sched.add("tags", 1, NativeESP.applyTags)
+    Sched.add("scan", 1.5, function()
+        if Config.ESP.Mode == "Overlay" or Config.ESP.Mode == "Both" then
+            Scanner.sweep()
+            OverlayESP.resync()
+        end
+    end)
+    Sched.add("knife", 0.6, function()
+        if not Config.Combat.AutoKnife then return end
+        if Config.Combat.KnifeMode == "Near" then Combat.knifeNear() else Combat.knifeIfEmpty() end
+    end)
+    Sched.add("reload", 0.5, function()
+        if not Config.Combat.AutoReload then return end
+        local t = Combat.equipped()
+        if not t or t:FindFirstChildOfClass("Humanoid") then return end
+        local ammo = t:GetAttribute("Ammo") or t:GetAttribute("Clip") or t:GetAttribute("Mag")
+        local max = t:GetAttribute("MaxAmmo") or t:GetAttribute("MagSize")
+        if type(ammo) == "number" and type(max) == "number" and max > 0 and ammo / max <= Config.Combat.ReloadAt / 10 then
+            Refs.fire("Reload")
+        end
+    end)
+    Sched.add("proximity", 3, Alerts.proximity)
+    Sched.on("scan", true)
+    Sched.on("proximity", true)
+end
+
+local function sync()
+    State.master = Config.General.Master
+    Movement.suspended = false
+    registerTasks()
+    NativeESP.start()
+    if Config.Combat.Mode ~= "Off" then Combat.start() end
+    if Config.World.Fullbright then World.fullbright() end
+    if Config.World.Fov then World.fov() end
+    if Config.Main.InstantOpen or Config.Main.InstantPickup or Config.Main.RemoveDelay then Interact.start() end
+    if Config.Main.AntiAfk then Utility.setAfk(true) end
+    if Config.Main.AutoRollSell then Utility.setRoll(true) end
+    World.spinner(Config.Main.HideSpinner)
+    World.chat(Config.Main.ChatWindow)
+    Movement.installHook()
+    if Config.Player.Speed then Movement.onSpeed(true) end
+    if Config.Player.Noclip then Movement.setNoclip(true) end
+    if Config.Player.InfJump then Movement.setInfJump(true) end
+    if Config.Player.Bhop then Movement.setBhop(true) end
+    if Config.Player.Fly then Movement.startFly() end
+    if Config.Main.AutoRun then Movement.setAutoRun(true) end
+    Alerts.start()
+    Menu.status()
+end
+
+function module.Unload()
+    stop()
+    NativeESP.stop()
+    OverlayESP.stop()
+    Scanner.clear()
+    Interact.stop()
+    Movement.shutdown()
+    Combat.stop()
+    Utility.setAfk(false)
+    Utility.setRoll(false)
+    Alerts.stop()
+    World.restoreBright()
+    World.restoreFov()
+    if Notify.gui then Notify.gui:Destroy() end
+    if Menu.gui then Menu.gui:Destroy() end
+    Util.untrackAll()
+    if ENV.__StorageSuite == module then ENV.__StorageSuite = nil end
+    print("[SS] unloaded")
+end
+
+module.Config = Config
+module.Movement = Movement
+module.Diagnostics = Diagnostics
+ENV.__StorageSuite = module
+
+--=====================================================================
+-- 26. Boot
+--=====================================================================
+
+Cfg.detect()
+Cfg.load()
+Refs.refresh()
+
+Notify.init(LocalPlayer:WaitForChild("PlayerGui"))
+Menu.build()
+Notify.push(("Loaded - %s"):format(Config.General.MenuKey.Name))
+
+registerBinds()
+Util.track(UserInputService.InputBegan:Connect(inputBegan))
+Util.track(UserInputService.InputEnded:Connect(inputEnded))
+
+Util.track(LocalPlayer.CharacterAdded:Connect(function(c)
+    local h = c:WaitForChild("Humanoid", 10)
+    if h then
+        h.Died:Connect(function()
+            local r = c:FindFirstChild("HumanoidRootPart")
+            if r then State.deathCF = r.CFrame end
+            Notify.push("Death recorded", "bad")
+        end)
+    end
+    task.spawn(Movement.onSpawn)
+    NativeESP.queueRebuild()
+end))
+
+Util.track(Players.PlayerAdded:Connect(function(p)
+    if Config.Alerts.PlayerJoin then Notify.push(("Joined: %s"):format(p.Name), "good") end
+    task.delay(1, function() Alerts.watchBounty(p) end)
+end))
+
+Util.track(Players.PlayerRemoving:Connect(function(p)
+    if Config.Alerts.PlayerLeave then Notify.push(("Left: %s"):format(p.Name), "bad") end
+    if p.Character then Scanner.unregister(p.Character) end
+    NativeESP.queueRebuild()
+end))
+
+for _, p in ipairs(Players:GetPlayers()) do Alerts.watchBounty(p) end
+
+sync()
+start()
+Diagnostics.run()
+Menu.renderDiag()
+Menu.status()
+
+print("[SS] ready")

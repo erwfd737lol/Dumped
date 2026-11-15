@@ -1,0 +1,565 @@
+local fenv=getfenv()
+fenv._QZDmdnMSdpKd = "This file was protected with MoonSec V3"
+wait()
+fenv.MoonSec_StringsHiddenAttr = true
+local loadedModule = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau", true))()
+local FluentRenewed = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/SaveManager.luau"))()
+local FluentRenewed2 = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/InterfaceManager.luau"))()
+local window = loadedModule:CreateWindow({
+	Title = "The Storage",
+	Size = UDim2.fromOffset(830, 525),
+	MinimizeKey = Enum.KeyCode.LeftAlt,
+	TabWidth = 160,
+	SubTitle = "by Bac0nH1ckOff",
+	Theme = "Dark",
+	MinSize = Vector2.new(470, 380),
+	Acrylic = true,
+	Resize = true,
+})
+local _call23 = window:CreateTab({
+	Title = "Main",
+	Icon = "hammer",
+})
+local _call25 = window:CreateTab({
+	Title = "Player",
+	Icon = "phosphor-user-bold",
+})
+local _call27 = window:CreateTab({
+	Title = "ESP",
+	Icon = "phosphor-eye-bold",
+})
+local _call29 = window:CreateTab({
+	Title = "Teleport",
+	Icon = "map-pin",
+})
+local _call31 = window:CreateTab({
+	Title = "Settings",
+	Icon = "settings",
+})
+local value5Options = loadedModule.Options
+local CoreGui = game:GetService("CoreGui")
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local call38LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local basementStoragesFolder = Workspace:FindFirstChild("BasementStorages")
+local storagesFolder = Workspace:FindFirstChild("Storages")
+error("line 2: attempt to perform arithmetic (mul) on nil and number")
+spawn(function(...)
+	wait(5)
+end)
+local _call52 = _call23:CreateToggle("autoRun", {
+	Title = "Auto Run",
+	Default = false,
+})
+local _call54 = _call23:CreateToggle("instantOpen", {
+	Title = "Instant Open Storages",
+	Default = false,
+})
+local _call56 = _call23:CreateToggle("instantPickup", {
+	Title = "Instant Puckup Items",
+	Default = false,
+})
+local _call58 = _call23:CreateToggle("chatWindow", {
+	Title = "Chat Window",
+	Default = false,
+})
+local _call60 = _call23:CreateToggle("infMoney", {
+	Title = "Auto Roll&Sell",
+	Default = false,
+})
+local _call62 = _call23:CreateToggle("hideSpin", {
+	Title = "Hide Spinner",
+	Default = false,
+})
+_call52:OnChanged(function(...)
+	local _Value207 = value5Options.autoRun.Value
+	task.spawn(function(...)
+		-- Original loop condition was not observable in the runtime trace.
+		while true do
+			local _Value415 = value5Options.autoRun.Value
+			call38LocalPlayer.Character:GetAttribute("Running")
+			wait()
+			-- Trace sampled 60 repeated iterations; duplicate iterations collapsed.
+		end
+		-- End of bounded trace sample.
+	end)
+end)
+_call56:OnChanged(function(...)
+	local _Value212 = value5Options.instantPickup.Value
+	task.spawn(function(...)
+		-- Original loop condition was not observable in the runtime trace.
+		while true do
+			local _Value719 = value5Options.instantPickup.Value
+			for _, obj in pairs(storagesFolder:GetChildren()) do
+				obj:GetAttribute("Opened")
+				for _, obj in pairs(obj:FindFirstChild("Contents"):FindFirstChild("Loot"):GetChildren()) do
+					local _call733 = obj:FindFirstChildOfClass("ProximityPrompt")
+					local call733HoldDuration = _call733.HoldDuration
+					_call733.HoldDuration = 0
+				end
+			end
+			for _, obj in pairs(basementStoragesFolder:GetChildren()) do
+				obj:GetAttribute("Opened")
+				for _, obj in pairs(obj:FindFirstChild("Contents"):FindFirstChild("Loot"):GetChildren()) do
+					local _call748 = obj:FindFirstChildOfClass("ProximityPrompt")
+					local call748HoldDuration = _call748.HoldDuration
+					_call748.HoldDuration = 0
+				end
+			end
+			for _, obj in pairs(game:GetService("Workspace"):GetChildren()) do
+				obj:FindFirstChildOfClass("ProximityPrompt")
+				local _call758 = obj:FindFirstChildOfClass("ProximityPrompt")
+				local call758HoldDuration = _call758.HoldDuration
+				_call758.HoldDuration = 0
+			end
+			wait(1)
+			-- Trace sampled 11 repeated iterations; duplicate iterations collapsed.
+		end
+		-- End of bounded trace sample.
+	end)
+end)
+_call58:OnChanged(function(...)
+	local _Value217 = value5Options.chatWindow.Value
+	game:GetService("TextChatService").ChatWindowConfiguration.Enabled
+end)
+_call60:OnChanged(function(...)
+	local _Value223 = value5Options.infMoney.Value
+	game:GetService("RunService").Heartbeat:Connect(function(...)
+		game:GetService("ReplicatedStorage").RemoteFunction:InvokeServer("PremRollSkin10")
+		wait(0.3)
+	end)
+	game:GetService("RunService").Heartbeat:Connect(function(...)
+		local SMG_NAMES = { -- recovered from local ipairs data; used for inferred membership guards
+			"SMG",
+			"LMG",
+			"Double Barrel Shotgun",
+			"Revolver",
+			"AK47",
+			"Turret",
+			"Shotgun",
+		}
+		local HOT_PINK_NAMES2 = { -- recovered from local ipairs data; used for inferred membership guards
+			"Hot Pink",
+			"Agent",
+			"Checkered",
+			"Grey Camo",
+			"Rusted Red",
+			"Green Camo",
+			"Orange Crush",
+			"Painted Yellow",
+			"Painted Orange",
+			"Damaged",
+			"Earth",
+			"Painted Blue",
+			"Painted Green",
+			"Painted Red",
+			"Painted Pink",
+			"Painted Purple",
+			"Green Sentry",
+			"Pink Sentry",
+			"Red Sentry",
+			"Royal",
+			"Fallen Agent",
+		}
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Hot Pink")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Hot Pink")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Agent")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Agent")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Checkered")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Checkered")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Grey Camo")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Grey Camo")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Rusted Red")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Rusted Red")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Green Camo")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Green Camo")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Orange Crush")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Orange Crush")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Yellow")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Yellow")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Orange")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Orange")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Damaged")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Damaged")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Earth")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Earth")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Blue")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Blue")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Green")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Green")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Red")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Red")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Pink")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Pink")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Purple")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Painted Purple")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Green Sentry")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Green Sentry")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Pink Sentry")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Pink Sentry")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Red Sentry")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Red Sentry")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Royal")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Royal")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Fallen Agent")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "SMG", "Fallen Agent")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Hot Pink")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Hot Pink")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Agent")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Agent")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Checkered")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Checkered")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Grey Camo")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Grey Camo")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Rusted Red")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Rusted Red")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Green Camo")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Green Camo")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Orange Crush")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Orange Crush")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Painted Yellow")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Painted Yellow")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Painted Orange")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Painted Orange")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Damaged")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Damaged")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Earth")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Earth")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Painted Blue")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Painted Blue")
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvent"):FireServer("SellSkin", "LMG", "Painted Green")
+		local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		-- End of bounded trace sample.
+	end)
+end)
+_call62:OnChanged(function(...)
+	task.spawn(function(...)
+		-- Original loop condition was not observable in the runtime trace.
+		while true do
+			local _Value1625 = value5Options.hideSpin.Value
+			local spinner = call38LocalPlayer.PlayerGui:FindFirstChild("Spinner")
+			spinner.Enabled = false
+			wait()
+			-- Trace sampled 60 repeated iterations; duplicate iterations collapsed.
+		end
+		-- End of bounded trace sample.
+	end)
+end)
+_call54:OnChanged(function(...)
+	local _Value240 = value5Options.instantOpen.Value
+	task.spawn(function(...)
+		-- Original loop condition was not observable in the runtime trace.
+		while true do
+			local _Value1929 = value5Options.instantOpen.Value
+			for _, obj in pairs(storagesFolder:GetChildren()) do
+				local proximityPrompt = obj:FindFirstChild("Door"):FindFirstChild("Handle"):FindFirstChild("ProximityPrompt")
+				local call1938HoldDuration = proximityPrompt.HoldDuration
+				proximityPrompt.HoldDuration = 0
+			end
+			for _, obj in pairs(basementStoragesFolder:GetChildren()) do
+				local proximityPrompt2 = obj:FindFirstChild("Door"):FindFirstChild("Handle"):FindFirstChild("ProximityPrompt")
+				local call1948HoldDuration = proximityPrompt2.HoldDuration
+				proximityPrompt2.HoldDuration = 0
+			end
+			task.wait(1)
+			-- Trace sampled 19 repeated iterations; duplicate iterations collapsed.
+		end
+		-- End of bounded trace sample.
+	end)
+end)
+local _call82 = _call23:CreateParagraph("Death Position", {
+	Title = "Death Position",
+	Content = "Last death position: N/A",
+})
+local localPlayer39Character = call38LocalPlayer.Character
+local localPlayer39Character2 = call38LocalPlayer.Character
+localPlayer39Character2:WaitForChild("Humanoid", 10).Died:Connect(function(...)
+	local startPosition = localPlayer39Character2:WaitForChild("HumanoidRootPart", 10).Position
+	local _246, _246_2, _246_3 = math.round(startPosition.X)
+	local _248, _248_2, _248_3 = math.round(startPosition.Z)
+	_call82:SetValue("Last death position: X: " .. _246 .. ", Z: " .. _248)
+end)
+call38LocalPlayer.CharacterAdded:Connect(function(...)
+	local localPlayer39Character3 = call38LocalPlayer.Character
+	local localPlayer39Character4 = call38LocalPlayer.Character
+	localPlayer39Character4:WaitForChild("Humanoid", 10).Died:Connect(function(...)
+		local startPosition2 = localPlayer39Character4:WaitForChild("HumanoidRootPart", 10).Position
+		local _2369, _2369_2, _2369_3 = math.round(startPosition2.X)
+		local _2371, _2371_2, _2371_3 = math.round(startPosition2.Z)
+		_call82:SetValue("Last death position: X: " .. _2369 .. ", Z: " .. _2371)
+	end)
+end)
+_call23:CreateButton({
+	Callback = function(...)
+		local hrp = call38LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+		hrp.CFrame = CFrame.new(startPosition)
+	end,
+	Description = "",
+	Title = "Teleport to Last Death Position",
+})
+local _call101 = _call27:CreateToggle("playersESP", {
+	Title = "Players ESP",
+	Default = false,
+})
+local _call103 = _call27:CreateToggle("enemiesESP", {
+	Title = "Enemies ESP",
+	Default = false,
+})
+local _call105 = _call27:CreateToggle("baseESP", {
+	Title = "Base ESP",
+	Default = false,
+})
+local _call107 = _call27:CreateToggle("elevatorESP", {
+	Title = "Elevator ESP",
+	Default = false,
+})
+local _call109 = _call27:CreateToggle("itemsESP", {
+	Title = "Items ESP",
+	Default = false,
+})
+_call109:OnChanged(function(...)
+	local _Value270 = value5Options.itemsESP.Value
+	task.spawn(function(...)
+		-- Original loop condition was not observable in the runtime trace.
+		while true do
+			local _Value2378 = value5Options.itemsESP.Value
+			local selectedLootESP
+			for _, obj in pairs(storagesFolder:GetChildren()) do
+				obj:GetAttribute("Opened")
+				for _, obj in pairs(obj:FindFirstChild("Contents"):FindFirstChild("Loot"):GetChildren()) do
+					local lootESP = obj:FindFirstChild("lootESP")
+				end
+				selectedLootESP = lootESP
+			end
+			for _, obj in pairs(basementStoragesFolder:GetChildren()) do
+				obj:GetAttribute("Opened")
+				for _, obj in pairs(obj:FindFirstChild("Contents"):FindFirstChild("Loot"):GetChildren()) do
+					local lootESP2 = obj:FindFirstChild("selectedLootESP")
+				end
+			end
+			task.wait(1)
+			-- Trace sampled 16 repeated iterations; duplicate iterations collapsed.
+		end
+		-- End of bounded trace sample.
+	end)
+end)
+_call105:OnChanged(function(...)
+	local _Value275 = value5Options.baseESP.Value
+	task.spawn(function(...)
+		-- Original loop condition was not observable in the runtime trace.
+		while true do
+			local _Value2882 = value5Options.baseESP.Value
+			for _, obj in pairs(Workspace:FindFirstChild("Storages"):GetChildren()) do
+				-- Observed condition: obj:GetAttribute("Owner")==call38LocalPlayer.Name
+				local eSP = obj:FindFirstChild("ESP")
+			end
+			wait(1)
+			-- Trace sampled 34 repeated iterations; duplicate iterations collapsed.
+		end
+		-- End of bounded trace sample.
+	end)
+end)
+_call107:OnChanged(function(...)
+	local _Value280 = value5Options.elevatorESP.Value
+	for _, obj in pairs(Workspace:FindFirstChild("Elevator"):GetChildren()) do
+		local eSP2 = obj:FindFirstChild("ESP")
+	end
+end)
+_call103:OnChanged(function(...)
+	local _Value289 = value5Options.enemiesESP.Value
+	task.spawn(function(...)
+		-- Original loop condition was not observable in the runtime trace.
+		while true do
+			local _Value3327 = value5Options.enemiesESP.Value
+			for _, obj in pairs(Workspace:FindFirstChild("Mobs"):GetChildren()) do
+				obj:IsA("Model")
+				local eSP3 = obj:FindFirstChild("ESP")
+				for _, obj in pairs(obj:GetChildren()) do
+					obj:IsA("BasePart")
+					eSP3:FindFirstChild(obj.Name)
+				end
+			end
+			wait(1)
+			-- Trace sampled 22 repeated iterations; duplicate iterations collapsed.
+		end
+		-- End of bounded trace sample.
+	end)
+end)
+_call101:OnChanged(function(...)
+	local _Value294 = value5Options.playersESP.Value
+	for _, obj in pairs(Players:GetPlayers()) do
+		-- Observed condition: obj.Name==call38LocalPlayer.Name
+	end
+end)
+_call29:CreateButton({
+	Callback = function(...)
+		for _, obj in pairs(Workspace:FindFirstChild("Storages"):GetChildren()) do
+			-- Observed condition: obj:GetAttribute("Owner")==call38LocalPlayer.Name
+			local eSP4 = obj:FindFirstChild("ESP")
+		end
+	end,
+	Description = "",
+	Title = "Base",
+})
+_call29:CreateButton({
+	Callback = function(...)
+		local box = Workspace:FindFirstChild("Elevator"):FindFirstChild("Box")
+		local hrp2 = call38LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+		hrp2.CFrame = box:FindFirstChild("Doors").WorldPivot
+	end,
+	Description = "",
+	Title = "Elevator",
+})
+_call29:CreateButton({
+	Callback = function(...)
+		local pointsFolder = Workspace:FindFirstChild("Map"):FindFirstChild("Points")
+		#pointsFolder:GetChildren()
+		#pointsFolder:GetChildren()
+		local hrp3 = call38LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+		hrp3.CFrame = pointsFolder:GetChildren()[182291518].CFrame
+	end,
+	Description = "",
+	Title = "Map",
+})
+_call29:CreateButton({
+	Callback = function(...)
+		local hrp4 = call38LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+		hrp4.CFrame = CFrame.new(731, -88, 0)
+	end,
+	Description = "",
+	Title = "Basement",
+})
+local selectedObjName
+for _, obj in pairs(game:GetService("Players"):GetPlayers()) do
+	local objName = obj.Name
+	table.insert({}, objName)
+	selectedObjName = objName
+end
+local _call144 = _call29:CreateDropdown("Players", {
+	Default = "",
+	Multi = false,
+	Values = {
+		[1] = selectedObjName,
+	},
+	Title = "Teleport to Player",
+})
+_call144:OnChanged(function(...)
+	local _call345 = Players:FindFirstChild(nil)
+	local call345Character = _call345.Character
+	local call345Character2 = _call345.Character
+	local hrp5 = call38LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+	hrp5.CFrame = call345Character2:FindFirstChild("HumanoidRootPart").CFrame + Vector3.new(0, 2, 0)
+end)
+local _call149 = _call25:CreateToggle("Noclip", {
+	Title = "Noclip",
+	Default = false,
+})
+_call149:OnChanged(function(...)
+	local _Value358 = value5Options.Noclip.Value
+	RunService.Stepped:Connect(function(...)
+		local localPlayer39Character5 = call38LocalPlayer.Character
+		for _, desc in pairs(call38LocalPlayer.Character:GetDescendants()) do
+			desc:IsA("BasePart")
+			local descCanCollide = desc.CanCollide
+		end
+	end)
+end)
+_call25:CreateKeybind("keyNoclip", {
+	Callback = function(...)
+		local options32Noclip = value5Options.Noclip
+		local _Value365 = value5Options.Noclip.Value
+		options32Noclip.Value = false
+		_call149:SetValue(value5Options.Noclip.Value)
+	end,
+	Mode = "Toggle",
+	Title = "Noclip",
+	Default = "C",
+})
+local _call157 = _call25:CreateToggle("InfJump", {
+	Title = "Inf Jump",
+	Default = false,
+})
+_call157:OnChanged(function(...)
+	local _Value371 = value5Options.InfJump.Value
+	game:GetService("UserInputService").JumpRequest:Connect(function(...)
+		call38LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+		wait()
+	end)
+end)
+_call25:CreateKeybind("keyInfJump", {
+	Callback = function(...)
+		local options32InfJump = value5Options.InfJump
+		local _Value378 = value5Options.InfJump.Value
+		options32InfJump.Value = false
+		_call157:SetValue(value5Options.InfJump.Value)
+	end,
+	Mode = "Toggle",
+	Title = "Inf Jump",
+	Default = "B",
+})
+_call25:CreateInput("speedInput", {
+	Placeholder = "",
+	Title = "Speed here",
+	Numeric = true,
+	Finished = true,
+	Callback = function(...)
+	end,
+	Default = 3,
+})
+local _call168 = _call25:CreateToggle("Speed", {
+	Title = "Speed",
+	Default = false,
+})
+local call41Heartbeat = RunService.Heartbeat
+_call168:OnChanged(function(...)
+	local _Value384 = value5Options.Speed.Value
+	local localPlayer39Character6 = call38LocalPlayer.Character
+	call41Heartbeat:Connect(function(...)
+		call41Heartbeat:Wait()
+		localPlayer39Character6:FindFirstChildWhichIsA("Humanoid").MoveDirection.Magnitude
+	end)
+end)
+_call25:CreateKeybind("keySpeed", {
+	Callback = function(...)
+		local options32Speed = value5Options.Speed
+		local _Value393 = value5Options.Speed.Value
+		options32Speed.Value = false
+		_call168:SetValue(value5Options.Speed.Value)
+	end,
+	Mode = "Toggle",
+	Title = "Speed",
+	Default = "V",
+})
+game:GetService("Players").PlayerAdded:Connect(function(...)
+	local selectedObjName2
+	for _, obj in pairs(game:GetService("Players"):GetPlayers()) do
+		local objName2 = obj.Name
+		table.insert({}, objName2)
+		selectedObjName2 = objName2
+	end
+	_call144:SetValues({
+		[1] = selectedObjName2,
+	})
+end)
+game:GetService("Players").PlayerRemoving:Connect(function(...)
+	local selectedObjName3
+	for _, obj in pairs(game:GetService("Players"):GetPlayers()) do
+		local objName3 = obj.Name
+		table.insert({}, objName3)
+		selectedObjName3 = objName3
+	end
+	_call144:SetValues({
+		[1] = selectedObjName3,
+	})
+end)
+FluentRenewed:SetLibrary(loadedModule)
+FluentRenewed2:SetLibrary(loadedModule)
+FluentRenewed2:SetFolder("thestorage")
+FluentRenewed:SetFolder("thestorage/cfg")
+FluentRenewed2:BuildInterfaceSection(_call31)
+FluentRenewed:BuildConfigSection(_call31)
+window:SelectTab(1)
+FluentRenewed:LoadAutoloadConfig()
+warn("Loaded")
+warn("t.me/arceusxscripts")
