@@ -24,22 +24,15 @@ local env               = getgenv and getgenv() or _G
 local loader            = loadstring or _G.load
 local fmt               = string.format
 
-local KEY_F = Enum.KeyCode.F
+local A = {}   -- functions
+local D = {}   -- static data
+local T = {}   -- tabs
+local U = {}   -- widget handles
 
-local function press(key)
-    pcall(VIM.SendKeyEvent, VIM, key, true, false, game)
-end
-
-local function release(key)
-    pcall(VIM.SendKeyEvent, VIM, key, false, false, game)
-end
-
-local function safeDisconnect(connection)
-    if not connection then
-        return
-    end
-    pcall(connection.Disconnect, connection)
-end
+local Flags
+local S
+local WindUI
+local Options
 
 if env.__StorageAdv then
     if env.__StorageAdv.unload then
@@ -50,69 +43,45 @@ end
 --═══════════════════════════════════════════════════════════════
 --  DATA
 --═══════════════════════════════════════════════════════════════
-local FACTION_COLORS = {
+D.KEY_F = Enum.KeyCode.F
+
+D.FACTION_COLORS = {
     Hunger = Color3.fromRGB(226, 108, 62),
     Crips  = Color3.fromRGB(96, 178, 255),
     Guards = Color3.fromRGB(238, 198, 84),
     Roblox = Color3.fromRGB(236, 236, 236),
 }
 
-local RARITY_COLORS = {
+D.RARITY_COLORS = {
     Legendary = Color3.fromRGB(255, 128, 40),
     Rare      = Color3.fromRGB(120, 190, 255),
     Uncommon  = Color3.fromRGB(120, 235, 140),
     Common    = Color3.fromRGB(225, 225, 225),
 }
 
-local RARITY_RANK = {
+D.RARITY_RANK = {
     Common = 1,
     Uncommon = 2,
     Rare = 3,
     Legendary = 4,
 }
 
-local RARITY_OF = {}
+D.RARITY_OF = {}
 
-local LEGENDARY_ITEMS = {
+D.LEGENDARY = {
     "Dark Scythe", "Hallow's Scythe", "Scythe", "Megalodon Knife",
     "False Trident", "Chainsaw", "Hallow's Saw", "Hallow's Revolvers",
 }
-local RARE_ITEMS = {
+D.RARE = {
     "Katana", "Fire Axe", "LMG", "Grenade Launcher", "Flamethrower",
     "Harpoon Gun", "Ancient Knife",
 }
-local UNCOMMON_ITEMS = {
+D.UNCOMMON = {
     "AK47", "Shotgun", "SMG", "Sledgehammer", "Revolver",
     "Double Barrel Shotgun", "Turret",
 }
 
-for _, name in ipairs(LEGENDARY_ITEMS) do
-    RARITY_OF[name] = "Legendary"
-end
-for _, name in ipairs(RARE_ITEMS) do
-    RARITY_OF[name] = "Rare"
-end
-for _, name in ipairs(UNCOMMON_ITEMS) do
-    RARITY_OF[name] = "Uncommon"
-end
-
-local function rarityRank(name)
-    local tier = RARITY_OF[name]
-    if not tier then
-        return 1
-    end
-    return RARITY_RANK[tier]
-end
-
-local function rarityColor(name)
-    local tier = RARITY_OF[name]
-    if not tier then
-        return RARITY_COLORS.Common
-    end
-    return RARITY_COLORS[tier]
-end
-
-local WEAPONS = {
+D.WEAPONS = {
     { n = "Double Barrel Shotgun", d = 11,   p = 6, cd = 0.40, hd = 0  },
     { n = "Shotgun",               d = 9,    p = 4, cd = 0.65, hd = 0  },
     { n = "Dark Scythe",           d = 25,   p = 1, cd = 0.55, hd = 50 },
@@ -140,20 +109,10 @@ local WEAPONS = {
     { n = "Fist",                  d = 7,    p = 1, cd = 0.50, hd = 11 },
 }
 
-local WEAPON_BY_NAME = {}
+D.WEAPON_BY_NAME = {}
+D.KNIVES = { "Ancient Knife", "Claymore", "Crowbar", "Knife" }
 
-for _, entry in ipairs(WEAPONS) do
-    entry.dps = (entry.d * entry.p) / entry.cd
-    WEAPON_BY_NAME[entry.n] = entry
-end
-
-table.sort(WEAPONS, function(a, b)
-    return a.dps > b.dps
-end)
-
-local KNIVES = { "Ancient Knife", "Claymore", "Crowbar", "Knife" }
-
-local FARMABLES = {
+D.FARMABLES = {
     "Double Barrel Shotgun", "Shotgun", "Dark Scythe", "Sledgehammer", "Hallow's Scythe",
     "AK47", "Hallow's Saw", "False Trident", "Scythe", "Claymore", "Fire Axe", "Katana",
     "LMG", "Chainsaw", "Revolver", "SMG", "Grenade Launcher", "Harpoon Gun",
@@ -170,7 +129,7 @@ local FARMABLES = {
     "Pain Painting", "Light Ammo Pack", "Medium Ammo Pack", "Shotgun Ammo Pack",
 }
 
-local NPCS = {
+D.NPCS = {
     { "Coleman", 3 },
     { "Priest Jonathan", 3 },
     { "Gunner Jayce", 3 },
@@ -190,28 +149,24 @@ local NPCS = {
     { "Fisherman James", 3 },
 }
 
-local NPC_NAMES = {}
+D.NPC_NAMES = {}
 
-for _, entry in ipairs(NPCS) do
-    table.insert(NPC_NAMES, entry[1])
-end
-
-local MOBS = {
+D.MOBS = {
     "Agent 7", "Agent 1", "Brand Arsonist", "Mummified King", "Shotty Beck",
     "Shotty Ben", "Dweller Tyrone", "Front Man", "Strong Goblin", "Mike Crusher",
     "Tabitha Witch", "Flame Twins", "Possessed Skeleton", "The Bear",
     "Dark Skeleton", "Ghoul", "Angry Banana", "The Muck",
 }
 
-local TRAVEL_SURFACE  = CFrame.new(-2.429, 5.6, 4.122)
-local TRAVEL_BASEMENT = CFrame.new(147.225, -88.5, -0.224)
-local TRAVEL_ELEVATOR = CFrame.new(-696.527, 5.6, 0.093)
+D.TRAVEL_SURFACE  = CFrame.new(-2.429, 5.6, 4.122)
+D.TRAVEL_BASEMENT = CFrame.new(147.225, -88.5, -0.224)
+D.TRAVEL_ELEVATOR = CFrame.new(-696.527, 5.6, 0.093)
 
-local SELL_WEAPONS = {
+D.SELL_WEAPONS = {
     "SMG", "LMG", "Double Barrel Shotgun", "Revolver", "AK47", "Turret", "Shotgun",
 }
 
-local SELL_SKINS = {
+D.SELL_SKINS = {
     "Hot Pink", "Agent", "Checkered", "Grey Camo", "Rusted Red", "Green Camo",
     "Orange Crush", "Painted Yellow", "Painted Orange", "Damaged", "Earth",
     "Painted Blue", "Painted Green", "Painted Red", "Painted Pink",
@@ -219,18 +174,69 @@ local SELL_SKINS = {
     "Fallen Agent",
 }
 
-local NATIVE_TAGS = {
+D.NATIVE_TAGS = {
     Player = { "PlayerESP", "PlayerHighlight" },
     Mob    = { "MobESP", "MobHighlight" },
     Item   = { "LootName", "LootHighlight" },
 }
 
-local ROOM_FOLDERS = { "Storages", "BasementStorages" }
+D.ROOM_FOLDERS = { "Storages", "BasementStorages" }
+
+D.PART_ORDER = {
+    Head  = { "Head", "UpperTorso", "HumanoidRootPart", "LowerTorso", "LeftUpperArm", "RightUpperArm" },
+    Torso = { "UpperTorso", "LowerTorso", "Torso", "HumanoidRootPart", "Head" },
+    Root  = { "HumanoidRootPart", "UpperTorso", "Head" },
+}
+
+D.ATTACK_ACTIONS = { M1D = true, M2D = true }
+
+D.PRESETS = {
+    Off = {
+        playersESP = false,
+        enemiesESP = false,
+        itemsESP = false,
+        silent = false,
+        autoAttack = false,
+        Speed = false,
+        FullBright = false,
+        Noclip = false,
+    },
+    Farming = {
+        itemsESP = true,
+        instantOpen = true,
+        instantPickup = true,
+        Speed = true,
+        autoRun = true,
+        teamCheck = true,
+    },
+    Legit = {
+        playersESP = true,
+        teamCheck = true,
+        Speed = true,
+        silent = true,
+        autoAttack = true,
+        requireClear = true,
+        healthBars = true,
+    },
+    Rage = {
+        playersESP = true,
+        enemiesESP = true,
+        silent = true,
+        spoofAim = true,
+        autoAttack = true,
+        requireClear = false,
+        Speed = true,
+        Noclip = true,
+        FullBright = true,
+        autoKnife = true,
+        manip = true,
+    },
+}
 
 --═══════════════════════════════════════════════════════════════
 --  STATE
 --═══════════════════════════════════════════════════════════════
-local Flags = {
+Flags = {
     autoRun = false,
     instantOpen = false,
     instantPickup = false,
@@ -295,7 +301,7 @@ local Flags = {
     bountyAlert = false,
 }
 
-local S = {
+S = {
     conns = {},
     destroy = {},
     espObjs = {},
@@ -318,6 +324,7 @@ local S = {
     ring = nil,
     marker = nil,
     blockHeld = false,
+    tabsBuilt = 0,
     params = RaycastParams.new(),
     fb = { active = false, conn = nil, saved = nil },
     stats = { frames = 0, fps = 0, acc = 0 },
@@ -326,22 +333,102 @@ local S = {
 S.params.FilterType = Enum.RaycastFilterType.Exclude
 S.params.IgnoreWater = true
 
-local WindUI
-local Options
+--═══════════════════════════════════════════════════════════════
+--  PRIMITIVES
+--═══════════════════════════════════════════════════════════════
+function A.press(key)
+    pcall(VIM.SendKeyEvent, VIM, key, true, false, game)
+end
 
-local function track(connection)
+function A.release(key)
+    pcall(VIM.SendKeyEvent, VIM, key, false, false, game)
+end
+
+function A.safeDisconnect(connection)
+    if not connection then
+        return
+    end
+    pcall(connection.Disconnect, connection)
+end
+
+function A.track(connection)
     table.insert(S.conns, connection)
     return connection
 end
 
-local function onDestroy(fn)
+function A.onDestroy(fn)
     table.insert(S.destroy, fn)
 end
+
+function A.notify(title, content)
+    pcall(function()
+        WindUI:Notify({
+            Title = title,
+            Content = tostring(content),
+            Duration = 3,
+        })
+    end)
+    print(fmt("[Storage] %s | %s", tostring(title), tostring(content)))
+end
+
+function A.syncUI(key, value)
+    local option = Options[key]
+    if not option then
+        return
+    end
+    if option.Value == value then
+        return
+    end
+    pcall(option.Set, option, value)
+end
+
+function A.rarityRank(name)
+    local tier = D.RARITY_OF[name]
+    if not tier then
+        return 1
+    end
+    return D.RARITY_RANK[tier]
+end
+
+function A.rarityColor(name)
+    local tier = D.RARITY_OF[name]
+    if not tier then
+        return D.RARITY_COLORS.Common
+    end
+    return D.RARITY_COLORS[tier]
+end
+
+function A.initData()
+    for _, name in ipairs(D.LEGENDARY) do
+        D.RARITY_OF[name] = "Legendary"
+    end
+    for _, name in ipairs(D.RARE) do
+        D.RARITY_OF[name] = "Rare"
+    end
+    for _, name in ipairs(D.UNCOMMON) do
+        D.RARITY_OF[name] = "Uncommon"
+    end
+
+    for _, entry in ipairs(D.WEAPONS) do
+        entry.dps = (entry.d * entry.p) / entry.cd
+        D.WEAPON_BY_NAME[entry.n] = entry
+    end
+
+    table.sort(D.WEAPONS, function(a, b)
+        return a.dps > b.dps
+    end)
+
+    for _, entry in ipairs(D.NPCS) do
+        table.insert(D.NPC_NAMES, entry[1])
+    end
+end
+
+A.initData()
 
 --═══════════════════════════════════════════════════════════════
 --  UTIL
 --═══════════════════════════════════════════════════════════════
-local function myChar()
+function A.myChar()
     local live = Workspace:FindFirstChild("Live")
     if live then
         local found = live:FindFirstChild(LP.Name)
@@ -352,23 +439,23 @@ local function myChar()
     return LP.Character
 end
 
-local function myRoot()
-    local char = myChar()
+function A.myRoot()
+    local char = A.myChar()
     if not char then
         return nil
     end
     return char:FindFirstChild("HumanoidRootPart")
 end
 
-local function myHum()
-    local char = myChar()
+function A.myHum()
+    local char = A.myChar()
     if not char then
         return nil
     end
     return char:FindFirstChildOfClass("Humanoid")
 end
 
-local function rootOf(plr)
+function A.rootOf(plr)
     local char = plr.Character
     if not char then
         return nil
@@ -376,7 +463,7 @@ local function rootOf(plr)
     return char:FindFirstChild("HumanoidRootPart")
 end
 
-local function humOf(plr)
+function A.humOf(plr)
     local char = plr.Character
     if not char then
         return nil
@@ -384,20 +471,20 @@ local function humOf(plr)
     return char:FindFirstChildOfClass("Humanoid")
 end
 
-local function alive(plr)
-    local hum = humOf(plr)
+function A.alive(plr)
+    local hum = A.humOf(plr)
     if not hum then
         return false
     end
     if hum.Health <= 0 then
         return false
     end
-    return rootOf(plr) ~= nil
+    return A.rootOf(plr) ~= nil
 end
 
-local function allRooms()
+function A.allRooms()
     local out = {}
-    for _, folderName in ipairs(ROOM_FOLDERS) do
+    for _, folderName in ipairs(D.ROOM_FOLDERS) do
         local folder = Workspace:FindFirstChild(folderName)
         if folder then
             for _, room in ipairs(folder:GetChildren()) do
@@ -408,8 +495,8 @@ local function allRooms()
     return out
 end
 
-local function factionOf(plr)
-    local root = rootOf(plr)
+function A.factionOf(plr)
+    local root = A.rootOf(plr)
     if not root then
         return nil
     end
@@ -424,12 +511,12 @@ local function factionOf(plr)
     return label.Text
 end
 
-local function myFaction()
-    return factionOf(LP)
+function A.myFaction()
+    return A.factionOf(LP)
 end
 
-local function armorOf(plr)
-    local root = rootOf(plr)
+function A.armorOf(plr)
+    local root = A.rootOf(plr)
     if not root then
         return nil
     end
@@ -440,7 +527,7 @@ local function armorOf(plr)
     return value
 end
 
-local function remoteEvent()
+function A.remoteEvent()
     local remotes = RS:FindFirstChild("Remotes")
     if remotes then
         local event = remotes:FindFirstChild("RemoteEvent")
@@ -451,7 +538,7 @@ local function remoteEvent()
     return RS:FindFirstChild("RemoteEvent")
 end
 
-local function remoteFunc()
+function A.remoteFunc()
     local remotes = RS:FindFirstChild("Remotes")
     if remotes then
         local fn = remotes:FindFirstChild("RemoteFunction")
@@ -462,8 +549,8 @@ local function remoteFunc()
     return RS:FindFirstChild("RemoteFunction")
 end
 
-local function teleport(cf)
-    local root = myRoot()
+function A.teleport(cf)
+    local root = A.myRoot()
     if not root then
         return false
     end
@@ -471,47 +558,30 @@ local function teleport(cf)
     return true
 end
 
-local function cam()
+function A.cam()
     return Workspace.CurrentCamera
 end
 
-local function muzzle()
-    local char = myChar()
+function A.muzzle()
+    local char = A.myChar()
     local tool = char and char:FindFirstChildOfClass("Tool")
     local handle = tool and tool:FindFirstChild("Handle")
     if handle then
         return handle.Position
     end
-    local camera = cam()
+    local camera = A.cam()
     return camera.CFrame.Position
 end
 
-local function notify(title, content)
-    pcall(function()
-        WindUI:Notify({
-            Title = title,
-            Content = tostring(content),
-            Duration = 3,
-        })
-    end)
-    print(fmt("[Storage] %s | %s", tostring(title), tostring(content)))
-end
-
-local PART_ORDER = {
-    Head  = { "Head", "UpperTorso", "HumanoidRootPart", "LowerTorso", "LeftUpperArm", "RightUpperArm" },
-    Torso = { "UpperTorso", "LowerTorso", "Torso", "HumanoidRootPart", "Head" },
-    Root  = { "HumanoidRootPart", "UpperTorso", "Head" },
-}
-
-local function partsOf(plr, mode)
+function A.partsOf(plr, mode)
     local out = {}
     local char = plr.Character
     if not char then
         return out
     end
-    local order = PART_ORDER[mode]
+    local order = D.PART_ORDER[mode]
     if not order then
-        order = PART_ORDER.Head
+        order = D.PART_ORDER.Head
     end
     for _, partName in ipairs(order) do
         local part = char:FindFirstChild(partName)
@@ -566,19 +636,19 @@ local Window = WindUI:CreateWindow({
     Resize = true,
 })
 
-local MainTab = Window:CreateTab({ Title = "Main", Icon = "hammer" })
-local PlayerTab = Window:CreateTab({ Title = "Player", Icon = "user" })
-local EspTab = Window:CreateTab({ Title = "ESP", Icon = "eye" })
-local CombatTab = Window:CreateTab({ Title = "Combat", Icon = "crosshair" })
-local FarmTab = Window:CreateTab({ Title = "Farm", Icon = "box" })
-local TravelTab = Window:CreateTab({ Title = "Travel", Icon = "map-pin" })
-local AlertsTab = Window:CreateTab({ Title = "Alerts", Icon = "bell" })
-local SettingsTab = Window:CreateTab({ Title = "Settings", Icon = "settings" })
+T.main = Window:CreateTab({ Title = "Main", Icon = "hammer" })
+T.player = Window:CreateTab({ Title = "Player", Icon = "user" })
+T.esp = Window:CreateTab({ Title = "ESP", Icon = "eye" })
+T.combat = Window:CreateTab({ Title = "Combat", Icon = "crosshair" })
+T.farm = Window:CreateTab({ Title = "Farm", Icon = "box" })
+T.travel = Window:CreateTab({ Title = "Travel", Icon = "map-pin" })
+T.alerts = Window:CreateTab({ Title = "Alerts", Icon = "bell" })
+T.settings = Window:CreateTab({ Title = "Settings", Icon = "settings" })
 
--- one bad widget can no longer take out the rest of the build
-local function buildTab(name, fn)
+function A.buildTab(name, fn)
     local ok, err = pcall(fn)
     if ok then
+        S.tabsBuilt = S.tabsBuilt + 1
         return
     end
     print(fmt("[Storage] tab build failed: %s — %s", name, tostring(err)))
@@ -591,21 +661,10 @@ local function buildTab(name, fn)
     end)
 end
 
-local function syncUI(key, value)
-    local option = Options[key]
-    if not option then
-        return
-    end
-    if option.Value == value then
-        return
-    end
-    pcall(option.Set, option, value)
-end
-
 --═══════════════════════════════════════════════════════════════
 --  FULLBRIGHT
 --═══════════════════════════════════════════════════════════════
-local function fbApply()
+function A.fbApply()
     Lighting.Ambient = Color3.new(1, 1, 1)
     Lighting.ColorShift_Bottom = Color3.new(1, 1, 1)
     Lighting.ColorShift_Top = Color3.new(1, 1, 1)
@@ -625,9 +684,9 @@ local function fbApply()
     end
 end
 
-local function setFullBright(on)
+function A.setFullBright(on)
     Flags.FullBright = on
-    syncUI("FullBright", on)
+    A.syncUI("FullBright", on)
 
     if on then
         if S.fb.active then
@@ -644,13 +703,13 @@ local function setFullBright(on)
             shadows = Lighting.GlobalShadows,
             atm = Lighting:FindFirstChildOfClass("Atmosphere"),
         }
-        fbApply()
+        A.fbApply()
         S.fb.conn = Lighting.LightingChanged:Connect(function()
             if S.fb.active then
-                fbApply()
+                A.fbApply()
             end
         end)
-        notify("FullBright", "Enabled")
+        A.notify("FullBright", "Enabled")
         return
     end
 
@@ -658,7 +717,7 @@ local function setFullBright(on)
         return
     end
     S.fb.active = false
-    safeDisconnect(S.fb.conn)
+    A.safeDisconnect(S.fb.conn)
     S.fb.conn = nil
 
     local saved = S.fb.saved
@@ -675,17 +734,17 @@ local function setFullBright(on)
         end
     end
     S.fb.saved = nil
-    notify("FullBright", "Disabled")
+    A.notify("FullBright", "Disabled")
 end
 
-onDestroy(function()
-    safeDisconnect(S.fb.conn)
+A.onDestroy(function()
+    A.safeDisconnect(S.fb.conn)
 end)
 
 --═══════════════════════════════════════════════════════════════
 --  PROMPTS
 --═══════════════════════════════════════════════════════════════
-local function zeroPrompt(prompt)
+function A.zeroPrompt(prompt)
     if not prompt then
         return
     end
@@ -693,13 +752,13 @@ local function zeroPrompt(prompt)
     prompt.MaxActivationDistance = math.max(prompt.MaxActivationDistance, 30)
 end
 
-local function sweepPrompts(doors, pickup)
-    for _, room in ipairs(allRooms()) do
+function A.sweepPrompts(doors, pickup)
+    for _, room in ipairs(A.allRooms()) do
         if doors then
             local door = room:FindFirstChild("Door")
             local handle = door and door:FindFirstChild("Handle")
             if handle then
-                zeroPrompt(handle:FindFirstChild("ProximityPrompt"))
+                A.zeroPrompt(handle:FindFirstChild("ProximityPrompt"))
             end
         end
         if pickup then
@@ -707,73 +766,75 @@ local function sweepPrompts(doors, pickup)
             local loot = contents and contents:FindFirstChild("Loot")
             if loot then
                 for _, item in ipairs(loot:GetChildren()) do
-                    zeroPrompt(item:FindFirstChildOfClass("ProximityPrompt"))
+                    A.zeroPrompt(item:FindFirstChildOfClass("ProximityPrompt"))
                 end
             end
         end
     end
 end
 
-for _, folderName in ipairs(ROOM_FOLDERS) do
-    local folder = Workspace:FindFirstChild(folderName)
-    if folder then
-        track(folder.DescendantAdded:Connect(function(descendant)
-            if not descendant:IsA("ProximityPrompt") then
-                return
-            end
-            local parent = descendant.Parent
-            local isDoor = parent and parent.Name == "Handle"
-            if isDoor and Flags.instantOpen then
-                zeroPrompt(descendant)
-                return
-            end
-            if not isDoor and Flags.instantPickup then
-                zeroPrompt(descendant)
-            end
-        end))
+function A.bindPromptFolders()
+    for _, folderName in ipairs(D.ROOM_FOLDERS) do
+        local folder = Workspace:FindFirstChild(folderName)
+        if folder then
+            A.track(folder.DescendantAdded:Connect(function(descendant)
+                if not descendant:IsA("ProximityPrompt") then
+                    return
+                end
+                local parent = descendant.Parent
+                local isDoor = parent and parent.Name == "Handle"
+                if isDoor and Flags.instantOpen then
+                    A.zeroPrompt(descendant)
+                    return
+                end
+                if not isDoor and Flags.instantPickup then
+                    A.zeroPrompt(descendant)
+                end
+            end))
+        end
     end
 end
 
 --═══════════════════════════════════════════════════════════════
 --  AUTOMATION
 --═══════════════════════════════════════════════════════════════
-local function setAutoRun(on)
+function A.setAutoRun(on)
     Flags.autoRun = on
-    syncUI("autoRun", on)
-    local char = myChar()
+    A.syncUI("autoRun", on)
+    local char = A.myChar()
     if char then
         char:SetAttribute("Running", on)
     end
     if on then
         return
     end
-    local event = remoteEvent()
+    local event = A.remoteEvent()
     if event then
         pcall(event.FireServer, event, "Walk")
     end
 end
 
-local function setRoll(on)
+function A.setRoll(on)
     Flags.rollSell = on
-    syncUI("infMoney", on)
+    A.syncUI("infMoney", on)
     if not on then
         return
     end
-    notify("Roll & Sell", "Started")
+    A.notify("Roll & Sell", "Started")
 
     task.spawn(function()
         while Flags.rollSell do
-            local fn = remoteFunc()
-            local event = remoteEvent()
+            local fn = A.remoteFunc()
+            local event = A.remoteEvent()
             if fn then
                 pcall(fn.InvokeServer, fn, "PremRollSkin10")
             end
             if event then
-                for _, weapon in ipairs(SELL_WEAPONS) do
+                for _, weapon in ipairs(D.SELL_WEAPONS) do
                     if not Flags.rollSell then
                         break
                     end
-                    for _, skin in ipairs(SELL_SKINS) do
+                    for _, skin in ipairs(D.SELL_SKINS) do
                         pcall(event.FireServer, event, "SellSkin", weapon, skin)
                         pcall(event.FireServer, event, "SellSkin", weapon, skin)
                     end
@@ -782,21 +843,21 @@ local function setRoll(on)
             end
             task.wait(math.max(Flags.rollInterval, 0.3))
         end
-        notify("Roll & Sell", "Stopped")
+        A.notify("Roll & Sell", "Stopped")
     end)
 end
 
-local function setChat(on)
+function A.setChat(on)
     Flags.chatWindow = on
-    syncUI("chatWindow", on)
+    A.syncUI("chatWindow", on)
     pcall(function()
         TCS.ChatWindowConfiguration.Enabled = on
     end)
 end
 
-local function setSpinner(on)
+function A.setSpinner(on)
     Flags.hideSpinner = on
-    syncUI("hideSpin", on)
+    A.syncUI("hideSpin", on)
     local gui = LP:FindFirstChild("PlayerGui")
     local spinner = gui and gui:FindFirstChild("Spinner")
     if spinner then
@@ -811,8 +872,8 @@ S.espFolder = Instance.new("Folder")
 S.espFolder.Name = "StorageAdvESP"
 S.espFolder.Parent = CoreGui
 
-local function nativeApply(inst, kind, on)
-    local tags = NATIVE_TAGS[kind]
+function A.nativeApply(inst, kind, on)
+    local tags = D.NATIVE_TAGS[kind]
     if not tags then
         return false
     end
@@ -840,7 +901,7 @@ local function nativeApply(inst, kind, on)
     return found
 end
 
-local function clearEsp(inst)
+function A.clearEsp(inst)
     local record = S.espObjs[inst]
     if not record then
         return
@@ -862,9 +923,9 @@ local function clearEsp(inst)
     S.espObjs[inst] = nil
 end
 
-local function clearAllEsp()
+function A.clearAllEsp()
     for inst in pairs(S.espObjs) do
-        clearEsp(inst)
+        A.clearEsp(inst)
     end
     for obj in pairs(S.nativeApplied) do
         pcall(function()
@@ -874,7 +935,7 @@ local function clearAllEsp()
     end
 end
 
-local function buildEsp(inst, kind)
+function A.buildEsp(inst, kind)
     if S.espObjs[inst] then
         return
     end
@@ -985,7 +1046,7 @@ local function buildEsp(inst, kind)
     S.espObjs[inst] = record
 end
 
-local function espPos(inst)
+function A.espPos(inst)
     if inst:IsA("BasePart") then
         return inst.Position
     end
@@ -1001,10 +1062,10 @@ local function espPos(inst)
     return nil
 end
 
-local function ownRooms()
+function A.ownRooms()
     local out = {}
     local me = LP.Name
-    for _, room in ipairs(allRooms()) do
+    for _, room in ipairs(A.allRooms()) do
         local owner = room:GetAttribute("Owner")
         if owner == me then
             table.insert(out, room)
@@ -1015,16 +1076,16 @@ local function ownRooms()
     return out
 end
 
-local function wantedEsp()
+function A.wantedEsp()
     local want = {}
-    local mine = myFaction()
+    local mine = A.myFaction()
 
     if Flags.playersESP then
         for _, plr in ipairs(Players:GetPlayers()) do
-            if plr ~= LP and alive(plr) then
+            if plr ~= LP and A.alive(plr) then
                 local same = false
                 if mine then
-                    same = factionOf(plr) == mine
+                    same = A.factionOf(plr) == mine
                 end
                 if not (Flags.teamCheck and same) then
                     want[plr.Character] = "Player"
@@ -1043,12 +1104,12 @@ local function wantedEsp()
     end
 
     if Flags.itemsESP then
-        for _, room in ipairs(allRooms()) do
+        for _, room in ipairs(A.allRooms()) do
             local contents = room:FindFirstChild("Contents")
             local loot = contents and contents:FindFirstChild("Loot")
             if loot then
                 for _, item in ipairs(loot:GetChildren()) do
-                    if rarityRank(item.Name) >= Flags.itemMinRank then
+                    if A.rarityRank(item.Name) >= Flags.itemMinRank then
                         want[item] = "Item"
                     end
                 end
@@ -1057,7 +1118,7 @@ local function wantedEsp()
     end
 
     if Flags.baseESP then
-        for _, room in ipairs(ownRooms()) do
+        for _, room in ipairs(A.ownRooms()) do
             want[room] = "Base"
         end
     end
@@ -1074,27 +1135,26 @@ local function wantedEsp()
     return want
 end
 
-local function reconcileEsp()
-    local want = wantedEsp()
+function A.reconcileEsp()
+    local want = A.wantedEsp()
 
     for inst in pairs(S.espObjs) do
         if not want[inst] then
-            clearEsp(inst)
+            A.clearEsp(inst)
         elseif not inst.Parent then
-            clearEsp(inst)
+            A.clearEsp(inst)
         end
     end
 
     if Flags.nativeEsp then
         for inst, kind in pairs(want) do
-            local applied = nativeApply(inst, kind, true)
+            local applied = A.nativeApply(inst, kind, true)
             if not applied then
-                -- no game object for this kind: fall back to the overlay
                 if not S.espObjs[inst] then
-                    buildEsp(inst, kind)
+                    A.buildEsp(inst, kind)
                 end
             elseif S.espObjs[inst] then
-                clearEsp(inst)
+                A.clearEsp(inst)
             end
         end
         return
@@ -1102,17 +1162,17 @@ local function reconcileEsp()
 
     for inst, kind in pairs(want) do
         if not S.espObjs[inst] then
-            buildEsp(inst, kind)
+            A.buildEsp(inst, kind)
         end
     end
 end
 
-local function tintFor(inst, kind)
+function A.tintFor(inst, kind)
     if kind == "Player" then
         local plr = Players:GetPlayerFromCharacter(inst)
-        local faction = plr and factionOf(plr)
+        local faction = plr and A.factionOf(plr)
         if faction then
-            local color = FACTION_COLORS[faction]
+            local color = D.FACTION_COLORS[faction]
             if color then
                 return color
             end
@@ -1123,7 +1183,7 @@ local function tintFor(inst, kind)
         return Color3.fromRGB(255, 130, 110)
     end
     if kind == "Item" then
-        return rarityColor(inst.Name)
+        return A.rarityColor(inst.Name)
     end
     if kind == "Base" then
         return Color3.fromRGB(120, 235, 150)
@@ -1131,8 +1191,8 @@ local function tintFor(inst, kind)
     return Color3.fromRGB(180, 200, 255)
 end
 
-local function updateEsp()
-    local camera = cam()
+function A.updateEsp()
+    local camera = A.cam()
     if not camera then
         return
     end
@@ -1140,11 +1200,11 @@ local function updateEsp()
     local viewport = camera.ViewportSize
 
     for inst, record in pairs(S.espObjs) do
-        local pos = espPos(inst)
+        local pos = A.espPos(inst)
         if pos then
             local dist = (pos - camPos).Magnitude
             local near = dist <= Flags.espDist
-            local tint = tintFor(inst, record.kind)
+            local tint = A.tintFor(inst, record.kind)
 
             record.gui.Enabled = near
             record.stroke.Color = tint
@@ -1162,8 +1222,8 @@ local function updateEsp()
                 local plr = Players:GetPlayerFromCharacter(inst)
                 local label = ""
                 if plr then
-                    label = factionOf(plr) or ""
-                    local armor = armorOf(plr)
+                    label = A.factionOf(plr) or ""
+                    local armor = A.armorOf(plr)
                     if armor and armor > 0 then
                         label = fmt("%s · %dA", label, armor)
                     end
@@ -1211,9 +1271,9 @@ local function updateEsp()
 end
 
 --═══════════════════════════════════════════════════════════════
---  COMBAT — solver
+--  COMBAT
 --═══════════════════════════════════════════════════════════════
-local function manipPoint(base, origin)
+function A.manipPoint(base, origin)
     local point = base
     if not Flags.manip then
         return point
@@ -1222,7 +1282,7 @@ local function manipPoint(base, origin)
         point = point + Vector3.yAxis * Flags.manipV
     end
     if Flags.manipL ~= 0 then
-        local camera = cam()
+        local camera = A.cam()
         point = point + camera.CFrame.RightVector * Flags.manipL
     end
     if Flags.manipD ~= 0 then
@@ -1234,9 +1294,9 @@ local function manipPoint(base, origin)
     return point
 end
 
-local function castSegment(from, to, targetChar)
+function A.castSegment(from, to, targetChar)
     local ignore = {}
-    local mine = myChar()
+    local mine = A.myChar()
     if mine then
         table.insert(ignore, mine)
     end
@@ -1247,20 +1307,20 @@ local function castSegment(from, to, targetChar)
     return Workspace:Raycast(from, to - from, S.params)
 end
 
-local function solve(plr)
+function A.solve(plr)
     local char = plr.Character
     if not char then
         return nil, false
     end
 
-    local origin = muzzle()
+    local origin = A.muzzle()
     local best = nil
     local bestScore = -math.huge
     local clear = false
 
-    for _, part in ipairs(partsOf(plr, Flags.combatPart)) do
-        local point = manipPoint(part.Position, origin)
-        local hit = castSegment(origin, point, char)
+    for _, part in ipairs(A.partsOf(plr, Flags.combatPart)) do
+        local point = A.manipPoint(part.Position, origin)
+        local hit = A.castSegment(origin, point, char)
         local score = math.huge
         if hit then
             score = hit.Distance
@@ -1280,24 +1340,24 @@ local function solve(plr)
     return best, clear
 end
 
-local function passesFilter(plr)
+function A.passesFilter(plr)
     if plr == LP then
         return false
     end
-    if not alive(plr) then
+    if not A.alive(plr) then
         return false
     end
-    local mine = myFaction()
+    local mine = A.myFaction()
     if mine then
-        if factionOf(plr) == mine then
+        if A.factionOf(plr) == mine then
             return false
         end
     end
     return true
 end
 
-local function scan()
-    local camera = cam()
+function A.scan()
+    local camera = A.cam()
     if not camera then
         return nil
     end
@@ -1308,8 +1368,8 @@ local function scan()
     local bestScore = math.huge
 
     for _, plr in ipairs(Players:GetPlayers()) do
-        if passesFilter(plr) then
-            local part = partsOf(plr, Flags.combatPart)[1]
+        if A.passesFilter(plr) then
+            local part = A.partsOf(plr, Flags.combatPart)[1]
             if part then
                 local vel = part.AssemblyLinearVelocity
                 local pos = part.Position + vel * (Flags.prediction / 100)
@@ -1332,7 +1392,7 @@ local function scan()
     return best
 end
 
-local function refreshSilent()
+function A.refreshSilent()
     if not Flags.silent then
         S.silentPoint = nil
         S.silentClear = false
@@ -1340,7 +1400,7 @@ local function refreshSilent()
         return
     end
 
-    local target = scan()
+    local target = A.scan()
     if not target then
         S.silentPoint = nil
         S.silentClear = false
@@ -1348,7 +1408,7 @@ local function refreshSilent()
         return
     end
 
-    local point, clear = solve(target.plr)
+    local point, clear = A.solve(target.plr)
     S.silentTarget = target
     S.silentClear = clear
     if point then
@@ -1358,9 +1418,7 @@ local function refreshSilent()
     end
 end
 
-local ATTACK_ACTIONS = { M1D = true, M2D = true }
-
-local function rewriteAimArgs(args)
+function A.rewriteAimArgs(args)
     local point = S.silentPoint
     if not point then
         return nil
@@ -1368,11 +1426,11 @@ local function rewriteAimArgs(args)
     for index = 2, args.n do
         local valueType = typeof(args[index])
         if valueType == "CFrame" then
-            args[index] = CFrame.new(muzzle(), point)
+            args[index] = CFrame.new(A.muzzle(), point)
             return args
         end
         if valueType == "Vector3" then
-            local delta = point - muzzle()
+            local delta = point - A.muzzle()
             if delta.Magnitude > 0.05 then
                 args[index] = delta.Unit
                 return args
@@ -1382,7 +1440,7 @@ local function rewriteAimArgs(args)
     return nil
 end
 
-local function installHooks()
+function A.installHooks()
     if not hookmetamethod then
         return
     end
@@ -1401,7 +1459,7 @@ local function installHooks()
                 if Flags.spoofAim then
                     local args = table.pack(...)
                     if args[1] == "ReportAim" then
-                        local rewritten = rewriteAimArgs(args)
+                        local rewritten = A.rewriteAimArgs(args)
                         if rewritten then
                             return S.oldNamecall(self, table.unpack(rewritten, 1, rewritten.n))
                         end
@@ -1422,11 +1480,11 @@ local function installHooks()
             if typeof(action) ~= "string" then
                 return S.oldNamecall(self, ...)
             end
-            if not ATTACK_ACTIONS[action] then
+            if not D.ATTACK_ACTIONS[action] then
                 return S.oldNamecall(self, ...)
             end
 
-            local rewritten = rewriteAimArgs(args)
+            local rewritten = A.rewriteAimArgs(args)
             if rewritten then
                 return S.oldNamecall(self, table.unpack(rewritten, 1, rewritten.n))
             end
@@ -1451,7 +1509,7 @@ local function installHooks()
             if not self:IsA("Humanoid") then
                 return S.oldNewIndex(self, key, value)
             end
-            if self.Parent ~= myChar() then
+            if self.Parent ~= A.myChar() then
                 return S.oldNewIndex(self, key, value)
             end
 
@@ -1476,10 +1534,8 @@ local function installHooks()
     end
 end
 
-installHooks()
-
-local function fireAttack(action)
-    local event = remoteEvent()
+function A.fireAttack(action)
+    local event = A.remoteEvent()
     if not event then
         return false
     end
@@ -1489,10 +1545,10 @@ local function fireAttack(action)
         end
     end
 
-    local origin = muzzle()
+    local origin = A.muzzle()
     local lookAt = S.silentPoint
     if not lookAt then
-        local camera = cam()
+        local camera = A.cam()
         lookAt = camera.CFrame.Position + camera.CFrame.LookVector * 200
     end
     if (lookAt - origin).Magnitude < 0.05 then
@@ -1506,7 +1562,7 @@ local function fireAttack(action)
         releaseDelay = 0.08
     end
     task.delay(releaseDelay, function()
-        local again = remoteEvent()
+        local again = A.remoteEvent()
         if again then
             pcall(again.FireServer, again, action:gsub("D", "U"))
         end
@@ -1515,35 +1571,35 @@ local function fireAttack(action)
     return true
 end
 
-local function attackLoop()
+function A.attackLoop()
     if S.attacking then
         return
     end
     S.attacking = true
     while Flags.autoAttack do
-        local char = myChar()
+        local char = A.myChar()
         local tool = char and char:FindFirstChildOfClass("Tool")
-        local weapon = tool and WEAPON_BY_NAME[tool.Name]
+        local weapon = tool and D.WEAPON_BY_NAME[tool.Name]
         local cooldown = 0.12
         if weapon then
             cooldown = weapon.cd
         end
-        fireAttack("M1D")
+        A.fireAttack("M1D")
         task.wait(math.max(cooldown, 0.05))
     end
     S.attacking = false
 end
 
-local function setAttack(on)
+function A.setAttack(on)
     Flags.autoAttack = on
-    syncUI("autoAttack", on)
+    A.syncUI("autoAttack", on)
     if on then
-        task.spawn(attackLoop)
+        task.spawn(A.attackLoop)
     end
 end
 
-local function knifeIfEmpty()
-    local char = myChar()
+function A.knifeIfEmpty()
+    local char = A.myChar()
     if not char then
         return
     end
@@ -1554,11 +1610,11 @@ local function knifeIfEmpty()
     if not backpack then
         return
     end
-    local hum = myHum()
+    local hum = A.myHum()
     if not hum then
         return
     end
-    for _, name in ipairs(KNIVES) do
+    for _, name in ipairs(D.KNIVES) do
         local tool = backpack:FindFirstChild(name)
         if tool then
             pcall(hum.EquipTool, hum, tool)
@@ -1570,13 +1626,13 @@ end
 --═══════════════════════════════════════════════════════════════
 --  MOVEMENT
 --═══════════════════════════════════════════════════════════════
-local function setNoclip(on)
+function A.setNoclip(on)
     Flags.Noclip = on
-    syncUI("Noclip", on)
+    A.syncUI("Noclip", on)
     if on then
         return
     end
-    local char = myChar()
+    local char = A.myChar()
     if not char then
         return
     end
@@ -1587,78 +1643,78 @@ local function setNoclip(on)
     end
 end
 
-local function setInfJump(on)
+function A.setInfJump(on)
     Flags.InfJump = on
-    syncUI("InfJump", on)
+    A.syncUI("InfJump", on)
 end
 
-local function setBhop(on)
+function A.setBhop(on)
     Flags.Bhop = on
-    syncUI("Bhop", on)
+    A.syncUI("Bhop", on)
 end
 
-local function setAntiAfk(on)
+function A.setAntiAfk(on)
     Flags.AntiAfk = on
-    syncUI("AntiAfk", on)
+    A.syncUI("AntiAfk", on)
 end
 
-local flyBV = nil
-local flyBG = nil
+S.flyBV = nil
+S.flyBG = nil
 
-local function setFly(on)
+function A.setFly(on)
     Flags.Fly = on
-    syncUI("Fly", on)
+    A.syncUI("Fly", on)
 
     if on then
-        local root = myRoot()
+        local root = A.myRoot()
         if not root then
             Flags.Fly = false
-            syncUI("Fly", false)
+            A.syncUI("Fly", false)
             return
         end
-        local hum = myHum()
+        local hum = A.myHum()
         if hum then
             hum.PlatformStand = true
         end
 
-        flyBV = Instance.new("BodyVelocity")
-        flyBV.MaxForce = Vector3.new(1e5, 1e5, 1e5)
-        flyBV.Velocity = Vector3.zero
-        flyBV.Parent = root
+        S.flyBV = Instance.new("BodyVelocity")
+        S.flyBV.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+        S.flyBV.Velocity = Vector3.zero
+        S.flyBV.Parent = root
 
-        flyBG = Instance.new("BodyGyro")
-        flyBG.MaxTorque = Vector3.new(1e5, 1e5, 1e5)
-        flyBG.P = 2500
-        flyBG.Parent = root
+        S.flyBG = Instance.new("BodyGyro")
+        S.flyBG.MaxTorque = Vector3.new(1e5, 1e5, 1e5)
+        S.flyBG.P = 2500
+        S.flyBG.Parent = root
         return
     end
 
-    if flyBV then
-        flyBV:Destroy()
-        flyBV = nil
+    if S.flyBV then
+        S.flyBV:Destroy()
+        S.flyBV = nil
     end
-    if flyBG then
-        flyBG:Destroy()
-        flyBG = nil
+    if S.flyBG then
+        S.flyBG:Destroy()
+        S.flyBG = nil
     end
-    local hum = myHum()
+    local hum = A.myHum()
     if hum then
         hum.PlatformStand = false
     end
 end
 
-local function flyStep()
+function A.flyStep()
     if not Flags.Fly then
         return
     end
-    if not flyBV then
+    if not S.flyBV then
         return
     end
-    if not flyBV.Parent then
+    if not S.flyBV.Parent then
         return
     end
 
-    local camera = cam()
+    local camera = A.cam()
     local dir = Vector3.zero
 
     if UIS:IsKeyDown(Enum.KeyCode.W) then
@@ -1681,38 +1737,38 @@ local function flyStep()
     end
 
     if dir.Magnitude > 0 then
-        flyBV.Velocity = dir.Unit * Flags.flySpeed
+        S.flyBV.Velocity = dir.Unit * Flags.flySpeed
     else
-        flyBV.Velocity = Vector3.zero
+        S.flyBV.Velocity = Vector3.zero
     end
-    flyBG.CFrame = camera.CFrame
+    S.flyBG.CFrame = camera.CFrame
 end
 
 --═══════════════════════════════════════════════════════════════
 --  FARM
 --═══════════════════════════════════════════════════════════════
-local warnGui = nil
-local warnFrame = nil
+S.warnGui = nil
+S.warnFrame = nil
 
-local function showWarning()
-    if warnFrame then
-        warnFrame.Visible = true
+function A.showWarning()
+    if S.warnFrame then
+        S.warnFrame.Visible = true
         return
     end
 
-    warnGui = Instance.new("ScreenGui")
-    warnGui.Name = "AdvFarmWarn"
-    warnGui.ResetOnSpawn = false
-    warnGui.Parent = LP:WaitForChild("PlayerGui")
+    S.warnGui = Instance.new("ScreenGui")
+    S.warnGui.Name = "AdvFarmWarn"
+    S.warnGui.ResetOnSpawn = false
+    S.warnGui.Parent = LP:WaitForChild("PlayerGui")
 
-    warnFrame = Instance.new("Frame")
-    warnFrame.Size = UDim2.fromOffset(300, 56)
-    warnFrame.Position = UDim2.new(0.5, -150, 0.5, -28)
-    warnFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
-    warnFrame.BackgroundTransparency = 0.2
-    warnFrame.BorderSizePixel = 2
-    warnFrame.BorderColor3 = Color3.fromRGB(255, 200, 100)
-    warnFrame.Parent = warnGui
+    S.warnFrame = Instance.new("Frame")
+    S.warnFrame.Size = UDim2.fromOffset(300, 56)
+    S.warnFrame.Position = UDim2.new(0.5, -150, 0.5, -28)
+    S.warnFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
+    S.warnFrame.BackgroundTransparency = 0.2
+    S.warnFrame.BorderSizePixel = 2
+    S.warnFrame.BorderColor3 = Color3.fromRGB(255, 200, 100)
+    S.warnFrame.Parent = S.warnGui
 
     local label = Instance.new("TextLabel")
     label.Size = UDim2.fromScale(1, 1)
@@ -1721,12 +1777,12 @@ local function showWarning()
     label.TextScaled = true
     label.Font = Enum.Font.GothamBold
     label.TextStrokeTransparency = 0.5
-    label.Parent = warnFrame
+    label.Parent = S.warnFrame
 
-    warnFrame.Visible = true
+    S.warnFrame.Visible = true
 end
 
-local function setCollisions(char, on)
+function A.setCollisions(char, on)
     if not char then
         return
     end
@@ -1737,12 +1793,12 @@ local function setCollisions(char, on)
     end
 end
 
-local function farmTargets()
+function A.farmTargets()
     local out = {}
     local names = Flags.farmNames
     local takeAll = next(names) == nil
 
-    for _, room in ipairs(allRooms()) do
+    for _, room in ipairs(A.allRooms()) do
         local folder = room.Parent
         if folder then
             if Flags.farmScope[folder.Name] then
@@ -1761,7 +1817,7 @@ local function farmTargets()
                             end
                         end
                         if wanted then
-                            local pos = espPos(item)
+                            local pos = A.espPos(item)
                             if pos then
                                 table.insert(out, { inst = item, pos = pos })
                             end
@@ -1775,16 +1831,16 @@ local function farmTargets()
     return out
 end
 
-local function stopFarm()
+function A.stopFarm()
     S.farmRunning = false
-    if warnFrame then
-        warnFrame.Visible = false
+    if S.warnFrame then
+        S.warnFrame.Visible = false
     end
     pcall(CAS.UnbindAction, CAS, "AdvFarmLock")
-    setCollisions(myChar(), true)
+    A.setCollisions(A.myChar(), true)
     if Flags.returnOnStop then
         if S.farmOrigin then
-            local root = myRoot()
+            local root = A.myRoot()
             if root then
                 root.CFrame = S.farmOrigin
             end
@@ -1792,9 +1848,9 @@ local function stopFarm()
     end
 end
 
-local function farmLoop()
+function A.farmLoop()
     while S.farmRunning do
-        local targets = farmTargets()
+        local targets = A.farmTargets()
         if #targets == 0 then
             task.wait(0.4)
         else
@@ -1802,7 +1858,7 @@ local function farmLoop()
                 if not S.farmRunning then
                     break
                 end
-                local root = myRoot()
+                local root = A.myRoot()
                 if not root then
                     break
                 end
@@ -1824,21 +1880,21 @@ local function farmLoop()
             end
         end
     end
-    stopFarm()
+    A.stopFarm()
 end
 
-local function refreshFarm()
+function A.refreshFarm()
     if not Flags.farmEnabled then
         if S.farmRunning then
-            stopFarm()
-            notify("Farm", "Stopped")
+            A.stopFarm()
+            A.notify("Farm", "Stopped")
         end
         return
     end
 
     if next(Flags.farmScope) == nil then
         if S.farmRunning then
-            stopFarm()
+            A.stopFarm()
         end
         return
     end
@@ -1847,36 +1903,36 @@ local function refreshFarm()
         return
     end
 
-    local root = myRoot()
+    local root = A.myRoot()
     if not root then
-        notify("Farm", "no character")
+        A.notify("Farm", "no character")
         return
     end
     S.farmRunning = true
     S.farmOrigin = root.CFrame
-    setCollisions(myChar(), false)
+    A.setCollisions(A.myChar(), false)
     CAS:BindActionAtPriority("AdvFarmLock", function() end, false, 3000,
         Enum.PlayerActions.CharacterForward,
         Enum.PlayerActions.CharacterBackward,
         Enum.PlayerActions.CharacterLeft,
         Enum.PlayerActions.CharacterRight,
         Enum.PlayerActions.CharacterJump)
-    showWarning()
-    task.spawn(farmLoop)
-    notify("Farm", "Started")
+    A.showWarning()
+    task.spawn(A.farmLoop)
+    A.notify("Farm", "Started")
 end
 
 --═══════════════════════════════════════════════════════════════
 --  ALERTS
 --═══════════════════════════════════════════════════════════════
-local function watch(key, name, on, isMob)
-    safeDisconnect(S.watchers[key])
+function A.watch(key, name, on, isMob)
+    A.safeDisconnect(S.watchers[key])
     S.watchers[key] = nil
     if not on then
         return
     end
 
-    for _, folderName in ipairs(ROOM_FOLDERS) do
+    for _, folderName in ipairs(D.ROOM_FOLDERS) do
         local folder = Workspace:FindFirstChild(folderName)
         if folder then
             S.watchers[key] = folder.DescendantAdded:Connect(function(descendant)
@@ -1887,19 +1943,19 @@ local function watch(key, name, on, isMob)
                     local parent = descendant.Parent
                     if parent then
                         if parent.Name == "Mobs" then
-                            notify("Mob", name)
+                            A.notify("Mob", name)
                         end
                     end
                     return
                 end
-                notify("NPC", name)
+                A.notify("NPC", name)
             end)
             return
         end
     end
 end
 
-local function checkBounty(plr)
+function A.checkBounty(plr)
     if not Flags.bountyAlert then
         return
     end
@@ -1912,43 +1968,43 @@ local function checkBounty(plr)
         return
     end
     if bounty.Value >= 1000 then
-        notify("Bounty", fmt("%s — %d", plr.Name, bounty.Value))
+        A.notify("Bounty", fmt("%s — %d", plr.Name, bounty.Value))
     end
 end
 
 --═══════════════════════════════════════════════════════════════
 --  TRAVEL
 --═══════════════════════════════════════════════════════════════
-local function goBase()
-    for _, room in ipairs(ownRooms()) do
+function A.goBase()
+    for _, room in ipairs(A.ownRooms()) do
         local floor = room:FindFirstChild("Floor")
         if floor then
-            teleport(floor.CFrame + Vector3.new(0, 3, 0))
-            notify("Travel", "Base")
+            A.teleport(floor.CFrame + Vector3.new(0, 3, 0))
+            A.notify("Travel", "Base")
             return
         end
     end
-    notify("Travel", "no owned storage")
+    A.notify("Travel", "no owned storage")
 end
 
-local function goElevator()
+function A.goElevator()
     local elevator = Workspace:FindFirstChild("Elevator")
     local box = elevator and elevator:FindFirstChild("Box")
     local doors = box and box:FindFirstChild("Doors")
     if doors then
-        teleport(doors:GetPivot())
+        A.teleport(doors:GetPivot())
     else
-        teleport(TRAVEL_ELEVATOR)
+        A.teleport(D.TRAVEL_ELEVATOR)
     end
-    notify("Travel", "Elevator")
+    A.notify("Travel", "Elevator")
 end
 
-local function goNpc(name, offset)
-    local char = myChar()
+function A.goNpc(name, offset)
+    local char = A.myChar()
     if not char then
         return
     end
-    for _, room in ipairs(allRooms()) do
+    for _, room in ipairs(A.allRooms()) do
         local contents = room:FindFirstChild("Contents")
         local folder = contents and contents:FindFirstChild("NPC")
         local npc = folder and folder:FindFirstChild(name)
@@ -1956,26 +2012,26 @@ local function goNpc(name, offset)
             local pivot = npc:GetPivot()
             local behind = pivot.LookVector * offset
             char:PivotTo(CFrame.new(pivot.Position + behind + Vector3.new(0, 1.5, 0)))
-            notify("Travel", name)
+            A.notify("Travel", name)
             return
         end
     end
-    notify("Travel", name .. " not found")
+    A.notify("Travel", name .. " not found")
 end
 
-local function goPlayer(name)
+function A.goPlayer(name)
     local plr = Players:FindFirstChild(name)
     if not plr then
-        notify("Travel", "unavailable")
+        A.notify("Travel", "unavailable")
         return
     end
-    if not alive(plr) then
-        notify("Travel", "unavailable")
+    if not A.alive(plr) then
+        A.notify("Travel", "unavailable")
         return
     end
-    local root = rootOf(plr)
+    local root = A.rootOf(plr)
     if root then
-        teleport(root.CFrame + Vector3.new(0, 2, 0))
+        A.teleport(root.CFrame + Vector3.new(0, 2, 0))
     end
 end
 
@@ -1994,7 +2050,7 @@ if Drawing then
     S.marker.Radius = 5
     S.marker.Visible = false
 
-    onDestroy(function()
+    A.onDestroy(function()
         if S.ring then
             pcall(S.ring.Remove, S.ring)
         end
@@ -2005,634 +2061,520 @@ if Drawing then
 end
 
 --═══════════════════════════════════════════════════════════════
---  MAIN TAB
+--  TAB BUILDERS
 --═══════════════════════════════════════════════════════════════
-local deathPara = nil
-
-local function onInstantOpen(value)
-    Flags.instantOpen = value
-    if value then
-        sweepPrompts(true, false)
-    end
-end
-
-local function onInstantPickup(value)
-    Flags.instantPickup = value
-    if value then
-        sweepPrompts(false, true)
-    end
-end
-
-local function onRollInterval(value)
-    Flags.rollInterval = value
-end
-
-local function onTeleportDeath()
-    if not S.lastDeath then
-        notify("Death", "none recorded")
-        return
-    end
-    teleport(S.lastDeath)
-end
-
-buildTab("Main", function()
-    MainTab:CreateSection("Automation")
-    MainTab:CreateToggle("autoRun", {
+function A.buildMain()
+    T.main:CreateSection("Automation")
+    T.main:CreateToggle("autoRun", {
         Title = "Auto Run",
         Description = "Holds the sprint remote",
         Default = false,
-        Callback = setAutoRun,
+        Callback = A.setAutoRun,
     })
-    MainTab:CreateToggle("instantOpen", {
+    T.main:CreateToggle("instantOpen", {
         Title = "Instant Open Storages",
         Default = false,
-        Callback = onInstantOpen,
+        Callback = function(value)
+            Flags.instantOpen = value
+            if value then
+                A.sweepPrompts(true, false)
+            end
+        end,
     })
-    MainTab:CreateToggle("instantPickup", {
+    T.main:CreateToggle("instantPickup", {
         Title = "Instant Pickup Items",
         Default = false,
-        Callback = onInstantPickup,
+        Callback = function(value)
+            Flags.instantPickup = value
+            if value then
+                A.sweepPrompts(false, true)
+            end
+        end,
     })
-    MainTab:CreateToggle("chatWindow", {
+    T.main:CreateToggle("chatWindow", {
         Title = "Chat Window",
         Default = false,
-        Callback = setChat,
+        Callback = A.setChat,
     })
-    MainTab:CreateToggle("infMoney", {
+    T.main:CreateToggle("infMoney", {
         Title = "Auto Roll & Sell",
         Default = false,
-        Callback = setRoll,
+        Callback = A.setRoll,
     })
-    MainTab:CreateSlider("rollInterval", {
+    T.main:CreateSlider("rollInterval", {
         Title = "Roll interval",
         Default = 1.2,
         Min = 0.3,
         Max = 5,
         Rounding = 1,
-        Callback = onRollInterval,
+        Callback = function(value)
+            Flags.rollInterval = value
+        end,
     })
-    MainTab:CreateToggle("hideSpin", {
+    T.main:CreateToggle("hideSpin", {
         Title = "Hide Spinner",
         Default = false,
-        Callback = setSpinner,
+        Callback = A.setSpinner,
     })
 
-    MainTab:CreateSection("Death")
-    deathPara = MainTab:CreateParagraph("deathPos", {
+    T.main:CreateSection("Death")
+    U.deathPara = T.main:CreateParagraph("deathPos", {
         Title = "Death Position",
         Content = "N/A",
     })
-    MainTab:CreateButton({
+    T.main:CreateButton({
         Title = "Teleport to Last Death",
-        Callback = onTeleportDeath,
+        Callback = function()
+            if not S.lastDeath then
+                A.notify("Death", "none recorded")
+                return
+            end
+            A.teleport(S.lastDeath)
+        end,
     })
-end)
-
---═══════════════════════════════════════════════════════════════
---  PLAYER TAB
---═══════════════════════════════════════════════════════════════
-local function toggleNoclip()
-    setNoclip(not Flags.Noclip)
 end
 
-local function toggleInfJump()
-    setInfJump(not Flags.InfJump)
-end
-
-local function onFlySpeed(value)
-    Flags.flySpeed = value
-end
-
-local function onSpeedInput(text)
-    local number = tonumber(text)
-    if number then
-        if number > 0 then
-            Flags.speedValue = number
-        end
-    end
-end
-
-local function onSpeedMode(selection)
-    local picked = selection[1]
-    if not picked then
-        picked = "Add"
-    end
-    Flags.speedMode = picked
-end
-
-local function onSpeedToggle(value)
-    Flags.Speed = value
-    if value then
-        return
-    end
-    local hum = myHum()
-    if hum then
-        hum.WalkSpeed = 12
-    end
-end
-
-local function toggleSpeed()
-    Flags.Speed = not Flags.Speed
-    syncUI("Speed", Flags.Speed)
-    if Flags.Speed then
-        return
-    end
-    local hum = myHum()
-    if hum then
-        hum.WalkSpeed = 12
-    end
-end
-
-local function onPanic(value)
-    Flags.panic = value
-end
-
-local function onPanicButton()
-    if Flags.panic then
-        goBase()
-    end
-end
-
-buildTab("Player", function()
-    PlayerTab:CreateSection("Movement")
-    PlayerTab:CreateToggle("Noclip", {
+function A.buildPlayer()
+    T.player:CreateSection("Movement")
+    T.player:CreateToggle("Noclip", {
         Title = "Noclip",
         Default = false,
-        Callback = setNoclip,
+        Callback = A.setNoclip,
     })
-    PlayerTab:CreateKeybind("kb_noclip", {
+    T.player:CreateKeybind("kb_noclip", {
         Title = "Noclip key",
         Default = Enum.KeyCode.C,
         Mode = "Toggle",
-        Callback = toggleNoclip,
+        Callback = function()
+            A.setNoclip(not Flags.Noclip)
+        end,
     })
-    PlayerTab:CreateToggle("InfJump", {
+    T.player:CreateToggle("InfJump", {
         Title = "Infinite Jump",
         Default = false,
-        Callback = setInfJump,
+        Callback = A.setInfJump,
     })
-    PlayerTab:CreateKeybind("kb_infjump", {
+    T.player:CreateKeybind("kb_infjump", {
         Title = "Inf jump key",
         Default = Enum.KeyCode.B,
         Mode = "Toggle",
-        Callback = toggleInfJump,
+        Callback = function()
+            A.setInfJump(not Flags.InfJump)
+        end,
     })
-    PlayerTab:CreateToggle("Bhop", {
+    T.player:CreateToggle("Bhop", {
         Title = "Bunny Hop",
         Description = "Auto-jump on landing",
         Default = false,
-        Callback = setBhop,
+        Callback = A.setBhop,
     })
-    PlayerTab:CreateToggle("Fly", {
+    T.player:CreateToggle("Fly", {
         Title = "Fly",
         Description = "WASD · Space up · Ctrl down",
         Default = false,
-        Callback = setFly,
+        Callback = A.setFly,
     })
-    PlayerTab:CreateSlider("flySpeed", {
+    T.player:CreateSlider("flySpeed", {
         Title = "Fly speed",
         Default = 55,
         Min = 10,
         Max = 300,
         Rounding = 0,
-        Callback = onFlySpeed,
+        Callback = function(value)
+            Flags.flySpeed = value
+        end,
     })
 
-    PlayerTab:CreateSection("Speed")
-    PlayerTab:CreateInput("speedInput", {
+    T.player:CreateSection("Speed")
+    T.player:CreateInput("speedInput", {
         Title = "Speed value",
         Placeholder = "3",
         Numeric = true,
         Finished = true,
         Default = "3",
-        Callback = onSpeedInput,
+        Callback = function(text)
+            local number = tonumber(text)
+            if number then
+                if number > 0 then
+                    Flags.speedValue = number
+                end
+            end
+        end,
     })
-    PlayerTab:CreateDropdown("speedMode", {
+    T.player:CreateDropdown("speedMode", {
         Title = "Mode",
         Values = { "Add", "Multiply", "Set" },
         Default = "Add",
-        Callback = onSpeedMode,
+        Callback = function(selection)
+            Flags.speedMode = selection[1] or "Add"
+        end,
     })
     local speedDesc = "Writer mode"
     if S.hookOK then
         speedDesc = "Forces WalkSpeed past the clamp"
     end
-    PlayerTab:CreateToggle("Speed", {
+    T.player:CreateToggle("Speed", {
         Title = "Speed",
         Description = speedDesc,
         Default = false,
-        Callback = onSpeedToggle,
+        Callback = function(value)
+            Flags.Speed = value
+            if value then
+                return
+            end
+            local hum = A.myHum()
+            if hum then
+                hum.WalkSpeed = 12
+            end
+        end,
     })
-    PlayerTab:CreateKeybind("kb_speed", {
+    T.player:CreateKeybind("kb_speed", {
         Title = "Speed key",
         Default = Enum.KeyCode.V,
         Mode = "Toggle",
-        Callback = toggleSpeed,
+        Callback = function()
+            Flags.Speed = not Flags.Speed
+            A.syncUI("Speed", Flags.Speed)
+            if Flags.Speed then
+                return
+            end
+            local hum = A.myHum()
+            if hum then
+                hum.WalkSpeed = 12
+            end
+        end,
     })
 
-    PlayerTab:CreateSection("Misc")
-    PlayerTab:CreateToggle("AntiAfk", {
+    T.player:CreateSection("Misc")
+    T.player:CreateToggle("AntiAfk", {
         Title = "Anti AFK",
         Default = false,
-        Callback = setAntiAfk,
+        Callback = A.setAntiAfk,
     })
-    PlayerTab:CreateToggle("panic", {
+    T.player:CreateToggle("panic", {
         Title = "Enable Panic",
         Description = "Allows the panic button",
         Default = false,
-        Callback = onPanic,
-    })
-    PlayerTab:CreateButton({
-        Title = "Reset to Base (Panic)",
-        Callback = onPanicButton,
-    })
-end)
-
---═══════════════════════════════════════════════════════════════
---  ESP TAB
---═══════════════════════════════════════════════════════════════
-local function espToggle(tab, key, title, field)
-    tab:CreateToggle(key, {
-        Title = title,
-        Default = false,
         Callback = function(value)
-            Flags[field] = value
-            reconcileEsp()
+            Flags.panic = value
+        end,
+    })
+    T.player:CreateButton({
+        Title = "Reset to Base (Panic)",
+        Callback = function()
+            if Flags.panic then
+                A.goBase()
+            end
         end,
     })
 end
 
-local function onNameTags(value)
-    Flags.nameTags = value
-end
+function A.buildEspTab()
+    T.esp:CreateSection("Categories")
 
-local function onHealthBars(value)
-    Flags.healthBars = value
-end
+    local categories = {
+        { "playersESP", "Players" },
+        { "enemiesESP", "Enemies" },
+        { "itemsESP", "Items" },
+        { "baseESP", "Base" },
+        { "elevatorESP", "Elevator" },
+    }
 
-local function onTracers(value)
-    Flags.tracers = value
-end
-
-local function onTeamCheck(value)
-    Flags.teamCheck = value
-    reconcileEsp()
-end
-
-local function onEspDist(value)
-    Flags.espDist = value
-end
-
-local function onItemMin(selection)
-    local picked = selection[1]
-    if not picked then
-        picked = "Common"
+    for _, entry in ipairs(categories) do
+        local field = entry[1]
+        T.esp:CreateToggle(field, {
+            Title = entry[2],
+            Default = false,
+            Callback = function(value)
+                Flags[field] = value
+                A.reconcileEsp()
+            end,
+        })
     end
-    Flags.itemMinRank = RARITY_RANK[picked]
-    reconcileEsp()
-end
 
-local function onNativeEsp(value)
-    Flags.nativeEsp = value
-    clearAllEsp()
-    reconcileEsp()
-end
-
-local function onOverrideFov(value)
-    Flags.overrideFov = value
-    if value then
-        return
-    end
-    local camera = cam()
-    if camera then
-        camera.FieldOfView = 70
-    end
-end
-
-local function onFov(value)
-    Flags.fov = value
-end
-
-buildTab("ESP", function()
-    EspTab:CreateSection("Categories")
-    espToggle(EspTab, "playersESP", "Players", "playersESP")
-    espToggle(EspTab, "enemiesESP", "Enemies", "enemiesESP")
-    espToggle(EspTab, "itemsESP", "Items", "itemsESP")
-    espToggle(EspTab, "baseESP", "Base", "baseESP")
-    espToggle(EspTab, "elevatorESP", "Elevator", "elevatorESP")
-
-    EspTab:CreateSection("Display")
-    EspTab:CreateToggle("nativeEsp", {
+    T.esp:CreateSection("Display")
+    T.esp:CreateToggle("nativeEsp", {
         Title = "Native objects",
         Description = "Drives the game's own ESP children, falls back to the overlay",
         Default = false,
-        Callback = onNativeEsp,
+        Callback = function(value)
+            Flags.nativeEsp = value
+            A.clearAllEsp()
+            A.reconcileEsp()
+        end,
     })
-    EspTab:CreateToggle("nameTags", {
+    T.esp:CreateToggle("nameTags", {
         Title = "Names",
         Default = true,
-        Callback = onNameTags,
+        Callback = function(value)
+            Flags.nameTags = value
+        end,
     })
-    EspTab:CreateToggle("healthBars", {
+    T.esp:CreateToggle("healthBars", {
         Title = "Health bars",
         Default = true,
-        Callback = onHealthBars,
+        Callback = function(value)
+            Flags.healthBars = value
+        end,
     })
-    EspTab:CreateToggle("tracers", {
+    T.esp:CreateToggle("tracers", {
         Title = "Tracers",
         Default = false,
-        Callback = onTracers,
+        Callback = function(value)
+            Flags.tracers = value
+        end,
     })
-    EspTab:CreateToggle("teamCheck", {
+    T.esp:CreateToggle("teamCheck", {
         Title = "Hide own faction",
         Default = true,
-        Callback = onTeamCheck,
+        Callback = function(value)
+            Flags.teamCheck = value
+            A.reconcileEsp()
+        end,
     })
-    EspTab:CreateSlider("espDist", {
+    T.esp:CreateSlider("espDist", {
         Title = "Max distance",
         Default = 350,
         Min = 50,
         Max = 1500,
         Rounding = 0,
-        Callback = onEspDist,
+        Callback = function(value)
+            Flags.espDist = value
+        end,
     })
-    EspTab:CreateDropdown("itemMin", {
+    T.esp:CreateDropdown("itemMin", {
         Title = "Item rarity floor",
         Values = { "Common", "Uncommon", "Rare", "Legendary" },
         Default = "Common",
-        Callback = onItemMin,
+        Callback = function(selection)
+            Flags.itemMinRank = D.RARITY_RANK[selection[1] or "Common"]
+            A.reconcileEsp()
+        end,
     })
 
-    EspTab:CreateSection("World")
-    EspTab:CreateToggle("FullBright", {
+    T.esp:CreateSection("World")
+    T.esp:CreateToggle("FullBright", {
         Title = "FullBright",
         Description = "White ambient, Atmosphere detached, restored on off",
         Default = false,
-        Callback = setFullBright,
+        Callback = A.setFullBright,
     })
-    EspTab:CreateToggle("overrideFov", {
+    T.esp:CreateToggle("overrideFov", {
         Title = "Override FOV",
         Default = false,
-        Callback = onOverrideFov,
+        Callback = function(value)
+            Flags.overrideFov = value
+            if value then
+                return
+            end
+            local camera = A.cam()
+            if camera then
+                camera.FieldOfView = 70
+            end
+        end,
     })
-    EspTab:CreateSlider("fov", {
+    T.esp:CreateSlider("fov", {
         Title = "FOV",
         Default = 70,
         Min = 40,
         Max = 120,
         Rounding = 0,
-        Callback = onFov,
+        Callback = function(value)
+            Flags.fov = value
+        end,
     })
-end)
-
---═══════════════════════════════════════════════════════════════
---  COMBAT TAB
---═══════════════════════════════════════════════════════════════
-local heldPara = nil
-
-local function onSilent(value)
-    Flags.silent = value
 end
 
-local function onSpoofAim(value)
-    Flags.spoofAim = value
-end
-
-local function onShowFov(value)
-    Flags.showFov = value
-end
-
-local function onShowPoint(value)
-    Flags.showPoint = value
-end
-
-local function onCombatFov(value)
-    Flags.combatFov = value
-end
-
-local function onCombatDist(value)
-    Flags.maxCombatDist = value
-end
-
-local function onPrediction(value)
-    Flags.prediction = value
-end
-
-local function onCombatPart(selection)
-    local picked = selection[1]
-    if not picked then
-        picked = "Head"
-    end
-    Flags.combatPart = picked
-end
-
-local function onManip(value)
-    Flags.manip = value
-end
-
-local function onManipV(value)
-    Flags.manipV = value
-end
-
-local function onManipL(value)
-    Flags.manipL = value
-end
-
-local function onManipD(value)
-    Flags.manipD = value
-end
-
-local function onRequireClear(value)
-    Flags.requireClear = value
-end
-
-local function onAutoBlock(value)
-    Flags.autoBlock = value
-end
-
-local function onBlockRadius(value)
-    Flags.blockRadius = value
-end
-
-local function onAutoKnife(value)
-    Flags.autoKnife = value
-end
-
-local function onAutoReload(value)
-    Flags.autoReload = value
-end
-
-local function onAttackOnce()
-    if fireAttack("M1D") then
-        notify("Combat", "M1D")
-        return
-    end
-    notify("Combat", "no clear point")
-end
-
-local function onHeavyOnce()
-    if fireAttack("M2D") then
-        notify("Combat", "M2D")
-        return
-    end
-    notify("Combat", "no clear point")
-end
-
-local function onWeaponInfo(name)
-    if setclipboard then
-        pcall(setclipboard, name)
-    end
-    local weapon = WEAPON_BY_NAME[name]
-    if not weapon then
-        return
-    end
-    notify(name, fmt("%.1f DPS · cd %.2fs", weapon.dps, weapon.cd))
-end
-
-buildTab("Combat", function()
-    CombatTab:CreateSection("Silent Aim")
-    CombatTab:CreateToggle("silent", {
+function A.buildCombatTab()
+    T.combat:CreateSection("Silent Aim")
+    T.combat:CreateToggle("silent", {
         Title = "Silent Aim",
         Default = false,
-        Callback = onSilent,
+        Callback = function(value)
+            Flags.silent = value
+        end,
     })
-    CombatTab:CreateToggle("spoofAim", {
+    T.combat:CreateToggle("spoofAim", {
         Title = "Spoof aim telemetry",
         Description = "Rewrites ReportAim on the unreliable remote",
         Default = false,
-        Callback = onSpoofAim,
+        Callback = function(value)
+            Flags.spoofAim = value
+        end,
     })
-    CombatTab:CreateToggle("showFov", {
+    T.combat:CreateToggle("showFov", {
         Title = "Show FOV ring",
         Default = true,
-        Callback = onShowFov,
+        Callback = function(value)
+            Flags.showFov = value
+        end,
     })
-    CombatTab:CreateToggle("showPoint", {
+    T.combat:CreateToggle("showPoint", {
         Title = "Show solved point",
         Default = true,
-        Callback = onShowPoint,
+        Callback = function(value)
+            Flags.showPoint = value
+        end,
     })
-    CombatTab:CreateSlider("combatFov", {
+    T.combat:CreateSlider("combatFov", {
         Title = "FOV",
         Default = 120,
         Min = 10,
         Max = 360,
         Rounding = 0,
-        Callback = onCombatFov,
+        Callback = function(value)
+            Flags.combatFov = value
+        end,
     })
-    CombatTab:CreateSlider("maxCombatDist", {
+    T.combat:CreateSlider("maxCombatDist", {
         Title = "Range",
         Default = 400,
         Min = 20,
         Max = 1000,
         Rounding = 0,
-        Callback = onCombatDist,
+        Callback = function(value)
+            Flags.maxCombatDist = value
+        end,
     })
-    CombatTab:CreateSlider("prediction", {
+    T.combat:CreateSlider("prediction", {
         Title = "Prediction",
         Default = 0,
         Min = 0,
         Max = 40,
         Rounding = 0,
-        Callback = onPrediction,
+        Callback = function(value)
+            Flags.prediction = value
+        end,
     })
-    CombatTab:CreateDropdown("combatPart", {
+    T.combat:CreateDropdown("combatPart", {
         Title = "Hit part",
         Values = { "Head", "Torso", "Root" },
         Default = "Head",
-        Callback = onCombatPart,
+        Callback = function(selection)
+            Flags.combatPart = selection[1] or "Head"
+        end,
     })
 
-    CombatTab:CreateSection("Manipulation")
-    CombatTab:CreateParagraph("manipNote", {
+    T.combat:CreateSection("Manipulation")
+    T.combat:CreateParagraph("manipNote", {
         Title = "Solver",
         Content = "Every candidate is tested against the real muzzle-to-point segment. The furthest survivor wins, then depth pushes it inside. Green marker is clear, orange is blocked but nearest.",
     })
-    CombatTab:CreateToggle("manip", {
+    T.combat:CreateToggle("manip", {
         Title = "Enable manipulation",
         Default = true,
-        Callback = onManip,
+        Callback = function(value)
+            Flags.manip = value
+        end,
     })
-    CombatTab:CreateSlider("manipV", {
+    T.combat:CreateSlider("manipV", {
         Title = "Vertical",
         Default = -1.2,
         Min = -6,
         Max = 6,
         Rounding = 1,
-        Callback = onManipV,
+        Callback = function(value)
+            Flags.manipV = value
+        end,
     })
-    CombatTab:CreateSlider("manipL", {
+    T.combat:CreateSlider("manipL", {
         Title = "Lateral",
         Default = 0,
         Min = -6,
         Max = 6,
         Rounding = 1,
-        Callback = onManipL,
+        Callback = function(value)
+            Flags.manipL = value
+        end,
     })
-    CombatTab:CreateSlider("manipD", {
+    T.combat:CreateSlider("manipD", {
         Title = "Depth push",
         Default = 0.6,
         Min = -6,
         Max = 6,
         Rounding = 1,
-        Callback = onManipD,
+        Callback = function(value)
+            Flags.manipD = value
+        end,
     })
 
-    CombatTab:CreateSection("Attack")
-    CombatTab:CreateToggle("autoAttack", {
+    T.combat:CreateSection("Attack")
+    T.combat:CreateToggle("autoAttack", {
         Title = "Auto Attack",
         Default = false,
-        Callback = setAttack,
+        Callback = A.setAttack,
     })
-    CombatTab:CreateToggle("requireClear", {
+    T.combat:CreateToggle("requireClear", {
         Title = "Only when segment clear",
         Default = true,
-        Callback = onRequireClear,
+        Callback = function(value)
+            Flags.requireClear = value
+        end,
     })
-    CombatTab:CreateToggle("autoBlock", {
+    T.combat:CreateToggle("autoBlock", {
         Title = "Auto Block",
         Description = "Holds F near enemies",
         Default = false,
-        Callback = onAutoBlock,
+        Callback = function(value)
+            Flags.autoBlock = value
+        end,
     })
-    CombatTab:CreateSlider("blockRadius", {
+    T.combat:CreateSlider("blockRadius", {
         Title = "Block radius",
         Default = 14,
         Min = 5,
         Max = 40,
         Rounding = 0,
-        Callback = onBlockRadius,
+        Callback = function(value)
+            Flags.blockRadius = value
+        end,
     })
-    CombatTab:CreateToggle("autoKnife", {
+    T.combat:CreateToggle("autoKnife", {
         Title = "Auto Knife",
         Description = "Equips a blade when empty",
         Default = false,
-        Callback = onAutoKnife,
+        Callback = function(value)
+            Flags.autoKnife = value
+        end,
     })
-    CombatTab:CreateToggle("autoReload", {
+    T.combat:CreateToggle("autoReload", {
         Title = "Auto Reload",
         Default = false,
-        Callback = onAutoReload,
+        Callback = function(value)
+            Flags.autoReload = value
+        end,
     })
-    CombatTab:CreateButton({
+    T.combat:CreateButton({
         Title = "Attack once",
-        Callback = onAttackOnce,
+        Callback = function()
+            if A.fireAttack("M1D") then
+                A.notify("Combat", "M1D")
+                return
+            end
+            A.notify("Combat", "no clear point")
+        end,
     })
-    CombatTab:CreateButton({
+    T.combat:CreateButton({
         Title = "Heavy attack once",
-        Callback = onHeavyOnce,
+        Callback = function()
+            if A.fireAttack("M2D") then
+                A.notify("Combat", "M2D")
+                return
+            end
+            A.notify("Combat", "no clear point")
+        end,
     })
 
-    CombatTab:CreateSection("Weapons")
-    heldPara = CombatTab:CreateParagraph("held", {
+    T.combat:CreateSection("Weapons")
+    U.heldPara = T.combat:CreateParagraph("held", {
         Title = "Held",
         Content = "—",
     })
 
-    local topWeapons = math.min(#WEAPONS, 8)
+    local top = math.min(#D.WEAPONS, 8)
 
-    for index = 1, topWeapons do
-        local weapon = WEAPONS[index]
+    for index = 1, top do
+        local weapon = D.WEAPONS[index]
         local stacks = ""
         if weapon.p > 1 then
             stacks = fmt("x%d", weapon.p)
@@ -2642,171 +2584,124 @@ buildTab("Combat", function()
             heavy = fmt("heavy %d", weapon.hd)
         end
         local weaponName = weapon.n
-        CombatTab:CreateButton({
+        T.combat:CreateButton({
             Title = fmt("%s — %.1f DPS", weaponName, weapon.dps),
             Description = fmt("%d dmg%s · %.2fs · %s", weapon.d, stacks, weapon.cd, heavy),
             Callback = function()
-                onWeaponInfo(weaponName)
+                if setclipboard then
+                    pcall(setclipboard, weaponName)
+                end
+                A.notify(weaponName, fmt("%.1f DPS · cd %.2fs", weapon.dps, weapon.cd))
             end,
         })
     end
-end)
-
---═══════════════════════════════════════════════════════════════
---  FARM TAB
---═══════════════════════════════════════════════════════════════
-local function onFarmSurface(value)
-    if value then
-        Flags.farmScope.Storages = true
-    else
-        Flags.farmScope.Storages = nil
-    end
-    refreshFarm()
 end
 
-local function onFarmBasement(value)
-    if value then
-        Flags.farmScope.BasementStorages = true
-    else
-        Flags.farmScope.BasementStorages = nil
-    end
-    refreshFarm()
-end
-
-local function onFarmTargets(selection)
-    Flags.farmNames = {}
-    for _, name in ipairs(selection) do
-        Flags.farmNames[name] = true
-    end
-    refreshFarm()
-end
-
-local function onCollectAll()
-    Flags.farmEnabled = true
-    Flags.farmNames = {}
-    Flags.farmScope.Storages = true
-    Flags.farmScope.BasementStorages = true
-    syncUI("farmSurface", true)
-    syncUI("farmBasement", true)
-    syncUI("farmTargets", {})
-    refreshFarm()
-end
-
-local function onFarmInterval(value)
-    Flags.farmInterval = value
-end
-
-local function onReturnOnStop(value)
-    Flags.returnOnStop = value
-end
-
-local function onStopFarm()
-    Flags.farmEnabled = false
-    Flags.farmNames = {}
-    Flags.farmScope = {}
-    syncUI("farmSurface", false)
-    syncUI("farmBasement", false)
-    syncUI("farmTargets", {})
-    refreshFarm()
-end
-
-local function onFarmEnabled(value)
-    Flags.farmEnabled = value
-    if value then
-        if next(Flags.farmScope) == nil then
-            Flags.farmScope.Storages = true
-            syncUI("farmSurface", true)
-        end
-    end
-    refreshFarm()
-end
-
-buildTab("Farm", function()
-    FarmTab:CreateSection("Scope")
-    FarmTab:CreateToggle("farmEnabled", {
+function A.buildFarmTab()
+    T.farm:CreateSection("Scope")
+    T.farm:CreateToggle("farmEnabled", {
         Title = "Farm enabled",
-        Description = "Master switch, needs a scope and at least one target or an empty target list",
+        Description = "Master switch, needs a scope and either a target list or an empty one",
         Default = false,
-        Callback = onFarmEnabled,
+        Callback = function(value)
+            Flags.farmEnabled = value
+            if value then
+                if next(Flags.farmScope) == nil then
+                    Flags.farmScope.Storages = true
+                    A.syncUI("farmSurface", true)
+                end
+            end
+            A.refreshFarm()
+        end,
     })
-    FarmTab:CreateToggle("farmSurface", {
+    T.farm:CreateToggle("farmSurface", {
         Title = "Surface",
         Default = false,
-        Callback = onFarmSurface,
+        Callback = function(value)
+            if value then
+                Flags.farmScope.Storages = true
+            else
+                Flags.farmScope.Storages = nil
+            end
+            A.refreshFarm()
+        end,
     })
-    FarmTab:CreateToggle("farmBasement", {
+    T.farm:CreateToggle("farmBasement", {
         Title = "Basement",
         Default = false,
-        Callback = onFarmBasement,
+        Callback = function(value)
+            if value then
+                Flags.farmScope.BasementStorages = true
+            else
+                Flags.farmScope.BasementStorages = nil
+            end
+            A.refreshFarm()
+        end,
     })
 
-    FarmTab:CreateSection("Targets")
-    FarmTab:CreateDropdown("farmTargets", {
+    T.farm:CreateSection("Targets")
+    T.farm:CreateDropdown("farmTargets", {
         Title = "Items to farm",
         Description = "Leave empty to take everything in scope",
         Multi = true,
         AllowNone = true,
-        Values = FARMABLES,
-        Callback = onFarmTargets,
+        Values = D.FARMABLES,
+        Callback = function(selection)
+            Flags.farmNames = {}
+            for _, name in ipairs(selection) do
+                Flags.farmNames[name] = true
+            end
+            A.refreshFarm()
+        end,
     })
-    FarmTab:CreateButton({
+    T.farm:CreateButton({
         Title = "Collect everything in scope",
-        Callback = onCollectAll,
+        Callback = function()
+            Flags.farmEnabled = true
+            Flags.farmNames = {}
+            Flags.farmScope.Storages = true
+            Flags.farmScope.BasementStorages = true
+            A.syncUI("farmEnabled", true)
+            A.syncUI("farmSurface", true)
+            A.syncUI("farmBasement", true)
+            A.syncUI("farmTargets", {})
+            A.refreshFarm()
+        end,
     })
-    FarmTab:CreateSlider("farmInterval", {
+    T.farm:CreateSlider("farmInterval", {
         Title = "Step delay",
         Default = 0.12,
         Min = 0.04,
         Max = 0.6,
         Rounding = 2,
-        Callback = onFarmInterval,
+        Callback = function(value)
+            Flags.farmInterval = value
+        end,
     })
-    FarmTab:CreateToggle("returnOnStop", {
+    T.farm:CreateToggle("returnOnStop", {
         Title = "Return on stop",
         Default = true,
-        Callback = onReturnOnStop,
+        Callback = function(value)
+            Flags.returnOnStop = value
+        end,
     })
-    FarmTab:CreateButton({
+    T.farm:CreateButton({
         Title = "Stop farm",
-        Callback = onStopFarm,
+        Callback = function()
+            Flags.farmEnabled = false
+            Flags.farmNames = {}
+            Flags.farmScope = {}
+            A.syncUI("farmEnabled", false)
+            A.syncUI("farmSurface", false)
+            A.syncUI("farmBasement", false)
+            A.syncUI("farmTargets", {})
+            A.refreshFarm()
+        end,
     })
-end)
-
---═══════════════════════════════════════════════════════════════
---  TRAVEL TAB
---═══════════════════════════════════════════════════════════════
-local pointDrop = nil
-local wpDrop = nil
-local plrDrop = nil
-
-local function onSurface()
-    teleport(TRAVEL_SURFACE)
-    notify("Travel", "Surface")
 end
 
-local function onBasement()
-    teleport(TRAVEL_BASEMENT)
-    notify("Travel", "Basement")
-end
-
-local function onMapPoint(selection)
-    local name = selection[1]
-    if not name then
-        return
-    end
-    local map = Workspace:FindFirstChild("Map")
-    local points = map and map:FindFirstChild("Points")
-    local part = points and points:FindFirstChild(name)
-    if part then
-        if part:IsA("BasePart") then
-            teleport(part.CFrame + Vector3.new(0, 3, 0))
-            notify("Travel", name)
-        end
-    end
-end
-
-local function refreshPoints()
-    if not pointDrop then
+function A.refreshPoints()
+    if not U.pointDrop then
         return
     end
     local map = Workspace:FindFirstChild("Map")
@@ -2819,23 +2714,11 @@ local function refreshPoints()
         table.insert(names, child.Name)
     end
     table.sort(names)
-    pcall(pointDrop.SetValues, pointDrop, names)
+    pcall(U.pointDrop.SetValues, U.pointDrop, names)
 end
 
-local function onWaypoint(selection)
-    local name = selection[1]
-    if not name then
-        return
-    end
-    local cf = S.waypoints[name]
-    if cf then
-        teleport(cf)
-        notify("Waypoint", name)
-    end
-end
-
-local function refreshWaypoints()
-    if not wpDrop then
+function A.refreshWaypoints()
+    if not U.wpDrop then
         return
     end
     local names = {}
@@ -2843,52 +2726,11 @@ local function refreshWaypoints()
         table.insert(names, name)
     end
     table.sort(names)
-    pcall(wpDrop.SetValues, wpDrop, names)
+    pcall(U.wpDrop.SetValues, U.wpDrop, names)
 end
 
-local function onSaveWaypoint()
-    local option = Options.wpName
-    local name = option and option.Value
-    local root = myRoot()
-    if not root then
-        return
-    end
-    if not name then
-        notify("Waypoint", "name required")
-        return
-    end
-    if name == "" then
-        notify("Waypoint", "name required")
-        return
-    end
-    S.waypoints[name] = root.CFrame
-    refreshWaypoints()
-    notify("Waypoint", name .. " saved")
-end
-
-local function onDeleteWaypoint()
-    local option = Options.waypoint
-    local value = option and option.Value
-    local name = value and value[1]
-    if not name then
-        return
-    end
-    if S.waypoints[name] then
-        S.waypoints[name] = nil
-        refreshWaypoints()
-        notify("Waypoint", name .. " deleted")
-    end
-end
-
-local function onPlayerTarget(selection)
-    local name = selection[1]
-    if name then
-        goPlayer(name)
-    end
-end
-
-local function refreshPlayers()
-    if not plrDrop then
+function A.refreshPlayers()
+    if not U.plrDrop then
         return
     end
     local names = {}
@@ -2898,197 +2740,187 @@ local function refreshPlayers()
         end
     end
     table.sort(names)
-    pcall(plrDrop.SetValues, plrDrop, names)
+    pcall(U.plrDrop.SetValues, U.plrDrop, names)
 end
 
-buildTab("Travel", function()
-    TravelTab:CreateSection("Locations")
-    TravelTab:CreateButton({ Title = "Base", Callback = goBase })
-    TravelTab:CreateButton({ Title = "Elevator", Callback = goElevator })
-    TravelTab:CreateButton({ Title = "Surface", Callback = onSurface })
-    TravelTab:CreateButton({ Title = "Basement", Callback = onBasement })
+function A.buildTravelTab()
+    T.travel:CreateSection("Locations")
+    T.travel:CreateButton({
+        Title = "Base",
+        Callback = A.goBase,
+    })
+    T.travel:CreateButton({
+        Title = "Elevator",
+        Callback = A.goElevator,
+    })
+    T.travel:CreateButton({
+        Title = "Surface",
+        Callback = function()
+            A.teleport(D.TRAVEL_SURFACE)
+            A.notify("Travel", "Surface")
+        end,
+    })
+    T.travel:CreateButton({
+        Title = "Basement",
+        Callback = function()
+            A.teleport(D.TRAVEL_BASEMENT)
+            A.notify("Travel", "Basement")
+        end,
+    })
 
-    TravelTab:CreateSection("Map points")
-    pointDrop = TravelTab:CreateDropdown("mapPoint", {
+    T.travel:CreateSection("Map points")
+    U.pointDrop = T.travel:CreateDropdown("mapPoint", {
         Title = "Points",
         Values = {},
-        Callback = onMapPoint,
+        Callback = function(selection)
+            local name = selection[1]
+            if not name then
+                return
+            end
+            local map = Workspace:FindFirstChild("Map")
+            local points = map and map:FindFirstChild("Points")
+            local part = points and points:FindFirstChild(name)
+            if part then
+                if part:IsA("BasePart") then
+                    A.teleport(part.CFrame + Vector3.new(0, 3, 0))
+                    A.notify("Travel", name)
+                end
+            end
+        end,
     })
 
-    TravelTab:CreateSection("Waypoints")
-    wpDrop = TravelTab:CreateDropdown("waypoint", {
+    T.travel:CreateSection("Waypoints")
+    U.wpDrop = T.travel:CreateDropdown("waypoint", {
         Title = "Saved",
         Values = {},
-        Callback = onWaypoint,
+        Callback = function(selection)
+            local name = selection[1]
+            if not name then
+                return
+            end
+            local cf = S.waypoints[name]
+            if cf then
+                A.teleport(cf)
+                A.notify("Waypoint", name)
+            end
+        end,
     })
-    TravelTab:CreateInput("wpName", {
+    T.travel:CreateInput("wpName", {
         Title = "Name",
         Placeholder = "base2",
         Finished = true,
     })
-    TravelTab:CreateButton({
+    T.travel:CreateButton({
         Title = "Save current position",
-        Callback = onSaveWaypoint,
+        Callback = function()
+            local option = Options.wpName
+            local name = option and option.Value
+            local root = A.myRoot()
+            if not root then
+                return
+            end
+            if not name then
+                A.notify("Waypoint", "name required")
+                return
+            end
+            if name == "" then
+                A.notify("Waypoint", "name required")
+                return
+            end
+            S.waypoints[name] = root.CFrame
+            A.refreshWaypoints()
+            A.notify("Waypoint", name .. " saved")
+        end,
     })
-    TravelTab:CreateButton({
+    T.travel:CreateButton({
         Title = "Delete selected",
-        Callback = onDeleteWaypoint,
+        Callback = function()
+            local option = Options.waypoint
+            local value = option and option.Value
+            local name = value and value[1]
+            if not name then
+                return
+            end
+            if S.waypoints[name] then
+                S.waypoints[name] = nil
+                A.refreshWaypoints()
+                A.notify("Waypoint", name .. " deleted")
+            end
+        end,
     })
 
-    TravelTab:CreateSection("NPCs")
+    T.travel:CreateSection("NPCs")
 
-    for _, entry in ipairs(NPCS) do
+    for _, entry in ipairs(D.NPCS) do
         local npcName = entry[1]
         local offset = entry[2]
-        TravelTab:CreateButton({
+        T.travel:CreateButton({
             Title = npcName,
             Callback = function()
-                goNpc(npcName, offset)
+                A.goNpc(npcName, offset)
             end,
         })
     end
 
-    TravelTab:CreateSection("Players")
-    plrDrop = TravelTab:CreateDropdown("playerTarget", {
+    T.travel:CreateSection("Players")
+    U.plrDrop = T.travel:CreateDropdown("playerTarget", {
         Title = "Player",
         Values = {},
-        Callback = onPlayerTarget,
+        Callback = function(selection)
+            local name = selection[1]
+            if name then
+                A.goPlayer(name)
+            end
+        end,
     })
-end)
-
---═══════════════════════════════════════════════════════════════
---  ALERTS TAB
---═══════════════════════════════════════════════════════════════
-local function onWatchNpc(selection)
-    for _, name in ipairs(NPC_NAMES) do
-        local on = table.find(selection, name) ~= nil
-        watch("npc_" .. name, name, on, false)
-    end
 end
 
-local function onWatchMob(selection)
-    for _, name in ipairs(MOBS) do
-        local on = table.find(selection, name) ~= nil
-        watch("mob_" .. name, name, on, true)
-    end
-end
-
-local function onBountyAlert(value)
-    Flags.bountyAlert = value
-    if not value then
-        return
-    end
-    for _, plr in ipairs(Players:GetPlayers()) do
-        checkBounty(plr)
-    end
-end
-
-buildTab("Alerts", function()
-    AlertsTab:CreateSection("NPC spawns")
-    AlertsTab:CreateDropdown("watchNpc", {
+function A.buildAlertsTab()
+    T.alerts:CreateSection("NPC spawns")
+    T.alerts:CreateDropdown("watchNpc", {
         Title = "Watch NPCs",
         Multi = true,
         AllowNone = true,
-        Values = NPC_NAMES,
-        Callback = onWatchNpc,
+        Values = D.NPC_NAMES,
+        Callback = function(selection)
+            for _, name in ipairs(D.NPC_NAMES) do
+                local on = table.find(selection, name) ~= nil
+                A.watch("npc_" .. name, name, on, false)
+            end
+        end,
     })
 
-    AlertsTab:CreateSection("Mob spawns")
-    AlertsTab:CreateDropdown("watchMob", {
+    T.alerts:CreateSection("Mob spawns")
+    T.alerts:CreateDropdown("watchMob", {
         Title = "Watch mobs",
         Multi = true,
         AllowNone = true,
-        Values = MOBS,
-        Callback = onWatchMob,
+        Values = D.MOBS,
+        Callback = function(selection)
+            for _, name in ipairs(D.MOBS) do
+                local on = table.find(selection, name) ~= nil
+                A.watch("mob_" .. name, name, on, true)
+            end
+        end,
     })
 
-    AlertsTab:CreateSection("Bounty")
-    AlertsTab:CreateToggle("bountyAlert", {
+    T.alerts:CreateSection("Bounty")
+    T.alerts:CreateToggle("bountyAlert", {
         Title = "Alert at 1000+ bounty",
         Default = false,
-        Callback = onBountyAlert,
+        Callback = function(value)
+            Flags.bountyAlert = value
+            if not value then
+                return
+            end
+            for _, plr in ipairs(Players:GetPlayers()) do
+                A.checkBounty(plr)
+            end
+        end,
     })
-end)
-
---═══════════════════════════════════════════════════════════════
---  SETTINGS
---═══════════════════════════════════════════════════════════════
-if SaveManager then
-    buildTab("Settings:save", function()
-        SaveManager:SetLibrary(WindUI)
-        SaveManager:SetFolder("thestorage/cfg")
-        SaveManager:IgnoreThemeSettings()
-        SaveManager:BuildConfigSection(SettingsTab)
-        SaveManager:LoadAutoloadConfig()
-    end)
 end
 
-local PRESETS = {
-    Off = {
-        playersESP = false,
-        enemiesESP = false,
-        itemsESP = false,
-        silent = false,
-        autoAttack = false,
-        Speed = false,
-        FullBright = false,
-        Noclip = false,
-    },
-    Farming = {
-        itemsESP = true,
-        instantOpen = true,
-        instantPickup = true,
-        Speed = true,
-        autoRun = true,
-        teamCheck = true,
-    },
-    Legit = {
-        playersESP = true,
-        teamCheck = true,
-        Speed = true,
-        silent = true,
-        autoAttack = true,
-        requireClear = true,
-        healthBars = true,
-    },
-    Rage = {
-        playersESP = true,
-        enemiesESP = true,
-        silent = true,
-        spoofAim = true,
-        autoAttack = true,
-        requireClear = false,
-        Speed = true,
-        Noclip = true,
-        FullBright = true,
-        autoKnife = true,
-        manip = true,
-    },
-}
-
-local diagPara = nil
-
-local function onPreset(selection)
-    local name = selection[1]
-    if not name then
-        return
-    end
-    local preset = PRESETS[name]
-    if not preset then
-        return
-    end
-    for key, value in pairs(preset) do
-        local known = Flags[key]
-        if known ~= nil then
-            Flags[key] = value
-            syncUI(key, value)
-        end
-    end
-    reconcileEsp()
-    notify("Preset", name)
-end
-
-local function runDiagnostics()
+function A.runDiagnostics()
     local lines = {}
 
     local function check(name, ok)
@@ -3103,119 +2935,139 @@ local function runDiagnostics()
     check("drawing", Drawing ~= nil)
     check("namecall hook", S.oldNamecall ~= nil)
     check("speed hook", S.hookOK)
-    check("remote event", remoteEvent() ~= nil)
+    check("remote event", A.remoteEvent() ~= nil)
     check("live folder", Workspace:FindFirstChild("Live") ~= nil)
     check("storages", Workspace:FindFirstChild("Storages") ~= nil)
-    check("owned base", #ownRooms() > 0)
+    check("owned base", #A.ownRooms() > 0)
     check("fps over 20", S.stats.fps > 20)
-    check("tabs built", S.tabsBuilt or 0)
+    check("tabs built", S.tabsBuilt >= 8)
 
-    if diagPara then
-        diagPara:SetValue(table.concat(lines, "\n"))
+    if U.diagPara then
+        U.diagPara:SetValue(table.concat(lines, "\n"))
     else
         print(table.concat(lines, "\n"))
     end
 end
 
-buildTab("Settings", function()
-    SettingsTab:CreateSection("Presets")
-    SettingsTab:CreateDropdown("preset", {
+function A.buildSettingsTab()
+    T.settings:CreateSection("Presets")
+    T.settings:CreateDropdown("preset", {
         Title = "Apply preset",
         Values = { "Off", "Farming", "Legit", "Rage" },
-        Callback = onPreset,
+        Callback = function(selection)
+            local name = selection[1]
+            if not name then
+                return
+            end
+            local preset = D.PRESETS[name]
+            if not preset then
+                return
+            end
+            for key, value in pairs(preset) do
+                local known = Flags[key]
+                if known ~= nil then
+                    Flags[key] = value
+                    A.syncUI(key, value)
+                end
+            end
+            A.reconcileEsp()
+            A.notify("Preset", name)
+        end,
     })
 
-    SettingsTab:CreateSection("Diagnostics")
-    diagPara = SettingsTab:CreateParagraph("diag", {
+    T.settings:CreateSection("Diagnostics")
+    U.diagPara = T.settings:CreateParagraph("diag", {
         Title = "Diagnostics",
         Content = "idle",
     })
-    SettingsTab:CreateButton({
+    T.settings:CreateButton({
         Title = "Run diagnostics",
-        Callback = runDiagnostics,
+        Callback = A.runDiagnostics,
     })
 
     if InterfaceManager then
         pcall(function()
             InterfaceManager:SetLibrary(WindUI)
             InterfaceManager:SetFolder("thestorage")
-            InterfaceManager:BuildInterfaceSection(SettingsTab)
+            InterfaceManager:BuildInterfaceSection(T.settings)
         end)
     end
-end)
+end
 
 --═══════════════════════════════════════════════════════════════
 --  CONNECTIONS
 --═══════════════════════════════════════════════════════════════
-local function onDied(char)
+function A.onDied(char)
     local root = char:FindFirstChild("HumanoidRootPart")
     if not root then
         return
     end
     S.lastDeath = CFrame.new(root.Position)
-    if deathPara then
-        deathPara:SetValue(fmt("X %d, Z %d",
+    if U.deathPara then
+        U.deathPara:SetValue(fmt("X %d, Z %d",
             math.round(root.Position.X),
             math.round(root.Position.Z)))
     end
 end
 
-track(LP.CharacterAdded:Connect(function(char)
-    local hum = char:WaitForChild("Humanoid", 10)
-    if not hum then
-        return
-    end
-    track(hum.Died:Connect(function()
-        onDied(char)
+function A.bindConnections()
+    A.track(LP.CharacterAdded:Connect(function(char)
+        local hum = char:WaitForChild("Humanoid", 10)
+        if not hum then
+            return
+        end
+        A.track(hum.Died:Connect(function()
+            A.onDied(char)
+        end))
+        if Flags.Fly then
+            A.setFly(false)
+            A.setFly(true)
+        end
     end))
-    if Flags.Fly then
-        setFly(false)
-        setFly(true)
-    end
-end))
 
-track(Players.PlayerAdded:Connect(function(plr)
-    task.wait(1)
-    refreshPlayers()
-    checkBounty(plr)
-    plr.CharacterAdded:Connect(function()
-        task.wait(1.5)
-        checkBounty(plr)
-    end)
-end))
+    A.track(Players.PlayerAdded:Connect(function(plr)
+        task.wait(1)
+        A.refreshPlayers()
+        A.checkBounty(plr)
+        plr.CharacterAdded:Connect(function()
+            task.wait(1.5)
+            A.checkBounty(plr)
+        end)
+    end))
 
-track(Players.PlayerRemoving:Connect(function()
-    task.wait(0.2)
-    refreshPlayers()
-end))
+    A.track(Players.PlayerRemoving:Connect(function()
+        task.wait(0.2)
+        A.refreshPlayers()
+    end))
 
-track(UIS.JumpRequest:Connect(function()
-    if not Flags.InfJump then
-        return
-    end
-    local hum = myHum()
-    if hum then
-        hum:ChangeState(Enum.HumanoidStateType.Jumping)
-    end
-end))
+    A.track(UIS.JumpRequest:Connect(function()
+        if not Flags.InfJump then
+            return
+        end
+        local hum = A.myHum()
+        if hum then
+            hum:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end))
 
-track(LP.Idled:Connect(function()
-    if not Flags.AntiAfk then
-        return
-    end
-    pcall(function()
-        VirtualUser:CaptureController()
-        VirtualUser:ClickButton2(Vector2.new())
-    end)
-end))
+    A.track(LP.Idled:Connect(function()
+        if not Flags.AntiAfk then
+            return
+        end
+        pcall(function()
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+    end))
+end
 
 --═══════════════════════════════════════════════════════════════
 --  LOOPS
 --═══════════════════════════════════════════════════════════════
-local function heartStep(dt)
+function A.heartStep(dt)
     if Flags.autoRun then
-        local char = myChar()
-        local event = remoteEvent()
+        local char = A.myChar()
+        local event = A.remoteEvent()
         if char then
             char:SetAttribute("Running", true)
         end
@@ -3225,7 +3077,7 @@ local function heartStep(dt)
     end
 
     if Flags.Noclip then
-        local char = myChar()
+        local char = A.myChar()
         if char then
             for _, descendant in ipairs(char:GetDescendants()) do
                 if descendant:IsA("BasePart") then
@@ -3238,7 +3090,7 @@ local function heartStep(dt)
     end
 
     if Flags.Speed then
-        local hum = myHum()
+        local hum = A.myHum()
         if hum then
             local want
             if Flags.speedMode == "Set" then
@@ -3255,27 +3107,27 @@ local function heartStep(dt)
     end
 
     if Flags.autoReload then
-        local char = myChar()
+        local char = A.myChar()
         local tool = char and char:FindFirstChildOfClass("Tool")
-        local event = remoteEvent()
+        local event = A.remoteEvent()
         if tool and event then
-            if WEAPON_BY_NAME[tool.Name] then
+            if D.WEAPON_BY_NAME[tool.Name] then
                 pcall(event.FireServer, event, "Reload")
             end
         end
     end
 
     if Flags.autoKnife then
-        knifeIfEmpty()
+        A.knifeIfEmpty()
     end
 
     if Flags.autoBlock then
-        local root = myRoot()
+        local root = A.myRoot()
         local threat = false
         if root then
             for _, plr in ipairs(Players:GetPlayers()) do
-                if plr ~= LP and alive(plr) then
-                    local other = rootOf(plr)
+                if plr ~= LP and A.alive(plr) then
+                    local other = A.rootOf(plr)
                     if other then
                         if (other.Position - root.Position).Magnitude <= Flags.blockRadius then
                             threat = true
@@ -3288,31 +3140,29 @@ local function heartStep(dt)
         if threat ~= S.blockHeld then
             S.blockHeld = threat
             if threat then
-                press(KEY_F)
+                A.press(D.KEY_F)
             else
-                release(KEY_F)
+                A.release(D.KEY_F)
             end
         end
     elseif S.blockHeld then
         S.blockHeld = false
-        release(KEY_F)
+        A.release(D.KEY_F)
     end
 
     S.sweepAcc = S.sweepAcc + dt
     if S.sweepAcc >= 0.5 then
         S.sweepAcc = 0
         if Flags.instantOpen then
-            sweepPrompts(true, Flags.instantPickup)
+            A.sweepPrompts(true, Flags.instantPickup)
         elseif Flags.instantPickup then
-            sweepPrompts(false, true)
+            A.sweepPrompts(false, true)
         end
     end
 end
 
-track(RunService.Heartbeat:Connect(heartStep))
-
-local function renderStep(dt)
-    local camera = cam()
+function A.renderStep(dt)
+    local camera = A.cam()
 
     if Flags.overrideFov then
         if camera then
@@ -3322,8 +3172,8 @@ local function renderStep(dt)
         end
     end
 
-    refreshSilent()
-    flyStep()
+    A.refreshSilent()
+    A.flyStep()
 
     local viewport = Vector2.new(1920, 1080)
     if camera then
@@ -3366,23 +3216,23 @@ local function renderStep(dt)
         end
     end
 
-    local char = myChar()
-    local tool = char and char:FindFirstChildOfClass("Tool")
-    local weapon = tool and WEAPON_BY_NAME[tool.Name]
-    if heldPara then
+    if U.heldPara then
+        local char = A.myChar()
+        local tool = char and char:FindFirstChildOfClass("Tool")
+        local weapon = tool and D.WEAPON_BY_NAME[tool.Name]
         if weapon then
-            heldPara:SetValue(fmt("%s · %.1f DPS · cd %.2fs", weapon.n, weapon.dps, weapon.cd))
+            U.heldPara:SetValue(fmt("%s · %.1f DPS · cd %.2fs", weapon.n, weapon.dps, weapon.cd))
         else
-            heldPara:SetValue("—")
+            U.heldPara:SetValue("—")
         end
     end
 
     S.espAcc = S.espAcc + dt
     if S.espAcc >= 0.4 then
         S.espAcc = 0
-        reconcileEsp()
+        A.reconcileEsp()
     end
-    updateEsp()
+    A.updateEsp()
 
     S.stats.frames = S.stats.frames + 1
     S.stats.acc = S.stats.acc + dt
@@ -3393,16 +3243,49 @@ local function renderStep(dt)
     end
 end
 
-track(RunService.RenderStepped:Connect(renderStep))
+--═══════════════════════════════════════════════════════════════
+--  BOOT
+--═══════════════════════════════════════════════════════════════
+function A.boot()
+    A.installHooks()
+    A.bindPromptFolders()
+    A.bindConnections()
 
-track(Workspace.ChildAdded:Connect(function()
-    task.delay(0.5, reconcileEsp)
-end))
+    if SaveManager then
+        A.buildTab("Settings:save", function()
+            SaveManager:SetLibrary(WindUI)
+            SaveManager:SetFolder("thestorage/cfg")
+            SaveManager:IgnoreThemeSettings()
+            SaveManager:BuildConfigSection(T.settings)
+            SaveManager:LoadAutoloadConfig()
+        end)
+    end
+
+    A.buildTab("Main", A.buildMain)
+    A.buildTab("Player", A.buildPlayer)
+    A.buildTab("ESP", A.buildEspTab)
+    A.buildTab("Combat", A.buildCombatTab)
+    A.buildTab("Farm", A.buildFarmTab)
+    A.buildTab("Travel", A.buildTravelTab)
+    A.buildTab("Alerts", A.buildAlertsTab)
+    A.buildTab("Settings", A.buildSettingsTab)
+
+    A.track(RunService.Heartbeat:Connect(A.heartStep))
+    A.track(RunService.RenderStepped:Connect(A.renderStep))
+    A.track(Workspace.ChildAdded:Connect(function()
+        task.delay(0.5, A.reconcileEsp)
+    end))
+
+    A.refreshPoints()
+    A.refreshPlayers()
+    Window:SelectTab(1)
+    A.notify("The Storage", fmt("ready · %d tabs built", S.tabsBuilt))
+end
 
 --═══════════════════════════════════════════════════════════════
 --  TEARDOWN
 --═══════════════════════════════════════════════════════════════
-local function unload()
+function A.unload()
     Flags.autoAttack = false
     Flags.rollSell = false
     Flags.autoRun = false
@@ -3413,22 +3296,22 @@ local function unload()
     S.farmRunning = false
 
     if S.fb.active then
-        setFullBright(false)
+        A.setFullBright(false)
     end
     if Flags.Fly then
-        setFly(false)
+        A.setFly(false)
     end
     if S.blockHeld then
-        release(KEY_F)
+        A.release(D.KEY_F)
     end
 
     for _, connection in ipairs(S.conns) do
-        safeDisconnect(connection)
+        A.safeDisconnect(connection)
     end
     S.conns = {}
 
     for _, watcher in pairs(S.watchers) do
-        safeDisconnect(watcher)
+        A.safeDisconnect(watcher)
     end
     S.watchers = {}
 
@@ -3439,13 +3322,13 @@ local function unload()
         pcall(hookmetamethod, game, "__newindex", S.oldNewIndex)
     end
 
-    clearAllEsp()
+    A.clearAllEsp()
 
     if S.espFolder then
         S.espFolder:Destroy()
     end
-    if warnGui then
-        warnGui:Destroy()
+    if S.warnGui then
+        S.warnGui:Destroy()
     end
 
     for _, fn in ipairs(S.destroy) do
@@ -3455,12 +3338,9 @@ local function unload()
 end
 
 env.__StorageAdv = {
-    unload = unload,
+    unload = A.unload,
     flags = Flags,
     state = S,
 }
 
-refreshPoints()
-refreshPlayers()
-Window:SelectTab(1)
-notify("The Storage", "advanced build ready")
+A.boot()
